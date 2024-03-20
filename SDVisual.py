@@ -3,7 +3,6 @@ import streamlit as st
 import yfinance as yf
 import plotly.graph_objects as go
 import pandas as pd
-from yahooquery import Ticker
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
