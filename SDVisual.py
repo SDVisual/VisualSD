@@ -23,7 +23,7 @@ if 'valid_tickers' not in st.session_state:
     st.session_state.valid_tickers = []
 
 # Default symbol to show
-DEFAULT_SYMBOL = 'APPL'
+DEFAULT_SYMBOL = ''
 
 
 
