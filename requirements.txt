@@ -3,7 +3,5 @@ matplotlib==3.8.2
 pandas==1.5.1
 plotly==5.18.0
 streamlit==1.32.2
-yfinance==0.2.36
-~==reamlit
-~treamlit==1.30.0
-~treamlit==1.31.1
+yfinance==0.2.28
+
