@@ -2,6 +2,5 @@ cufflinks==0.17.3
 matplotlib==3.8.2
 pandas==1.5.1
 plotly==5.18.0
-streamlit==1.31.1
 yahooquery==1.1.0
 yfinance==0.2.36
