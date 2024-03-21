@@ -974,7 +974,7 @@ elif menu_option == "Balance Sheet":
 
 
     # Convert the styled DataFrame to HTML
-    styled_balance_sheet_html = styled_balance_sheet.render()
+    styled_balance_sheet_html = styled_balance_sheet
 
     # Use st.markdown to add a vertical scrollbar without expanding
     st.markdown(
