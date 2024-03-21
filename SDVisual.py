@@ -23,7 +23,7 @@ if 'valid_tickers' not in st.session_state:
     st.session_state.valid_tickers = []
 
 # Default symbol to show
-DEFAULT_SYMBOL = 'APPL'
+DEFAULT_SYMBOL = 'AAPL'
 
 
 
@@ -339,7 +339,7 @@ if menu_option == "Company Summary":
 elif menu_option == "Income Statements":
 
 
-    # st.text(ticker)
+    st.text(ticker)
     StockInfo = yf.Ticker(ticker).info
     income_statementYear = yf.Ticker(ticker).income_stmt
     IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
@@ -434,14 +434,16 @@ elif menu_option == "Income Statements":
         {'selector': 'th', 'props': [('text-align', 'left')]}
     ])
 
-    # Convert the styled DataFrame to HTML
-    styled_income_statement_html = styled_income_statement.render()
+    # # Convert the styled DataFrame to HTML
+    # styled_income_statement_html = styled_income_statement.render()
 
-    # Use st.markdown to add a vertical scroll bar without expanding
-    st.markdown(
-        f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
-        unsafe_allow_html=True
-    )
+    # # Use st.markdown to add a vertical scroll bar without expanding
+    # st.markdown(
+    #     f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
+    #     unsafe_allow_html=True
+    # )
+    
+    st.write(styled_income_statement)
     st.markdown("## \n\n\n")  # Add an empty line
     st.markdown("## \n\n\n")  # Add an empty line
 
