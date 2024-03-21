@@ -33,7 +33,7 @@ st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add Symbol to Select Box (e.g., AAPL)", DEFAULT_SYMBOL).strip().upper()
-
+st.write("Use Side Bar Menu For Additional Information" 
 
 st.markdown("## \n\n\n")  # Add an empty line
 
