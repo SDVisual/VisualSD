@@ -1093,7 +1093,7 @@ elif menu_option == "Balance Sheet":
         fig.update_layout(title='Total Assets',
                           title_x=0.25,  # Set the title position to the center
                           xaxis_title='',
-                          yaxis_title='Amount',
+                          yaxis_title='Amount (M$)',
                           yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                           legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top', orientation='h'))  # Set legend to horizontal orientation
 
@@ -1169,7 +1169,7 @@ elif menu_option == "Balance Sheet":
         fig.update_layout(title='Total Non Current Assets',
                           title_x=0.25,  # Set the title position to the center
                           xaxis_title='',
-                          yaxis_title='Amount',
+                          yaxis_title='Amount (M$)',
                           yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                           legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
                                       orientation='h'))  # Set legend to horizontal orientation
@@ -1208,7 +1208,7 @@ elif menu_option == "Balance Sheet":
         fig.update_layout(title='Cash & Cash Equivalents And Short Term Investments',
                           title_x=0,  # Set the title position to the center
                           xaxis_title='',
-                          yaxis_title='Amount',
+                          yaxis_title='Amount (M$)',
                           yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                           legend=dict(x=0.5, y=1.2, xanchor='center', yanchor='top',
                                       orientation='h'))  # Set legend to horizontal orientation
@@ -1248,7 +1248,7 @@ elif menu_option == "Balance Sheet":
             fig.update_layout(title='Total Liabilities Net Minority Interest',
                               title_x=0.15,  # Set the title position to the center
                               xaxis_title='',
-                              yaxis_title='Amount',
+                              yaxis_title='Amount (M$)',
                               yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                               legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top', orientation='h'))  # Set legend to horizontal orientation
 
@@ -1286,7 +1286,7 @@ elif menu_option == "Balance Sheet":
             fig.update_layout(title='Current Liabilities',
                               title_x=0.25,  # Set the title position to the center
                               xaxis_title='',
-                              yaxis_title='Amount',
+                              yaxis_title='Amount (M$)',
                               yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                               legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top', orientation='h'))  # Set legend to horizontal orientation
 
@@ -1324,7 +1324,7 @@ elif menu_option == "Balance Sheet":
             fig.update_layout(title='Total Non Current Liabilities',
                               title_x=0.25,  # Set the title position to the center
                               xaxis_title='',
-                              yaxis_title='Amount',
+                              yaxis_title='Amount (M$)',
                               yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                               legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top', orientation='h'))  # Set legend to horizontal orientation
 
@@ -1362,7 +1362,7 @@ elif menu_option == "Balance Sheet":
             fig.update_layout(title='Total Debt',
                               title_x=0.25,  # Set the title position to the center
                               xaxis_title='',
-                              yaxis_title='Amount',
+                              yaxis_title='Amount (M$)',
                               yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                               legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top', orientation='h'))  # Set legend to horizontal orientation
 
