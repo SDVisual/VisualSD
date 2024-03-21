@@ -348,7 +348,15 @@ if menu_option == "Company Summary":
 elif menu_option == "Income Statements":
 
 
-    
+    # Use JavaScript to scroll the page to the top after a menu selection
+script = """
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+    window.scrollTo(0, 0);
+});
+</script>
+"""
+
     StockInfo = yf.Ticker(ticker).info
     income_statementYear = yf.Ticker(ticker).income_stmt
     IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
@@ -878,6 +886,14 @@ elif menu_option == "Income Statements":
 # ************************************************************************ Balance Sheet***************************
 elif menu_option == "Balance Sheet":
 
+    # Use JavaScript to scroll the page to the top after a menu selection
+    script = """
+    <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        window.scrollTo(0, 0);
+    });
+    </script>
+    """
     StockInfo = yf.Ticker(ticker).info
 
     balance_sheetYear = yf.Ticker(ticker).balance_sheet
