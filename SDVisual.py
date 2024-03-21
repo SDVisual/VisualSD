@@ -973,15 +973,15 @@ elif menu_option == "Balance Sheet":
     ])
 
 
-    # Convert the styled DataFrame to HTML
-    styled_balance_sheet_html = styled_balance_sheet
+    # # Convert the styled DataFrame to HTML
+    # styled_balance_sheet_html = styled_balance_sheet
 
-    # Use st.markdown to add a vertical scrollbar without expanding
-    st.markdown(
-        f'<div style="max-height: 400px; overflow-y: auto;">{styled_balance_sheet_html}</div>',
-        unsafe_allow_html=True
-    )
-
+    # # Use st.markdown to add a vertical scrollbar without expanding
+    # st.markdown(
+    #     f'<div style="max-height: 400px; overflow-y: auto;">{styled_balance_sheet_html}</div>',
+    #     unsafe_allow_html=True
+    # )
+    st.write(balance_sheet)
     col1, col2 = st.columns(2)
 
     with col1:
@@ -1082,7 +1082,7 @@ elif menu_option == "Balance Sheet":
                                y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                showarrow=False,  # whether to show arrow or not
-                               font=dict(color='yellow', size=15),  # color of the annotation text
+                               font=dict(color='black', size=15),  # color of the annotation text
                                yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                align='left',  # alignment of the text
                                xanchor='left')  # anchor point along x-axis for alignment
@@ -1120,7 +1120,7 @@ elif menu_option == "Balance Sheet":
                                y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                showarrow=False,  # whether to show arrow or not
-                               font=dict(color='yellow', size=15),  # color of the annotation text
+                               font=dict(color='black', size=15),  # color of the annotation text
                                yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                align='left',  # alignment of the text
                                xanchor='left')  # anchor point along x-axis for alignment
@@ -1158,7 +1158,7 @@ elif menu_option == "Balance Sheet":
                                y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                showarrow=False,  # whether to show arrow or not
-                               font=dict(color='yellow', size=15),  # color of the annotation text
+                               font=dict(color='black', size=15),  # color of the annotation text
                                yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                align='left',  # alignment of the text
                                xanchor='left')  # anchor point along x-axis for alignment
@@ -1237,7 +1237,7 @@ elif menu_option == "Balance Sheet":
                                    y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                    text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                    showarrow=False,  # whether to show arrow or not
-                                   font=dict(color='yellow', size=15),  # color of the annotation text
+                                   font=dict(color='black', size=15),  # color of the annotation text
                                    yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                    align='left',  # alignment of the text
                                    xanchor='left')  # anchor point along x-axis for alignment
@@ -1275,7 +1275,7 @@ elif menu_option == "Balance Sheet":
                                    y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                    text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                    showarrow=False,  # whether to show arrow or not
-                                   font=dict(color='yellow', size=15),  # color of the annotation text
+                                   font=dict(color='black', size=15),  # color of the annotation text
                                    yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                    align='left',  # alignment of the text
                                    xanchor='left')  # anchor point along x-axis for alignment
@@ -1313,7 +1313,7 @@ elif menu_option == "Balance Sheet":
                                    y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                    text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                    showarrow=False,  # whether to show arrow or not
-                                   font=dict(color='yellow', size=15),  # color of the annotation text
+                                   font=dict(color='black', size=15),  # color of the annotation text
                                    yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                    align='left',  # alignment of the text
                                    xanchor='left')  # anchor point along x-axis for alignment
@@ -1351,7 +1351,7 @@ elif menu_option == "Balance Sheet":
                                    y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                                    text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                    showarrow=False,  # whether to show arrow or not
-                                   font=dict(color='yellow', size=15),  # color of the annotation text
+                                   font=dict(color='black', size=15),  # color of the annotation text
                                    yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                    align='left',  # alignment of the text
                                    xanchor='left')  # anchor point along x-axis for alignment
@@ -1483,15 +1483,16 @@ elif menu_option == "Cash Flow":
         {'selector': 'th:first-child, td:first-child', 'props': [('text-align', 'left')]}  # Align first column to left
     ])
 
-    # Convert the styled DataFrame to HTML
-    styled_cash_flow_html = styled_cash_flow.render()
+    # # Convert the styled DataFrame to HTML
+    # styled_cash_flow_html = styled_cash_flow.render()
 
-    # Use st.markdown to add a vertical scroll bar without expanding
-    st.markdown(
-        f'<div style="max-height: 400px; overflow-y: auto;">{styled_cash_flow_html}</div>',
-        unsafe_allow_html=True
-    )
+    # # Use st.markdown to add a vertical scroll bar without expanding
+    # st.markdown(
+    #     f'<div style="max-height: 400px; overflow-y: auto;">{styled_cash_flow_html}</div>',
+    #     unsafe_allow_html=True
+    # )
 
+    st.write(cash_flow)
     st.markdown("## \n\n\n")  # Add an empty line
     st.markdown("## \n\n\n")  # Add an empty line
     st.write(f'* All charts are interactive by clicking legend elements')
@@ -1572,7 +1573,7 @@ elif menu_option == "Cash Flow":
                                y=value + 1,  # Shift the text 1 above the point
                                text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                showarrow=False,  # whether to show arrow or not
-                               font=dict(color='yellow', size=15),  # color and size of the annotation text
+                               font=dict(color='black', size=15),  # color and size of the annotation text
                                yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                align='left',  # alignment of the text
                                xanchor='left')  # anchor point along x-axis for alignment
@@ -1675,7 +1676,7 @@ elif menu_option == "Cash Flow":
                 y=value + 1,  # Shift the text 1 above the point
                 text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                 showarrow=False,  # whether to show arrow or not
-                font=dict(color='yellow', size=15),  # color and size of the annotation text
+                font=dict(color='black', size=15),  # color and size of the annotation text
                 yref='y2',  # reference point on the y-axis (in this case, it's the secondary y-axis)
                 align='left',  # alignment of the text
                 xanchor='left'  # anchor point along x-axis for alignment
@@ -1726,7 +1727,7 @@ elif menu_option == "Cash Flow":
                                y=value + 1,  # Shift the text 1 above the point
                                text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                                showarrow=False,  # whether to show arrow or not
-                               font=dict(color='yellow', size=15),  # color and size of the annotation text
+                               font=dict(color='black', size=15),  # color and size of the annotation text
                                yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                                align='left',  # alignment of the text
                                xanchor='left')  # anchor point along x-axis for alignment
@@ -1829,7 +1830,7 @@ elif menu_option == "Cash Flow":
                 name='Free Cash Flow Margin',
                 text=[f'{val:.2f}%' for val in free_cash_flow_margin_percentage.values],  # Text for each bar
                 textposition='auto',  # Position of the text (auto places the text inside the bars if there's enough space, otherwise outside)
-                textfont=dict(size=15, color='yellow'),  # Set font size to 14
+                textfont=dict(size=15, color='black'),  # Set font size to 14
             )
         )
 
