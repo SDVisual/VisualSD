@@ -348,14 +348,14 @@ if menu_option == "Company Summary":
 elif menu_option == "Income Statements":
 
 
-    # Use JavaScript to scroll the page to the top after a menu selection
-script = """
-<script>
-document.addEventListener("DOMContentLoaded", function(event) {
-    window.scrollTo(0, 0);
-});
-</script>
-"""
+        # Use JavaScript to scroll the page to the top after a menu selection
+    script = """
+    <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+        window.scrollTo(0, 0);
+    });
+    </script>
+    """
 
     StockInfo = yf.Ticker(ticker).info
     income_statementYear = yf.Ticker(ticker).income_stmt
