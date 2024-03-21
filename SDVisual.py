@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
-APP_NAME = "Stock Data Visualization"
+APP_NAME = "Stock Data Interactive Visualization"
 
 st.set_page_config(
     page_title=APP_NAME,
