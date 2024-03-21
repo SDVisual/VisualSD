@@ -847,7 +847,7 @@ elif menu_option == "Income Statements":
         # Update layout
         fig.update_layout(
             title='EBIT VS EBITDA vs Net Income (M$)',
-            title_x=0.30,
+            title_x=0.25,
             xaxis=dict(title='' if is_quarterly else ''),
             yaxis=dict(title='Value'),
             barmode='group',
