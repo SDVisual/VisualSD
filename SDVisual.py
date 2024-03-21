@@ -982,7 +982,9 @@ elif menu_option == "Balance Sheet":
     #     unsafe_allow_html=True
     # )
     st.write(balance_sheet)
-    col1, col2 = st.columns(2)
+
+    
+    col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
     with col1:
         st.markdown("## \n\n\n")  # Add an empty line
