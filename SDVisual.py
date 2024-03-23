@@ -87,15 +87,16 @@ menu_option = st.sidebar.radio("Menu", ["Company Summary", "Income Statements", 
 # JavaScript to scroll the page to the top after a menu selection
 scroll_script = """
 <script>
-document.addEventListener("DOMContentLoaded", function(event) {
+function scrollToTop() {
     window.scrollTo(0, 0);
-});
+}
 </script>
 """
 
-# Embed the script using st.markdown
+# Execute the JavaScript function when the menu selection changes
 st.markdown(scroll_script, unsafe_allow_html=True)
-
+menu_option_js = f'<select onchange="scrollToTop()">{"".join([f"<option>{opt}</option>" for opt in ["Company Summary", "Income Statements", "Balance Sheet", "Cash Flow"]])}</select>'
+st.sidebar.markdown(menu_option_js, unsafe_allow_html=True)
 
 
 if menu_option == "Company Summary":
