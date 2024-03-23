@@ -84,15 +84,18 @@ end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 # Add a menu to the sidebar
 menu_option = st.sidebar.radio("Menu", ["Company Summary", "Income Statements", "Balance Sheet", "Cash Flow"])
 
-# Use JavaScript to scroll the page to the top after a menu selection
-script = """
+# JavaScript to scroll the page to the top after a menu selection
+scroll_script = """
 <script>
 document.addEventListener("DOMContentLoaded", function(event) {
     window.scrollTo(0, 0);
 });
 </script>
 """
-st.markdown(script, unsafe_allow_html=True)
+
+# Embed the script using st.markdown
+st.markdown(scroll_script, unsafe_allow_html=True)
+
 
 
 if menu_option == "Company Summary":
