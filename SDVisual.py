@@ -84,20 +84,6 @@ end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 # Add a menu to the sidebar
 menu_option = st.sidebar.radio("Menu", ["Company Summary", "Income Statements", "Balance Sheet", "Cash Flow"])
 
-# JavaScript to scroll the page to the top after a menu selection
-scroll_script = """
-<script>
-function scrollToTop() {
-    window.scrollTo(0, 0);
-}
-</script>
-"""
-
-# Execute the JavaScript function when the menu selection changes
-st.markdown(scroll_script, unsafe_allow_html=True)
-menu_option_js = f'<select onchange="scrollToTop()">{"".join([f"<option>{opt}</option>" for opt in ["Company Summary", "Income Statements", "Balance Sheet", "Cash Flow"]])}</select>'
-st.sidebar.markdown(menu_option_js, unsafe_allow_html=True)
-
 
 if menu_option == "Company Summary":
 
@@ -352,14 +338,12 @@ if menu_option == "Company Summary":
 elif menu_option == "Income Statements":
 
 
-        # Use JavaScript to scroll the page to the top after a menu selection
-    script = """
+       # JavaScript to scroll the page to the top after selecting "Balance Sheet"
+    st.script("""
     <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-        window.scrollTo(0, 0);
-    });
+    window.scrollTo(0, 0);
     </script>
-    """
+    """)
 
     StockInfo = yf.Ticker(ticker).info
     income_statementYear = yf.Ticker(ticker).income_stmt
@@ -890,14 +874,14 @@ elif menu_option == "Income Statements":
 # ************************************************************************ Balance Sheet***************************
 elif menu_option == "Balance Sheet":
 
-    # Use JavaScript to scroll the page to the top after a menu selection
-    script = """
+   # JavaScript to scroll the page to the top after selecting "Balance Sheet"
+    st.script("""
     <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-        window.scrollTo(0, 0);
-    });
+    window.scrollTo(0, 0);
     </script>
-    """
+    """)
+
+    
     StockInfo = yf.Ticker(ticker).info
 
     balance_sheetYear = yf.Ticker(ticker).balance_sheet
@@ -1403,6 +1387,13 @@ elif menu_option == "Balance Sheet":
 
 elif menu_option == "Cash Flow":
 
+# JavaScript to scroll the page to the top after selecting "Balance Sheet"
+    st.script("""
+    <script>
+    window.scrollTo(0, 0);
+    </script>
+    """)
+    
 
     StockInfo = yf.Ticker(ticker).info
 
