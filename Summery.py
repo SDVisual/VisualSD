@@ -16,7 +16,7 @@ APP_NAME = "Stock Data Visualization"
 st.set_page_config(
     page_title=APP_NAME,
     layout="wide",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="collapsed",
 
 )
 
