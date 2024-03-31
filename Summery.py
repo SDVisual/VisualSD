@@ -182,7 +182,7 @@ st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display
          f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
          unsafe_allow_html=True)
 
-st.markdown("## \n\n\n")  # Add an empty line
+# st.markdown("## \n\n\n")  # Add an empty line
 
 # col1, col2 = st.columns([0.5, 0.5])  # Adjust the width ratio of col1 and col2 as needed
 col1, col2, col3 = st.columns([0.45, 0.45, 0.05])  # Adjust the width ratio of col1 and col2 as needed
