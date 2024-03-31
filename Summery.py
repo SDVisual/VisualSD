@@ -182,7 +182,7 @@ col1, col2, col3 = st.columns([0.45, 0.45, 0.05])  # Adjust the width ratio of c
 with col1:
 
     st.subheader(f'Stock Summary for {StockInfo["shortName"]}')
-    st.markdown(f'<span style="font-size: larger;">Sector - {StockInfo["sector"]}</span><br>, unsafe_allow_html=True)
+    # st.markdown(f'<span style="font-size: larger;">Sector - {StockInfo["sector"]}</span><br>, unsafe_allow_html=True)
 
     st.markdown("## \n\n\n")  # Add an empty line
 
