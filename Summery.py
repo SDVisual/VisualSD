@@ -186,7 +186,7 @@ with col1:
     # Display stock summary with reduced spacing
    
     st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
-    st.write(f"<h1 style='color:blue; font-size: smaller; margin-bottom: 1px; display: inline;'>{StockInfo['sector']}</h1>"
+    st.write(f"<h1 style='color:blue; font-size: smaller; margin-bottom: 1px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
          f"<h1 style='color:blue; font-size: smaller; margin-bottom: 1px; display: inline;'>{StockInfo['industry']}</h1>",
          unsafe_allow_html=True)
 
