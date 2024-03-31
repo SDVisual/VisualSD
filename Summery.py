@@ -6,7 +6,7 @@ import pandas as pd
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
-st.write('')
+
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -16,11 +16,9 @@ APP_NAME = "Stock Data Visualization"
 st.set_page_config(
     page_title=APP_NAME,
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="collapsed",)
 
-)
-
-
+st.write(‘#’)
 
 # Display title with blue color using Markdown
 st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
