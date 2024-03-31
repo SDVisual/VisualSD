@@ -25,6 +25,9 @@ st.set_page_config(
 # Display title with blue color using Markdown
 st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
+# Scroll to the top of the page
+st.markdown("<script>window.scrollTo(0, 0);</script>", unsafe_allow_html=True)
+
 
 
 # Initialize session state for selected ticker index and valid tickers
