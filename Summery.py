@@ -74,8 +74,6 @@ start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.da
 end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
 
-# if menu_option == "Company Summary":
-
 df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
 StockInfo = yf.Ticker(ticker).info
