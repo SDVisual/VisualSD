@@ -313,10 +313,14 @@ with col2:
 
 
 
-# Button to scroll to the top of the page
-if st.button("Scroll to Top"):
-    st.experimental_rerun()
-
+# Scroll to top of the page using JavaScript
+st.markdown(
+    """
+    <script>
+        window.scrollTo(0, 0);
+    </script>
+    """
+)
 
 
 
