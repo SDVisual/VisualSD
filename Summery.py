@@ -288,9 +288,11 @@ with col2:
 
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
 
-        if st.checkbox('Show Stock Price History Data'):
-            st.subheader('Stock History')
-            st.write(df_ticker)
+       if st.checkbox('Show Stock Price History Data'):
+        st.subheader('Stock History')
+        sorted_df = df_ticker.sort_values(by='Date', ascending=False)
+        st.write(sorted_df)
+
 
         st.markdown("## \n\n\n")  # Add an empty line
         st.markdown("## \n\n\n")  # Add an empty line
