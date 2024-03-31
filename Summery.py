@@ -187,7 +187,7 @@ with col1:
    
     st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
     st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 3px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-         f"<h1 style='color:blue; font-size: smaller; margin-bottom: 1px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+         f"<h1 style='color:blue; font-size: smaller; margin-bottom: 3px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
          unsafe_allow_html=True)
 
 
