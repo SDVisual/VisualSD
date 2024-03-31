@@ -20,8 +20,8 @@ st.set_page_config(
 
 
 
-# # Display title with blue color using Markdown
-# st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
+# Display title with blue color using Markdown
+st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
 
 # Initialize session state for selected ticker index and valid tickers
@@ -177,10 +177,10 @@ pairs = [
 
 
 # Display stock summary with reduced spacing
-# st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
-# st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-#          f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
-#          unsafe_allow_html=True)
+st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
+st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+         f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+         unsafe_allow_html=True)
 
 st.markdown("## \n\n\n")  # Add an empty line
 
@@ -189,14 +189,7 @@ col1, col2, col3 = st.columns([0.45, 0.45, 0.05])  # Adjust the width ratio of c
 
 
 with col1:
-
-    
-   
-    # st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
-    # st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-    #      f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
-    #      unsafe_allow_html=True)
-      
+          
 
     # Iterate through pairs and display labels with values or "N/A"
     for label1, label2 in pairs:
@@ -270,7 +263,7 @@ with col1:
         st.text(f"{label1_value1:<40} {label2_value2}")
 
     st.markdown("## \n\n\n")
-    # st.subheader(f'Company Summery')
+    st.subheader(f'Company Summery')
 
     st.markdown("## \n\n\n\n\n")  # Add an empty line
     st.write(StockInfo['longBusinessSummary'])
