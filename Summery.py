@@ -272,9 +272,9 @@ with col1:
 
 # Column 2: *****************************      Candlestick chart         ***************************
 with col2:
-    # Centered subheader with dates
-    st.markdown("<h3 style='text-align: center;'>Stock Chart For Dates Entered: {} to {}</h3>".format(
-        start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")), unsafe_allow_html=True)
+    # # Centered subheader with dates
+    # st.markdown("<h3 style='text-align: center;'>Stock Chart For Dates Entered: {} to {}</h3>".format(
+    #     start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")), unsafe_allow_html=True)
 
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
