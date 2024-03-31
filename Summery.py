@@ -311,8 +311,12 @@ with col2:
             st.subheader('Stock History')
             st.write(df_ticker)
 
-# Scroll to the top of the page
-st.markdown("<script>window.scrollTo(0, 0);</script>", unsafe_allow_html=True)
+
+
+# Button to scroll to the top of the page
+if st.button("Scroll to Top"):
+    st.experimental_rerun()
+
 
 
 
