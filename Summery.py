@@ -35,7 +35,7 @@ if 'valid_tickers' not in st.session_state:
     st.session_state.valid_tickers = []
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
-DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AA'
+DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
 
 
 
@@ -185,7 +185,9 @@ with col1:
 
     st.subheader(f'Stock Summary -  {StockInfo["shortName"]}')
     st.markdown(f"<h1 style='color:blue; font-size: smaller;'>{StockInfo['sector']}</h1>", unsafe_allow_html=True)
-    st.markdown(f"<h1 style='color:blue; font-size: smaller;'>{StockInfo['sectorDisp']}</h1>", unsafe_allow_html=True)
+    st.write("Keys in StockInfo:", StockInfo.keys())
+
+    # st.markdown(f"<h1 style='color:blue; font-size: smaller;'>{StockInfo['sectorDisp']}</h1>", unsafe_allow_html=True)
 
 
     st.markdown("## \n\n\n")  # Add an empty line
