@@ -290,8 +290,8 @@ with col2:
 
         
    if st.checkbox('Show Stock Price History Data'):
-    st.subheader('Stock History')
-    st.write(df_ticker)
+            st.subheader('Stock History')
+            st.write(df_ticker)
 
 
 
