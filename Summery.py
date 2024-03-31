@@ -6,7 +6,7 @@ import pandas as pd
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
-
+st.write('')
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -20,7 +20,7 @@ st.set_page_config(
 
 )
 
-st.write('')
+
 
 # Display title with blue color using Markdown
 st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
