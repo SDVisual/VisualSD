@@ -290,7 +290,9 @@ with col2:
         
     if st.checkbox('Show Stock Price History Data'):
         st.subheader('Stock History')
-        st.write(df_ticker)
+        sorted_df = df_ticker.sort_values(by='Date', ascending=False)
+        st.write(sorted_df)
+        # st.write(df_ticker)
 
 
 
