@@ -289,9 +289,9 @@ with col2:
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
 
         
-           if st.checkbox('Show Stock Price History Data'):
-            st.subheader('Stock History')
-            st.write(df_ticker)
+       if st.checkbox('Show Stock Price History Data'):
+        st.subheader('Stock History')
+        st.write(df_ticker)
 
 
 
