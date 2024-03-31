@@ -297,9 +297,9 @@ with col2:
             st.subheader('Stock History')
             st.write(df_ticker)
 
-st.markdown("## \n\n\n")  # Add an empty line
-st.markdown("## \n\n\n")  # Add an empty line
-st.markdown("## \n\n\n")  # Add an empty line
+        st.markdown("## \n\n\n")  # Add an empty line
+        st.markdown("## \n\n\n")  # Add an empty line
+        st.markdown("## \n\n\n")  # Add an empty line
 
 
 
