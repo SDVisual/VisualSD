@@ -272,7 +272,7 @@ with col1:
         st.text(f"{label1_value1:<40} {label2_value2}")
 
     st.markdown("## \n\n\n")
-    st.subheader(f'Company Summery')
+    # st.subheader(f'Company Summery')
 
     st.markdown("## \n\n\n\n\n")  # Add an empty line
     st.write(StockInfo['longBusinessSummary'])
@@ -308,7 +308,7 @@ with col2:
 
 
 
-st.markdown("<script> window.scrollTo(0, 0); </script>", unsafe_allow_html=True)
+
 
 
 
