@@ -24,6 +24,8 @@ st.set_page_config(
 
 # Display title with blue color using Markdown
 st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
+st.markdown(f"<h1 style='color:blue; font-size: smaller;'>{StockInfo["sector"]}</h1>", unsafe_allow_html=True)
+
 
 # Initialize session state for selected ticker index and valid tickers
 if 'selected_ticker_index' not in st.session_state:
