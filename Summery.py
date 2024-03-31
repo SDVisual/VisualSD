@@ -35,7 +35,7 @@ if 'valid_tickers' not in st.session_state:
     st.session_state.valid_tickers = []
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
-DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
+DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AA'
 
 
 
