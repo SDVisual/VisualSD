@@ -313,14 +313,7 @@ with col2:
 
 
 
-# Scroll to top of the page using JavaScript
-st.markdown(
-    """
-    <script>
-        window.scrollTo(0, 0);
-    </script>
-    """
-)
+st.markdown("<script> window.scrollTo(0, 0); </script>", unsafe_allow_html=True)
 
 
 
