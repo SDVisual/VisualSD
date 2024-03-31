@@ -18,10 +18,10 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="collapsed",)
 
-st.write(‘#’)
 
-# Display title with blue color using Markdown
-st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
+
+# # Display title with blue color using Markdown
+# st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
 
 # Initialize session state for selected ticker index and valid tickers
