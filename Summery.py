@@ -258,14 +258,14 @@ with col1:
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<40} {label2_value2}")
 
-    st.write("")
+   
     st.write("")
     st.subheader(f'Company Summery')
 
-    st.write("")
+    
     st.write("")
     st.write(StockInfo['longBusinessSummary'])
-    st.write("")
+   
     st.write("")
     st.write("Company Website:", StockInfo['website'])
 
