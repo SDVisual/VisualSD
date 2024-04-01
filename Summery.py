@@ -184,7 +184,7 @@ with col1:
     st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
              f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
              unsafe_allow_html=True)
-    st.markdown("## \n\n\n")  # Add an empty line
+    # st.markdown("## \n\n\n")  # Add an empty line
 
     # Iterate through pairs and display labels with values or "N/A"
     for label1, label2 in pairs:
