@@ -39,6 +39,39 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add Symbol to Select Box (e.g., AAPL)").strip().upper()
 
+# # Check if the entered symbol is empty or consists only of whitespace characters
+# if not new_symbol or new_symbol.isspace():
+#     new_symbol = DEFAULT_SYMBOL
+
+
+
+
+# # Check if the entered symbol is empty or consists only of whitespace characters
+# if not new_symbol or new_symbol.isspace():
+#     new_symbol = DEFAULT_SYMBOL
+# else:
+#     if new_symbol in st.session_state.valid_tickers:
+#         st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
+#         new_symbol = ""  # Clear the text input field
+
+
+
+# # Check if the entered symbol is valid
+# historical_data = yf.Ticker(new_symbol).history(period='1d')
+
+# if new_symbol != DEFAULT_SYMBOL and historical_data.empty:
+#     st.error("Invalid symbol. Please enter a valid symbol.")
+
+# else:
+#     # Add valid symbol to session state if it's not already present
+#     if new_symbol not in st.session_state.valid_tickers:
+#         st.session_state.valid_tickers.append(new_symbol)
+#         st.text(f"Symbol Added to Select Box - {new_symbol} ")
+
+#         # Update selected ticker index to the newly added symbol
+#         st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
+
+
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
@@ -47,26 +80,20 @@ else:
         st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
         new_symbol = ""  # Clear the text input field
 
+# Check if the entered symbol is not empty
+if new_symbol != DEFAULT_SYMBOL:
+    # Check if the entered symbol is valid
+    historical_data = yf.Ticker(new_symbol).history(period='1d')
+    if historical_data.empty:
+        st.error("Invalid symbol. Please enter a valid symbol.")
+    else:
+        # Add valid symbol to session state if it's not already present
+        if new_symbol not in st.session_state.valid_tickers:
+            st.session_state.valid_tickers.append(new_symbol)
+            st.text(f"Symbol Added to Select Box - {new_symbol} ")
 
-# # Check if the entered symbol is empty or consists only of whitespace characters
-# if not new_symbol or new_symbol.isspace():
-#     new_symbol = DEFAULT_SYMBOL
-
-# Check if the entered symbol is valid
-historical_data = yf.Ticker(new_symbol).history(period='1d')
-
-if new_symbol != DEFAULT_SYMBOL and historical_data.empty:
-    st.error("Invalid symbol. Please enter a valid symbol.")
-
-else:
-    # Add valid symbol to session state if it's not already present
-    if new_symbol not in st.session_state.valid_tickers:
-        st.session_state.valid_tickers.append(new_symbol)
-        st.text(f"Symbol Added to Select Box - {new_symbol} ")
-
-        # Update selected ticker index to the newly added symbol
-        st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
-
+            # Update selected ticker index to the newly added symbol
+            st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
 
 # Retrieve the index of the selected ticker symbol from the session state
 selected_ticker_index = st.session_state.selected_ticker_index
