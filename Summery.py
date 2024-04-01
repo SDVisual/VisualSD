@@ -296,14 +296,12 @@ with col2:
         st.subheader('Stock History')
         sorted_df = df_ticker.sort_values(by='Date', ascending=False)
         st.write(sorted_df)
-        # st.write(df_ticker)
+        
 
 
 
 
-# st.markdown("## \n\n\n")  # Add an empty line
-# st.markdown("## \n\n\n")  # Add an empty line
-# st.markdown("## \n\n\n")  # Add an empty line
+
 
 
 
