@@ -289,7 +289,7 @@ with col1:
                            y=value + 1,  # Shift the text 1 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color and size of the annotation text
+                           font=dict(color='white', size=15),  # color and size of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -389,7 +389,7 @@ with col1:
             y=value + 1,  # Shift the text 1 above the point
             text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
             showarrow=False,  # whether to show arrow or not
-            font=dict(color='black', size=15),  # color and size of the annotation text
+            font=dict(color='white', size=15),  # color and size of the annotation text
             yref='y2',  # reference point on the y-axis (in this case, it's the secondary y-axis)
             align='left',  # alignment of the text
             xanchor='left'  # anchor point along x-axis for alignment
@@ -440,7 +440,7 @@ with col2:
                            y=value + 1,  # Shift the text 1 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color and size of the annotation text
+                           font=dict(color='white', size=15),  # color and size of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -542,7 +542,7 @@ with col3:
             text=[f'{val:.2f}%' for val in free_cash_flow_margin_percentage.values],  # Text for each bar
             textposition='auto',
             # Position of the text (auto places the text inside the bars if there's enough space, otherwise outside)
-            textfont=dict(size=15, color='black'),  # Set font size to 14
+            textfont=dict(size=15, color='white'),  # Set font size to 14
         )
     )
 
