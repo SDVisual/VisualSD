@@ -179,12 +179,12 @@ col1, col2, col3 = st.columns([0.45, 0.45, 0.1])  # Adjust the width ratio of co
 
 with col1:
     
-    # Display stock summary with reduced spacing
-    st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
-    st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-             f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
-             unsafe_allow_html=True)
-    st.markdown("## \n\n\n")  # Add an empty line
+    # # Display stock summary with reduced spacing
+    # st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
+    # st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+    #          f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+    #          unsafe_allow_html=True)
+    # st.markdown("## \n\n\n")  # Add an empty line
 
     # Iterate through pairs and display labels with values or "N/A"
     for label1, label2 in pairs:
@@ -257,12 +257,12 @@ with col1:
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<40} {label2_value2}")
 
-    st.markdown("## \n\n\n")
-    st.subheader(f'Company Summery')
+    # st.markdown("## \n\n\n")
+    # st.subheader(f'Company Summery')
 
-    st.markdown("## \n\n\n\n\n")  # Add an empty line
+    # st.markdown("## \n\n\n\n\n")  # Add an empty line
     st.write(StockInfo['longBusinessSummary'])
-    st.markdown("## \n\n")  # Add an empty line
+    # st.markdown("## \n\n")  # Add an empty line
     st.write("Company Website:", StockInfo['website'])
 
 # Column 2: *****************************      Candlestick chart         ***************************
