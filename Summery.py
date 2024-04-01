@@ -52,7 +52,7 @@ if not new_symbol or new_symbol.isspace():
 else:
     if new_symbol in st.session_state.valid_tickers:
         st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
-        new_symbol = ""  # Clear the text input field
+        # new_symbol = ""  # Clear the text input field
 
 
 
