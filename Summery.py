@@ -258,12 +258,15 @@ with col1:
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<40} {label2_value2}")
 
-    st.markdown("## \n\n\n")
+    st.write("")
+    st.write("")
     st.subheader(f'Company Summery')
 
-    # st.markdown("## \n\n\n\n\n")  # Add an empty line
+    st.write("")
+    st.write("")
     st.write(StockInfo['longBusinessSummary'])
-    # st.markdown("## \n\n")  # Add an empty line
+    st.write("")
+    st.write("")
     st.write("Company Website:", StockInfo['website'])
 
 # Column 2: *****************************      Candlestick chart         ***************************
