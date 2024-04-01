@@ -42,6 +42,15 @@ new_symbol = st.text_input("Add Symbol to Select Box (e.g., AAPL)").strip().uppe
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
+else:
+    if new_symbol in st.session_state.valid_tickers:
+        st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
+        new_symbol = ""  # Clear the text input field
+
+
+# # Check if the entered symbol is empty or consists only of whitespace characters
+# if not new_symbol or new_symbol.isspace():
+#     new_symbol = DEFAULT_SYMBOL
 
 # Check if the entered symbol is valid
 historical_data = yf.Ticker(new_symbol).history(period='1d')
