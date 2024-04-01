@@ -16,19 +16,7 @@ APP_NAME = "Stock Data Visualization"
 st.set_page_config(
     page_title=APP_NAME,
     layout="wide",
-    initial_sidebar_state="collapsed",)
-
-# Custom CSS to adjust the sidebar width
-st.markdown(
-    """
-    <style>
-    .sidebar .sidebar-content {
-        width: 300px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    initial_sidebar_state="auto",)
 
 
 
