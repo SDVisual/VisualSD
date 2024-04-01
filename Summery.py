@@ -266,40 +266,40 @@ with col1:
     st.write("Company Website:", StockInfo['website'])
 
 # Column 2: *****************************      Candlestick chart         ***************************
-with col2:
-    # Centered subheader with dates
-    st.markdown("<h3 style='text-align: center;'>Stock Chart For Dates: {} to {}</h3>".format(
-        start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")), unsafe_allow_html=True)
+# with col2:
+#     # Centered subheader with dates
+#     st.markdown("<h3 style='text-align: center;'>Stock Chart For Dates: {} to {}</h3>".format(
+#         start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")), unsafe_allow_html=True)
 
-    if df_ticker.empty:
-        st.warning(f"No data found for {ticker} in the selected date range.")
-    else:
-        candlestick_chart = go.Figure(data=[go.Candlestick(x=df_ticker['Date'],
-                                                           open=df_ticker['Open'],
-                                                           high=df_ticker['High'],
-                                                           low=df_ticker['Low'],
-                                                           close=df_ticker['Close'])])
+#     if df_ticker.empty:
+#         st.warning(f"No data found for {ticker} in the selected date range.")
+#     else:
+#         candlestick_chart = go.Figure(data=[go.Candlestick(x=df_ticker['Date'],
+#                                                            open=df_ticker['Open'],
+#                                                            high=df_ticker['High'],
+#                                                            low=df_ticker['Low'],
+#                                                            close=df_ticker['Close'])])
 
-        candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
-                                        xaxis=dict(type='date', range=[start_date, end_date]),
-                                        height=600)
+#         candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
+#                                         xaxis=dict(type='date', range=[start_date, end_date]),
+#                                         height=600)
 
-        # Hide Plotly toolbar and directly display the chart
+#         # Hide Plotly toolbar and directly display the chart
 
-        st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
+#         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
         
-    if st.checkbox('Show Stock Price History Data'):
-        st.subheader('Stock History')
-        sorted_df = df_ticker.sort_values(by='Date', ascending=False)
-        st.write(sorted_df)
-        # st.write(df_ticker)
+#     if st.checkbox('Show Stock Price History Data'):
+#         st.subheader('Stock History')
+#         sorted_df = df_ticker.sort_values(by='Date', ascending=False)
+#         st.write(sorted_df)
+#         # st.write(df_ticker)
 
 
 
 
-st.markdown("## \n\n\n")  # Add an empty line
-st.markdown("## \n\n\n")  # Add an empty line
-st.markdown("## \n\n\n")  # Add an empty line
+# st.markdown("## \n\n\n")  # Add an empty line
+# st.markdown("## \n\n\n")  # Add an empty line
+# st.markdown("## \n\n\n")  # Add an empty line
 
 
 
