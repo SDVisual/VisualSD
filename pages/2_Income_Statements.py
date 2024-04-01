@@ -188,11 +188,12 @@ styled_income_statement = income_statement.style.set_table_styles([
 # )
 
 st.write(styled_income_statement)
-st.markdown("## \n\n\n")  # Add an empty line
-st.markdown("## \n\n\n")  # Add an empty line
+st.write("")
+st.write("")
 
 st.write(f'* All charts are interactive by clicking legend elements')
-st.markdown("## \n\n\n")  # Add an empty line
+st.write("")
+st.write("")
 
 col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
