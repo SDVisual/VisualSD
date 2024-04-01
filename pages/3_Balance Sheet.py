@@ -326,7 +326,7 @@ with col2:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -365,7 +365,7 @@ with col3:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -406,7 +406,7 @@ with col4:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -449,7 +449,7 @@ with col1:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -488,7 +488,7 @@ with col2:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -529,7 +529,7 @@ with col3:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -567,7 +567,7 @@ with col4:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
+                           font=dict(color='white', size=15),  # color of the annotation text
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
