@@ -23,6 +23,9 @@ st.set_page_config(
 st.image('Logo.png')
 st.write("")
 
+# Define sidebar elements
+st.sidebar.image("Side.png", use_column_width=True)
+
 # # Display title with blue color using Markdown
 # st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
