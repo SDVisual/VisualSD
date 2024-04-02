@@ -10,24 +10,24 @@ import matplotlib.pyplot as plt
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
-APP_NAME = "Stock Data Visualization"
-
-
+APP_NAME = "Visual Stock Data"
 
 # Set page configuration
 st.set_page_config(
     page_title=APP_NAME,
     layout="wide",
-    initial_sidebar_state="auto"
-)
+    initial_sidebar_state="auto",)
 
+# Display the image with the caption
+st.image('Logo.png')
+st.write("")
 
+# # Display title with blue color using Markdown
+# st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
-# Display title with blue color using Markdown
-st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Symbol to Select Box (e.g., AAPL)").strip().upper()
+new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip().upper()
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
