@@ -201,7 +201,7 @@ with col1:
     # Define the color code
     color_code = "#0ECCEC"
     
-    st.subheader(f'Stock Summary for {StockInfo["shortName"]}')
+    st.subheader(f'{StockInfo["shortName"]}')
     # Write the sector and industry with custom styling
     st.write(
         f"<h1 style='color:{color_code}; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
