@@ -39,7 +39,7 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Symbol to Select Box (e.g., AAPL)").strip().upper()
+new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip().upper()
 
 # # Check if the entered symbol is empty or consists only of whitespace characters
 # if not new_symbol or new_symbol.isspace():
