@@ -76,15 +76,10 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
 
+# # Sidebar date inputs
+# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
+# end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
-
-
-# Sidebar date inputs
-start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
-end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
-
-# # Add a menu to the sidebar
-# menu_option = st.sidebar.radio("Menu", ["Company Summary", "Income Statements", "Balance Sheet", "Cash Flow"])
 
 StockInfo = yf.Ticker(ticker).info
 
