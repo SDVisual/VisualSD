@@ -197,12 +197,24 @@ col1, col2, col3 = st.columns([0.45, 0.45, 0.1])  # Adjust the width ratio of co
 
 
 with col1:
+
+    # Define the color code
+    color_code = "#0ECCEC"
     
-    # Display stock summary with reduced spacing
-    st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
-    st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-             f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
-             unsafe_allow_html=True)
+    # Write the sector and industry with custom styling
+    st.write(
+        f"<h1 style='color:{color_code}; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+        f"<h1 style='color:{color_code}; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+        unsafe_allow_html=True
+    )
+
+
+    
+    # # Display stock summary with reduced spacing
+    # st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
+    # st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+    #          f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+    #          unsafe_allow_html=True)
     st.write("")
     st.write("")
 
