@@ -424,7 +424,7 @@ with col1:
                         y=row[metric],  # y-coordinate of the annotation
                         text=f"{row[metric]:.2f}%",  # text to display (format as needed)
                         showarrow=False,  # don't show an arrow
-                        font=dict(color=line_colors[metrics.index(metric)]),  # color of the annotation text
+                        font=dict(color='white'),  # color of the annotation text
                         xanchor='right',  # anchor point for x-coordinate
                         yanchor='middle',  # anchor point for y-coordinate
                         align='left',  # alignment of the annotation text
