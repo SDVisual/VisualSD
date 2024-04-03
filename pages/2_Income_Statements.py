@@ -89,11 +89,12 @@ IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
 # Default to annual income statement
 income_statement = income_statementYear
 
-color_code = "#0ECCEC"
-font_size = "25px"  # You can adjust the font size as needed
+symbol = StockInfo["shortName"]
+color_code = "#0ECCEC"  # Color for the symbol
 
-# Render subheader with customized font size and color
-st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+# Combine st.write() with HTML-styled header
+st.write(f'<span style="color:white; font-size:30px;">Income Statement - </span>'
+         f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
 
 st.write("")
@@ -172,7 +173,7 @@ income_statement = income_statement.apply(
     axis=1
 )
 
-st.subheader(f"Income Statement")
+
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
 
 
