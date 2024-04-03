@@ -30,10 +30,10 @@ st.sidebar.image("Side.png", use_column_width=True)
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip().upper()
+new_symbol = st.text_input("Add Stock Symbol to Symbols List (e.g., AAPL)").strip().upper()
 
-st.write("")
-st.write("")
+# st.write("")
+# st.write("")
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
@@ -51,7 +51,7 @@ if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
 else:
     if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
+        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
 
 
 # Check if the entered symbol is valid
@@ -62,7 +62,7 @@ if new_symbol != selected_symbol and historical_data.empty:
 else:
     if new_symbol not in st.session_state.valid_tickers:
         st.session_state.valid_tickers.append(new_symbol)
-        st.text(f"Symbol Added to Select Box - {new_symbol} ")
+        st.text(f"Symbol Added to Symbols List - {new_symbol} ")
         # Update selected ticker index to the newly added symbol
         st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
 
@@ -88,6 +88,16 @@ IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
 
 # Default to annual income statement
 income_statement = income_statementYear
+
+color_code = "#0ECCEC"
+font_size = "25px"  # You can adjust the font size as needed
+
+# Render subheader with customized font size and color
+st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+
+
+st.write("")
+
 
 # Checkbox to select between annual and quarterly
 is_quarterly = st.checkbox("Quarterly Income Statement", value=False)
@@ -162,7 +172,10 @@ income_statement = income_statement.apply(
     axis=1
 )
 
-st.subheader(f"Income Statement for  {StockInfo['shortName']} (In M$)")
+st.subheader(f"Income Statement")
+st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
+
+
 
 styled_income_statement = income_statement.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
@@ -382,9 +395,8 @@ data_percentage_change_df = percentage_change_df.loc[
 # Now you can proceed with the rest of your code
 with col1:
     # Add title in the middle with smaller font size
-    st.markdown("<h2 style='text-align: center; color: blue'>Income Statement Growth Rate</h2>",
-                unsafe_allow_html=True)
-
+    st.markdown("<h2 style='text-align: left; color: white'>Company Growth Trend</h2>", unsafe_allow_html=True)
+    st.write("")
     # Use Streamlit's columns layout manager to display charts side by side
     col1, col2, col3, col4 = st.columns(4)
 
@@ -398,7 +410,7 @@ with col1:
     metrics = ['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']
 
     # Iterate over each metric and create a chart
-    for metric, col in zip(metrics, [col1, col2, col3, col4]):
+    for metric, col in zip(metrics, [col1, col2]):
         # Create a new chart for the current metric
         with col:
             if not data_percentage_change_df.empty:
@@ -448,6 +460,73 @@ with col1:
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             else:
                 st.write("Data is empty for metric:", metric)
+
+
+
+
+    # Define colors for each metric
+    line_colors = ['green', 'orange']
+
+    # Create a new figure for the line chart
+    line_fig = go.Figure()
+
+    # Define the list of metrics
+    metrics = ['Operating Income', 'Net Income']
+
+    # Iterate over each metric and create a chart
+    for metric, col in zip(metrics, [col1, col2]):
+        # Create a new chart for the current metric
+        with col:
+            if not data_percentage_change_df.empty:
+                # Create a new figure for the current metric
+                fig = go.Figure()
+
+                # Add trace for the current metric
+                fig.add_trace(go.Scatter(
+                    x=pd.to_datetime(data_percentage_change_df.index).strftime(
+                        '%Y-%m-%d' if is_quarterly else '%Y'),
+                    y=data_percentage_change_df[metric],
+                    mode='lines',
+                    name=metric,
+                    line=dict(color=line_colors[metrics.index(metric)]),  # Assign color from the list
+                ))
+
+                # Add annotations for each point on the line
+                for index, row in data_percentage_change_df.iterrows():
+                    index_dt = pd.to_datetime(index)  # Convert index to datetime object
+                    fig.add_annotation(
+                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%Y'),
+                        # Use specific x-value for each data point
+                        y=row[metric],  # y-coordinate of the annotation
+                        text=f"{row[metric]:.2f}%",  # text to display (format as needed)
+                        showarrow=False,  # don't show an arrow
+                        font=dict(color='white'),  # color of the annotation text
+                        xanchor='right',  # anchor point for x-coordinate
+                        yanchor='middle',  # anchor point for y-coordinate
+                        align='left',  # alignment of the annotation text
+                        xshift=5,  # horizontal shift of the annotation
+                        yshift=0,  # vertical shift of the annotation
+                    )
+
+                # Update layout for the current chart
+                fig.update_layout(
+                    title=f'{metric} {"QoQ" if is_quarterly else "YoY"}',
+                    title_x=0.3,  # Set the title's horizontal position to the center
+                    xaxis=dict(title=''),
+                    yaxis=dict(title='% Growth'),
+                    width=800,  # Adjust the width of each chart as needed
+                    height=400,  # Adjust the height of each chart as needed
+                    font=dict(size=12),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=1),
+                )
+
+                # Plot the current chart
+                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+            else:
+                st.write("Data is empty for metric:", metric)
+
+
+
 
 # Basic EPS and Diluted EPS data for all years *****************************************************
 
