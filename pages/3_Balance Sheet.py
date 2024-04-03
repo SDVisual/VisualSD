@@ -89,11 +89,12 @@ balance_sheetQuarterly = yf.Ticker(ticker).quarterly_balance_sheet
 # Default to annual income statement
 balance_sheet = balance_sheetYear
 
-color_code = "#0ECCEC"
-font_size = "25px"  # You can adjust the font size as needed
+symbol = StockInfo["shortName"]
+color_code = "#0ECCEC"  # Color for the symbol
 
-# Render subheader with customized font size and color
-st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+# Combine st.write() with HTML-styled header
+st.write(f'<span style="color:white; font-size:30px;">Balance Sheet - </span>'
+         f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
 st.write("")
 
@@ -152,7 +153,7 @@ desired_order = [
 # # Checkbox to toggle display of extended balance sheet
 # is_extended = st.checkbox("Show extended Balance Sheet", value=False)
 
-st.subheader(f"Balance Sheet")
+
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
 
 
