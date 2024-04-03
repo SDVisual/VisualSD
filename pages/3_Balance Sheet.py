@@ -32,10 +32,8 @@ st.sidebar.image("Side.png", use_column_width=True)
 # st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip().upper()
+new_symbol = st.text_input("Add Stock Symbol to Symbols List (e.g., AAPL)").strip().upper()
 
-st.write("")
-st.write("")
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
@@ -53,7 +51,7 @@ if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
 else:
     if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
+        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
 
 
 # Check if the entered symbol is valid
@@ -64,7 +62,7 @@ if new_symbol != selected_symbol and historical_data.empty:
 else:
     if new_symbol not in st.session_state.valid_tickers:
         st.session_state.valid_tickers.append(new_symbol)
-        st.text(f"Symbol Added to Select Box - {new_symbol} ")
+        st.text(f"Symbol Added to Symbols List - {new_symbol} ")
         # Update selected ticker index to the newly added symbol
         st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
 
@@ -91,8 +89,16 @@ balance_sheetQuarterly = yf.Ticker(ticker).quarterly_balance_sheet
 # Default to annual income statement
 balance_sheet = balance_sheetYear
 
+color_code = "#0ECCEC"
+font_size = "25px"  # You can adjust the font size as needed
+
+# Render subheader with customized font size and color
+st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+
+st.write("")
+
 # Checkbox layout
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+col1, col2, col3, col4 = st.columns(4)
 
 # Checkbox to select between annual and quarterly
 is_quarterly = col1.checkbox("Quarterly Balance Sheet", value=False)
@@ -146,7 +152,10 @@ desired_order = [
 # # Checkbox to toggle display of extended balance sheet
 # is_extended = st.checkbox("Show extended Balance Sheet", value=False)
 
-st.subheader(f"Balance Sheet for {StockInfo['shortName']} (In M$)")
+st.subheader(f"Balance Sheet")
+st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
+
+
 
 if is_extended:
     balance_sheet = balance_sheet.reindex(desired_order, fill_value='0')
