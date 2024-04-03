@@ -31,10 +31,8 @@ st.sidebar.image("Side.png", use_column_width=True)
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip().upper()
+new_symbol = st.text_input("Add Stock Symbol to Symbols List (e.g., AAPL)").strip().upper()
 
-st.write("")
-st.write("")
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
@@ -52,7 +50,7 @@ if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
 else:
     if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
+        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
 
 
 
@@ -64,7 +62,7 @@ if new_symbol != selected_symbol and historical_data.empty:
 else:
     if new_symbol not in st.session_state.valid_tickers:
         st.session_state.valid_tickers.append(new_symbol)
-        st.text(f"Symbol Added to Select Box - {new_symbol} ")
+        st.text(f"Symbol Added to Symbols List - {new_symbol} ")
         # Update selected ticker index to the newly added symbol
         st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
 
@@ -78,7 +76,7 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
-
+StockInfo = yf.Ticker(ticker).info
 
 
 # # Sidebar date inputs
@@ -90,8 +88,11 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # ***************************************     Cash Flow   ************************************************************************
 
 
+color_code = "#0ECCEC"
+font_size = "25px"  # You can adjust the font size as needed
 
-StockInfo = yf.Ticker(ticker).info
+# Render subheader with customized font size and color
+st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
 
 balance_sheetYear = yf.Ticker(ticker).balance_sheet
 balance_sheetQuarterly = yf.Ticker(ticker).quarterly_balance_sheet
@@ -196,8 +197,8 @@ percentage_change_cash_flow.iloc[:, 0] = pd.to_numeric(percentage_change_cash_fl
 percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].fillna(0)
 # st.write(percentage_change_cash_flow)
 
-st.subheader(f"Cash Flow for {StockInfo['shortName']} (In M$)")
-
+st.subheader(f"Cash Flow")
+st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
 # Apply styling to the cash flow DataFrame
 styled_cash_flow = cash_flow.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
