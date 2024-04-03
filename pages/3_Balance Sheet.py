@@ -147,7 +147,7 @@ desired_order = [
 # # Checkbox to toggle display of extended balance sheet
 # is_extended = st.checkbox("Show extended Balance Sheet", value=False)
 
-st.subheader(f"Balance Sheet for {StockInfo['shortName']} (In M$)")
+# st.subheader(f"Balance Sheet for {StockInfo['shortName']} (In M$)")
 
 if is_extended:
     balance_sheet = balance_sheet.reindex(desired_order, fill_value='0')
