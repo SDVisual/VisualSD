@@ -216,8 +216,9 @@ styled_cash_flow = cash_flow.style.set_table_styles([
 # )
 
 st.write(cash_flow)
-st.markdown("## \n\n\n")  # Add an empty line
-st.markdown("## \n\n\n")  # Add an empty line
+st.write("")
+st.write("")
+
 st.write(f'* All charts are interactive by clicking legend elements')
 col1, col2 = st.columns(2)
 
