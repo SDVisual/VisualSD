@@ -25,8 +25,8 @@ st.set_page_config(
 st.image('Logo.png')
 st.write("")
 
-# Define sidebar elements
-st.sidebar.image("Side.png", use_column_width=True)
+# # Define sidebar elements
+# st.sidebar.image("Side.png", use_column_width=True)
 
 # # Display title with blue color using Markdown
 # st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
@@ -36,7 +36,6 @@ new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip(
 
 st.write("")
 st.write("")
-
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
