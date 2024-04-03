@@ -198,14 +198,23 @@ col1, col2, col3 = st.columns([0.45, 0.45, 0.1])  # Adjust the width ratio of co
 
 with col1:
 
-    # Define the color code
+     # Define the color code
     color_code = "#0ECCEC"
-    
-    st.subheader(f'{StockInfo["shortName"]}')
+
+
+    font_size = "30px"  # You can adjust the font size as needed
+
+    # Render subheader with customized font size and color
+    st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+
+    color_code1 = "#ffffff"
+
+
+    # st.subheader(f'{StockInfo["shortName"]}')
     # Write the sector and industry with custom styling
     st.write(
-        f"<h1 style='color:{color_code}; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-        f"<h1 style='color:{color_code}; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+        f"<h1 style='color:{color_code1}; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+        f"<h1 style='color:{color_code1}; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
         unsafe_allow_html=True
     )
 
