@@ -394,8 +394,10 @@ data_percentage_change_df = percentage_change_df.loc[
 
 # Now you can proceed with the rest of your code
 with col1:
-    # Add title in the middle with smaller font size
-    st.markdown("<h2 style='text-align: left; color: white'>Company Growth Trend</h2>", unsafe_allow_html=True)
+    # # Add title in the middle with smaller font size
+    # st.markdown("<h2 style='text-align: left; color: white'>Company Growth Trend</h2>", unsafe_allow_html=True)
+
+    st.subheader(f"Company Growth Trend")
     st.write("")
     # Use Streamlit's columns layout manager to display charts side by side
     col1, col2, col3, col4 = st.columns(4)
