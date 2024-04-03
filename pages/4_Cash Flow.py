@@ -88,11 +88,13 @@ StockInfo = yf.Ticker(ticker).info
 # ***************************************     Cash Flow   ************************************************************************
 
 
-color_code = "#0ECCEC"
-font_size = "25px"  # You can adjust the font size as needed
+symbol = StockInfo["shortName"]
+color_code = "#0ECCEC"  # Color for the symbol
 
-# Render subheader with customized font size and color
-st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+# Combine st.write() with HTML-styled header
+st.write(f'<span style="color:white; font-size:30px;">Cash Flow - </span>'
+         f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
+
 
 balance_sheetYear = yf.Ticker(ticker).balance_sheet
 balance_sheetQuarterly = yf.Ticker(ticker).quarterly_balance_sheet
@@ -197,7 +199,7 @@ percentage_change_cash_flow.iloc[:, 0] = pd.to_numeric(percentage_change_cash_fl
 percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].fillna(0)
 # st.write(percentage_change_cash_flow)
 
-st.subheader(f"Cash Flow")
+
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
 # Apply styling to the cash flow DataFrame
 styled_cash_flow = cash_flow.style.set_table_styles([
