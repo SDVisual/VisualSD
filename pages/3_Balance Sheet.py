@@ -21,12 +21,12 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="auto",)
 
-# # Display the image with the caption
-# st.image('Logo.png')
-# st.write("")
+# Display the image with the caption
+st.image('Logo.png')
+st.write("")
 
-# # Define sidebar elements
-# st.sidebar.image("Side.png", use_column_width=True)
+# Define sidebar elements
+st.sidebar.image("Side.png", use_column_width=True)
 
 # # Display title with blue color using Markdown
 # st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
@@ -146,7 +146,7 @@ desired_order = [
 # # Checkbox to toggle display of extended balance sheet
 # is_extended = st.checkbox("Show extended Balance Sheet", value=False)
 
-# st.subheader(f"Balance Sheet for {StockInfo['shortName']} (In M$)")
+st.subheader(f"Balance Sheet for {StockInfo['shortName']} (In M$)")
 
 if is_extended:
     balance_sheet = balance_sheet.reindex(desired_order, fill_value='0')
