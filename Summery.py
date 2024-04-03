@@ -18,6 +18,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="auto",)
 
+
+
 # Display the image with the caption
 st.image('Logo.png')
 st.write("")
@@ -42,22 +44,18 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Stock Symbol to Select Box (e.g., AAPL)").strip().upper()
-
-# # Check if the entered symbol is empty or consists only of whitespace characters
-# if not new_symbol or new_symbol.isspace():
-#     new_symbol = DEFAULT_SYMBOL
-
+new_symbol = st.text_input("Add Stock Symbol to Symbols List (e.g., AAPL)").strip().upper()
 
 
 
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
+
 else:
     if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"The symbol '{new_symbol}' is already in the select box list.")
-        # new_symbol = ""  # Clear the text input field
+        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
+
 
 
 
@@ -71,7 +69,7 @@ else:
     # Add valid symbol to session state if it's not already present
     if new_symbol not in st.session_state.valid_tickers:
         st.session_state.valid_tickers.append(new_symbol)
-        st.text(f"Symbol Added to Select Box - {new_symbol} ")
+        st.text(f"Symbol Added to Symbols List - {new_symbol} ")
 
         # Update selected ticker index to the newly added symbol
         st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
@@ -92,6 +90,8 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2023, 1, 1))
 end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
+# Display a message box in the sidebar
+st.sidebar.info("For the best experience, maximize your screen.")
 
 df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
@@ -210,12 +210,7 @@ with col1:
     )
 
 
-    
-    # # Display stock summary with reduced spacing
-    # st.subheader(f'Stock Summary - {StockInfo["shortName"]}')
-    # st.write(f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-    #          f"<h1 style='color:blue; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
-    #          unsafe_allow_html=True)
+
     st.write("")
     st.write("")
 
