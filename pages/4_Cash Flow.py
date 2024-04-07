@@ -95,7 +95,6 @@ color_code = "#0ECCEC"  # Color for the symbol
 st.write(f'<span style="color:white; font-size:30px;">Cash Flow - </span>'
          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
-
 balance_sheetYear = yf.Ticker(ticker).balance_sheet
 balance_sheetQuarterly = yf.Ticker(ticker).quarterly_balance_sheet
 income_statementYear = yf.Ticker(ticker).income_stmt
@@ -223,7 +222,7 @@ st.write("")
 st.write("")
 
 st.write(f'* All charts are interactive by clicking legend elements')
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([0.6, 0.4])
 
 with col1:
 
@@ -269,7 +268,7 @@ with col1:
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
 
