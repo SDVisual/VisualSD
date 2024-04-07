@@ -89,12 +89,21 @@ IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
 # Default to annual income statement
 income_statement = income_statementYear
 
+# color_code = "#0ECCEC"
+# font_size = "25px"  # You can adjust the font size as needed
+#
+# # Render subheader with customized font size and color
+# st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
+
+
 symbol = StockInfo["shortName"]
 color_code = "#0ECCEC"  # Color for the symbol
 
 # Combine st.write() with HTML-styled header
 st.write(f'<span style="color:white; font-size:30px;">Income Statement - </span>'
          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
+
+
 
 
 st.write("")
@@ -174,6 +183,7 @@ income_statement = income_statement.apply(
 )
 
 
+
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
 
 
@@ -201,7 +211,7 @@ st.write(f'* All charts are interactive by clicking legend elements')
 st.write("")
 st.write("")
 
-col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2 = st.columns([0.5, 0.5])  # Adjust the width ratio of col1 and col2 as needed
 
 data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Selling General And Administration',
                                   'Research And Development', 'Operating Expense', 'Operating Income',
@@ -238,7 +248,7 @@ with col1:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=colors[i % len(colors)], line=dict(width=2, color='black')),
-                insidetextfont=dict(size=15),
+                insidetextfont=dict(size=25),
             ))
 
         # Update layout
@@ -254,8 +264,8 @@ with col1:
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
-            font=dict(size=15),
-            legend=dict(orientation="h", yanchor="bottom", y=1.07, xanchor="center", x=0.5),
+            font=dict(size=20),
+            legend=dict(orientation="h", yanchor="bottom", y=1.07, xanchor="center", x=0.45),
             # Center the legend
         )
 
@@ -263,7 +273,7 @@ with col1:
     else:
         st.write("Income statement is empty.")
 
-col1, col2, col3 = st.columns([0.3, 0.3, 0.4])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
 
@@ -294,7 +304,7 @@ with col1:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=bar_colors, line=dict(width=2, color='black')),
-                insidetextfont=dict(size=15) if metric == 'Total Revenue' or metric == 'Operating Income' else dict(
+                insidetextfont=dict(size=20) if metric == 'Total Revenue' or metric == 'Operating Income' else dict(
                     size=15),
             ))
 
@@ -313,7 +323,7 @@ with col1:
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
-            font=dict(size=12),
+            font=dict(size=20),
             legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45),  # Center the legend
         )
 
@@ -349,7 +359,7 @@ with col2:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=colors_expenses[i], line=dict(width=2, color='black')),
-                insidetextfont=dict(size=15),  # Use the same size as in the first chart
+                insidetextfont=dict(size=25),  # Use the same size as in the first chart
             ))
 
         # Update layout to match the first chart
@@ -367,7 +377,7 @@ with col2:
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
-            font=dict(size=12),  # Use the same font size as in the first chart
+            font=dict(size=15),  # Use the same font size as in the first chart
             legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45),  # Center the legend
         )
 
@@ -375,9 +385,11 @@ with col2:
     else:
         st.write("Income statement is empty.")
 
+
+
 # Plot bar Revenue Growth ***************************************************************************************
 
-col1, col2 = st.columns([0.7, 0.3])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3 = st.columns([0.45, 0.45, 0.1])  # Adjust the width ratio of col1 and col2 as needed
 
 percentage_change_df = income_statement_numeric
 
@@ -393,15 +405,18 @@ percentage_change_df.iloc[:, 0] = percentage_change_df.iloc[:, 0].fillna(0)
 data_percentage_change_df = percentage_change_df.loc[
     ['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']].transpose()
 
+
+
+
 # Now you can proceed with the rest of your code
 with col1:
     # # Add title in the middle with smaller font size
     # st.markdown("<h2 style='text-align: left; color: white'>Company Growth Trend</h2>", unsafe_allow_html=True)
-
     st.subheader(f"Company Growth Trend")
+
     st.write("")
     # Use Streamlit's columns layout manager to display charts side by side
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2 = st.columns(2)
 
     # Define colors for each metric
     line_colors = ['blue', 'red', 'green', 'orange']
@@ -423,7 +438,7 @@ with col1:
                 # Add trace for the current metric
                 fig.add_trace(go.Scatter(
                     x=pd.to_datetime(data_percentage_change_df.index).strftime(
-                        '%Y-%m-%d' if is_quarterly else '%Y'),
+                        '%Y-%m-%d' if is_quarterly else '%Y-%m'),
                     y=data_percentage_change_df[metric],
                     mode='lines',
                     name=metric,
@@ -434,7 +449,7 @@ with col1:
                 for index, row in data_percentage_change_df.iterrows():
                     index_dt = pd.to_datetime(index)  # Convert index to datetime object
                     fig.add_annotation(
-                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%Y'),
+                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%Y-%m'),
                         # Use specific x-value for each data point
                         y=row[metric],  # y-coordinate of the annotation
                         text=f"{row[metric]:.2f}%",  # text to display (format as needed)
@@ -487,7 +502,7 @@ with col1:
                 # Add trace for the current metric
                 fig.add_trace(go.Scatter(
                     x=pd.to_datetime(data_percentage_change_df.index).strftime(
-                        '%Y-%m-%d' if is_quarterly else '%Y'),
+                        '%Y-%m-%d' if is_quarterly else '%Y-%m'),
                     y=data_percentage_change_df[metric],
                     mode='lines',
                     name=metric,
@@ -498,7 +513,7 @@ with col1:
                 for index, row in data_percentage_change_df.iterrows():
                     index_dt = pd.to_datetime(index)  # Convert index to datetime object
                     fig.add_annotation(
-                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%Y'),
+                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%Y-%m'),
                         # Use specific x-value for each data point
                         y=row[metric],  # y-coordinate of the annotation
                         text=f"{row[metric]:.2f}%",  # text to display (format as needed)
@@ -533,7 +548,7 @@ with col1:
 
 # Basic EPS and Diluted EPS data for all years *****************************************************
 
-col1, col2, col3 = st.columns([0.2, 0.2, 0.5])
+col1, col2, col3 = st.columns([0.3, 0.3, 0.4])
 
 with col1:
     # Extract Basic EPS and Diluted EPS data for all years
@@ -570,7 +585,7 @@ with col1:
     # Update layout
     fig.update_layout(
         title='Basic EPS vs Diluted EPS',
-        title_x=0.35,
+        title_x=0.4,
         xaxis=dict(title='' if is_quarterly else ''),
         yaxis=dict(title='EPS Value'),
         barmode='group',
@@ -579,7 +594,7 @@ with col1:
             yanchor="bottom",
             y=1.02,
             xanchor="center",
-            x=0.5
+            x=0.45
         ),
         font=dict(
             size=14  # Adjust font size of values on bars
@@ -641,7 +656,7 @@ with col2:
     # Update layout
     fig.update_layout(
         title='EBIT VS EBITDA vs Net Income (M$)',
-        title_x=0.25,
+        title_x=0.35,
         xaxis=dict(title='' if is_quarterly else ''),
         yaxis=dict(title='Value'),
         barmode='group',
@@ -650,7 +665,7 @@ with col2:
             yanchor="bottom",
             y=1.02,
             xanchor="center",
-            x=0.5
+            x=0.45
         ),
         font=dict(
             size=14  # Adjust font size of values on bars
