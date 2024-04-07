@@ -273,6 +273,8 @@ with col1:
     else:
         st.write("Income statement is empty.")
 
+
+
 col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
@@ -389,7 +391,7 @@ with col2:
 
 # Plot bar Revenue Growth ***************************************************************************************
 
-col1, col2, col3 = st.columns([0.45, 0.45, 0.1])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 percentage_change_df = income_statement_numeric
 
@@ -470,7 +472,7 @@ with col1:
                     yaxis=dict(title='% Growth'),
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
-                    font=dict(size=12),
+                    font=dict(size=15),
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=1),
                 )
 
@@ -534,7 +536,7 @@ with col1:
                     yaxis=dict(title='% Growth'),
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
-                    font=dict(size=12),
+                    font=dict(size=15),
                     legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=1),
                 )
 
