@@ -583,11 +583,11 @@ with col3:
 
     # Add bar trace for Issuance Of Debt
     fig.add_trace(
-        go.Bar(x=Issuance_Of_Debt.index, y=Issuance_Of_Debt.values, name='Issuance Of Debt', marker_color='green'))
+        go.Bar(x=Issuance_Of_Debt.index, y=Issuance_Of_Debt.values, name='Issuance Of Debt', marker_color='red'))
 
     # Add bar trace for Repayment Of Debt
     fig.add_trace(
-        go.Bar(x=Repayment_Of_Debt.index, y=Repayment_Of_Debt.values, name='Repayment Of Debt', marker_color='red'))
+        go.Bar(x=Repayment_Of_Debt.index, y=Repayment_Of_Debt.values, name='Repayment Of Debt', marker_color='green'))
 
     # Update layout
     fig.update_layout(
