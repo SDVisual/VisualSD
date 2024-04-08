@@ -329,7 +329,7 @@ with col2:
     # Add bar trace for total assets
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Current Assets'], name='Current Assets',
-               marker_color='blue'))
+               marker_color='green'))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
@@ -368,7 +368,7 @@ with col3:
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Non Current Assets'],
                name='Total Non Current Assets',
-               marker_color='blue'))
+               marker_color='green'))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
