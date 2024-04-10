@@ -1,4 +1,5 @@
-import datetime
+# import datetime
+from datetime import datetime, timedelta
 import streamlit as st
 import yfinance as yf
 import plotly.graph_objects as go
@@ -52,11 +53,6 @@ new_symbol = st.text_input("Add Stock Symbol to Symbols List (e.g., AAPL)").stri
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
 
-else:
-    if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
-
-
 
 
 # Check if the entered symbol is valid
@@ -86,14 +82,14 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
-# Sidebar date inputs
-start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2023, 1, 1))
-end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
+# # Sidebar date inputs
+# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime(2000, 1, 1))
+# end_date = st.sidebar.date_input('End date', datetime.now().date())
 
 # Display a message box in the sidebar
 st.sidebar.info("For the best experience, maximize your screen.")
 
-df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+# df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
 StockInfo = yf.Ticker(ticker).info
 
@@ -193,12 +189,14 @@ pairs = [
 ]
 
 
-col1, col2, col3 = st.columns([0.45, 0.45, 0.1])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3, col4 = st.columns([0.3, 0.03, 0.40, 0.10])  # Adjust the width ratio of col1 and col2 as needed
+
+
 
 
 with col1:
 
-     # Define the color code
+    # Define the color code
     color_code = "#0ECCEC"
 
 
@@ -218,8 +216,7 @@ with col1:
         unsafe_allow_html=True
     )
 
-
-
+    st.write("")
     st.write("")
     st.write("")
 
@@ -294,46 +291,135 @@ with col1:
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<40} {label2_value2}")
 
-   
+    st.write("")
     st.write("")
     st.subheader(f'Company Summery')
 
-    
+
     st.write("")
     st.write(StockInfo['longBusinessSummary'])
-   
+
     st.write("")
     st.write("Company Website:", StockInfo['website'])
 
-# Column 2: *****************************      Candlestick chart         ***************************
-with col2:
-    # Centered subheader with dates
-    st.markdown("<h3 style='text-align: center;'>Stock Chart For Dates: {} to {}</h3>".format(
-        start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y")), unsafe_allow_html=True)
 
+with col2:
+    st.write("")
+    st.write("")
+
+    # Fetch data based on the selected time period or default to '1Y'
+    selected_time_period = st.session_state.get('selected_time_period', '1Y')
+    df_ticker = yf.download(ticker, period='max').reset_index()
+    end_date = datetime.now()
+    # Buttons for selecting different time periods
+    time_periods = ['7D', '2M', '6M', 'YTD', '1Y', '5Y', 'MAX']
+    for _ in range(6):
+        st.write("")
+
+    # Display buttons in a single row
+    button_container = st.container()
+
+    # # # Initialize selected_time_period to '1Y' as default
+    # selected_time_period = '1Y'
+
+    with button_container:
+        button_spacing = 7  # Adjust spacing between buttons
+        st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
+
+        for period in time_periods:
+            if st.button(period):
+                selected_time_period = period
+                st.session_state.selected_time_period = period
+
+    # Calculate start date based on selected time period
+
+    if selected_time_period == '7D':
+        start_date = end_date - timedelta(days=7)
+    elif selected_time_period == '2M':
+        start_date = end_date - timedelta(days=60)
+    elif selected_time_period == '6M':
+        start_date = end_date - timedelta(days=180)
+    elif selected_time_period == 'YTD':
+        start_date = datetime(end_date.year, 1, 1)
+    elif selected_time_period == '1Y':
+        start_date = end_date - timedelta(days=365)
+    elif selected_time_period == '5Y':
+        start_date = end_date - timedelta(days=5 * 365)
+    else:  # 'MAX'
+        start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
+
+    # Fetch data for the selected time period again
+    df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+
+with col3:
+    st.write("")
+    st.write("")
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
     else:
-        candlestick_chart = go.Figure(data=[go.Candlestick(x=df_ticker['Date'],
-                                                           open=df_ticker['Open'],
-                                                           high=df_ticker['High'],
-                                                           low=df_ticker['Low'],
-                                                           close=df_ticker['Close'])])
+        # Calculate additional information
+        max_price = df_ticker['High'].max()
+        min_price = df_ticker['Low'].min()
+        range_low_to_high = ((max_price - min_price) / min_price) * 100
+
+        initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
+        final_close = df_ticker.iloc[-1]['Close']  # Closing price for the earliest date
+        yield_percentage = (((final_close / initial_close) - 1) * 100)
+
+        # Determine color based on yield
+        yield_color = 'red' if yield_percentage < 0 else 'green'
+
+
+
+        candlestick_chart = go.Figure()
+
+        # Add candlestick trace
+        candlestick_chart.add_trace(go.Candlestick(x=df_ticker['Date'],
+                                                    open=df_ticker['Open'],
+                                                    high=df_ticker['High'],
+                                                    low=df_ticker['Low'],
+                                                    close=df_ticker['Close'],
+                                                    name='Candlestick'))
+
+        # Add volume bars in light blue
+        candlestick_chart.add_trace(go.Bar(x=df_ticker['Date'],
+                                            y=df_ticker['Volume'],
+                                            yaxis='y2',
+                                            name='Shares Volume',
+                                            marker_color='rgba(52, 152, 219, 0.3)'))
+
+        # Set the title of the chart with both main and additional information
+        candlestick_chart.update_layout(
+            title_text="<span style='text-align: center;'>Stock Chart For Dates: {} to {}</span><br>"
+                       "<span style='font-size: 18px;'>Low Price: {:.2f} | High Price: {:.2f} | Range Low To High: {:.2f}%</span><br>"
+                       "<span style='font-size: 18px;'>                                                  Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+                start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
+                min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+            title_x=0.25,  # Center the title
+            title_font_size=25,  # Increase font size
+            title_y=0.95,  # Adjust title vertical position
+            title_yanchor='top'  # Anchor the title at the top
+        )
 
         candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
                                         xaxis=dict(type='date', range=[start_date, end_date]),
+                                        yaxis=dict(title='Price', showgrid=True),  # Remove gridlines from y-axis
+                                        yaxis2=dict(title='Volume',
+                                                    overlaying='y',
+                                                    side='right',  # Move to the right side
+                                                    position=1,  # Move outside the plot area
+                                                    showgrid=False),  # Remove gridlines from y2-axis
                                         height=600)
 
         # Hide Plotly toolbar and directly display the chart
-
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
-        
+
     if st.checkbox('Show Stock Price History Data'):
-        st.subheader('Stock History')
+        st.subheader('Stock History - {}'.format(selected_time_period))
         sorted_df = df_ticker.sort_values(by='Date', ascending=False)
         st.write(sorted_df)
-        
 
+#
 
 
 
