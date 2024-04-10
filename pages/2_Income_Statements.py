@@ -197,16 +197,16 @@ styled_income_statement = income_statement.style.set_table_styles([
 
 
 
-# Convert the styled DataFrame to HTML
-styled_income_statement_html = styled_income_statement
+# # Convert the styled DataFrame to HTML
+# styled_income_statement_html = styled_income_statement
 
-# Use st.markdown to add a vertical scroll bar without expanding
-st.markdown(
-    f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
-    unsafe_allow_html=True
-)
+# # Use st.markdown to add a vertical scroll bar without expanding
+# st.markdown(
+#     f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
+#     unsafe_allow_html=True
+# )
 
-# st.write(styled_income_statement)
+st.write(styled_income_statement)
 st.write("")
 st.write("")
 
