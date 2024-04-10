@@ -529,11 +529,11 @@ with col2:
 
 with col3:
 
-    # st.write(cash_flow)
-    # st.write(income_statement)
+    st.write(cash_flow)
+    st.write(income_statement)
     
     # Convert values to millions
-    cash_flow = cash_flow.astype(float) * 1_000_000  # Divide by 1 million
+    
     # Transpose the cash_flow DataFrame to convert the row into a column
     cash_flow_transposed = cash_flow.transpose()
 
