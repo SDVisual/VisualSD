@@ -184,34 +184,34 @@ income_statement = income_statement.apply(
 
 
 
-st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
+st.write(f'* values in millions $')
 
 
 
 styled_income_statement = income_statement.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
-    {'selector': 'th, td', 'props': [('text-align', 'center'), ('border', '1px solid blue')]},
+    {'selector': 'th, td', 'props': [('text-align', 'center'), ('border', '1px solid blue'), ('font-size', '30px')]},
     {'selector': 'th', 'props': [('text-align', 'left')]},
-    {'selector': '', 'props': [('font-size', '15px')]}  # Adjust font size for the entire table
 ])
 
 
 
-# # Convert the styled DataFrame to HTML
-# styled_income_statement_html = styled_income_statement
+st.dataframe(styled_income_statement)
 
-# # Use st.markdown to add a vertical scroll bar without expanding
-# st.markdown(
-#     f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
-#     unsafe_allow_html=True
-# )
-
-st.write(styled_income_statement)
 st.write("")
 st.write("")
 
+
+# Define the color code for the "Chart Zone" text
+color_code_chart_zone = "white"  # Example color code
+
+# Display the styled header using st.write() with HTML
+st.write(
+    f'<span style="font-size:30px;">Chart Zone</span>',
+    unsafe_allow_html=True
+)
 st.write(f'* All charts are interactive by clicking legend elements')
-st.write("")
+st.write(f'* values in millions $')
 st.write("")
 
 col1, col2 = st.columns([0.5, 0.5])  # Adjust the width ratio of col1 and col2 as needed
@@ -277,7 +277,9 @@ with col1:
         st.write("Income statement is empty.")
 
 
-
+st.subheader(f"revenues & expenses ")
+st.write("")
+st.write("")
 col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
@@ -392,6 +394,8 @@ with col2:
 
 
 
+
+
 # Plot bar Revenue Growth ***************************************************************************************
 
 col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
@@ -417,7 +421,7 @@ data_percentage_change_df = percentage_change_df.loc[
 with col1:
     # # Add title in the middle with smaller font size
     # st.markdown("<h2 style='text-align: left; color: white'>Company Growth Trend</h2>", unsafe_allow_html=True)
-    st.subheader(f"Company Growth Trend")
+    st.subheader(f"Growth Trend")
 
     st.write("")
     # Use Streamlit's columns layout manager to display charts side by side
@@ -552,10 +556,12 @@ with col1:
 
 
 # Basic EPS and Diluted EPS data for all years *****************************************************
-
+st.subheader(f"profitability")
 col1, col2, col3 = st.columns([0.3, 0.3, 0.4])
 
 with col1:
+
+
     # Extract Basic EPS and Diluted EPS data for all years
     basic_eps = income_statement.loc['Basic EPS'].astype(float)
     diluted_eps = income_statement.loc['Diluted EPS'].astype(float)
@@ -610,6 +616,8 @@ with col1:
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
 with col2:
+
+
     # Extract EBITDA and Net Income data for all years without converting to float
     ebit = income_statement.loc['EBIT']
     ebitda = income_statement.loc['EBITDA']
