@@ -167,6 +167,8 @@ def str_to_float(value):
     except ValueError:
         return value  # Return the original value if conversion fails
 
+# Convert values to millions
+cash_flow = cash_flow.astype(float) / 1_000_000  # Divide by 1 million
 
 # Fill empty cells with '0'
 cash_flow.fillna('0', inplace=True)
