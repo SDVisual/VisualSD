@@ -203,7 +203,7 @@ percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].
 # st.write(percentage_change_cash_flow)
 
 
-st.write("<span style='font-size: 16px;'>*  values in millions $</span>", unsafe_allow_html=True)
+st.write("<span style='font-size: 16px;'>*values in millions $</span>", unsafe_allow_html=True)
 
 # Apply styling to the cash flow DataFrame
 styled_cash_flow = cash_flow.style.set_table_styles([
@@ -235,8 +235,8 @@ st.write(
     f'<span style="font-size:30px;">Chart Zone</span>',
     unsafe_allow_html=True
 )
-st.write(f'* All charts are interactive by clicking legend elements')
-st.write(f'* values in millions $')
+st.write(f'*All charts are interactive by clicking legend elements')
+st.write(f'*values in millions $')
 st.write("")
 
 col1, col2 = st.columns([0.6, 0.4])
