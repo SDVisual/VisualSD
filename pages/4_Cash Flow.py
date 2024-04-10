@@ -203,7 +203,7 @@ percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].
 # st.write(percentage_change_cash_flow)
 
 
-st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
+st.write("<span style='font-size: 16px;'>* values in millions $</span>", unsafe_allow_html=True)
 
 # Apply styling to the cash flow DataFrame
 styled_cash_flow = cash_flow.style.set_table_styles([
