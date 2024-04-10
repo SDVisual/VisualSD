@@ -169,8 +169,11 @@ def str_to_float(value):
         return value  # Return the original value if conversion fails
 
 
+
+
+
 # Convert values to millions
-cash_flow = cash_flow.astype(float) / 1_000_000  # Divide by 1 million
+cash_flow = cash_flow.astype(float) / 1_000_000
 
 # Fill empty cells with '0'
 cash_flow.fillna('0', inplace=True)
@@ -203,8 +206,7 @@ percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].
 # st.write(percentage_change_cash_flow)
 
 
-st.write("<span style='font-size: 16px;'>*values in millions $</span>", unsafe_allow_html=True)
-
+st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
 # Apply styling to the cash flow DataFrame
 styled_cash_flow = cash_flow.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
@@ -213,19 +215,11 @@ styled_cash_flow = cash_flow.style.set_table_styles([
     {'selector': 'th:first-child, td:first-child', 'props': [('text-align', 'left')]}  # Align first column to left
 ])
 
-# # Convert the styled DataFrame to HTML
-# styled_cash_flow_html = styled_cash_flow.render()
 
-# # Use st.markdown to add a vertical scroll bar without expanding
-# st.markdown(
-#     f'<div style="max-height: 400px; overflow-y: auto;">{styled_cash_flow_html}</div>',
-#     unsafe_allow_html=True
-# )
 
 st.write(cash_flow)
 st.write("")
 st.write("")
-
 
 # Define the color code for the "Chart Zone" text
 color_code_chart_zone = "white"  # Example color code
@@ -238,6 +232,7 @@ st.write(
 st.write(f'*All charts are interactive by clicking legend elements')
 st.write(f'*values in millions $')
 st.write("")
+
 
 col1, col2 = st.columns([0.6, 0.4])
 
@@ -529,11 +524,11 @@ with col2:
 
 with col3:
 
-    st.write(cash_flow)
-    st.write(income_statement)
-    
+
     # Convert values to millions
-    
+    income_statement = income_statement.astype(float) / 1_000_000
+
+
     # Transpose the cash_flow DataFrame to convert the row into a column
     cash_flow_transposed = cash_flow.transpose()
 
@@ -549,6 +544,7 @@ with col3:
     cash_flow_transposed['Free Cash Flow'] = pd.to_numeric(cash_flow_transposed['Free Cash Flow'], errors='coerce')
 
     # Calculate free cash flow margin as a percentage
+
     free_cash_flow_margin_percentage = (cash_flow_transposed['Free Cash Flow'] / income_statement_transposed[
         'Total Revenue']) * 100
 
