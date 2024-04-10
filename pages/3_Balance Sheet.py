@@ -154,7 +154,7 @@ desired_order = [
 # is_extended = st.checkbox("Show extended Balance Sheet", value=False)
 
 
-st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
+st.write("<span style='font-size: 16px;'>* values in millions $</span>", unsafe_allow_html=True)
 
 
 
@@ -195,23 +195,28 @@ styled_balance_sheet = balance_sheet.style.set_table_styles([
     {'selector': 'th', 'props': [('text-align', 'left')]}
 ])
 
-# # Convert the styled DataFrame to HTML
-# styled_balance_sheet_html = styled_balance_sheet
 
-# # Use st.markdown to add a vertical scrollbar without expanding
-# st.markdown(
-#     f'<div style="max-height: 400px; overflow-y: auto;">{styled_balance_sheet_html}</div>',
-#     unsafe_allow_html=True
-# )
 st.write(balance_sheet)
+st.write("")
+st.write("")
+
+
+# Define the color code for the "Chart Zone" text
+color_code_chart_zone = "white"  # Example color code
+
+# Display the styled header using st.write() with HTML
+st.write(
+    f'<span style="font-size:30px;">Chart Zone</span>',
+    unsafe_allow_html=True
+)
+st.write(f'* All charts are interactive by clicking legend elements')
+st.write(f'* values in millions $')
+
 
 col1, col2 = st.columns([0.8, 0.2])  # Adjust the width ratio of col1 and col2 as needed
 
 with col1:
-    st.write("")
-    st.write("")
-    st.write(f'* All charts are interactive by clicking legend elements')
-    st.write("")
+
 
     
     # Transpose the balance sheet DataFrame
@@ -329,7 +334,7 @@ with col2:
     # Add bar trace for total assets
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Current Assets'], name='Current Assets',
-               marker_color='green'))
+               marker_color='blue'))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
@@ -368,7 +373,7 @@ with col3:
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Non Current Assets'],
                name='Total Non Current Assets',
-               marker_color='green'))
+               marker_color='blue'))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
