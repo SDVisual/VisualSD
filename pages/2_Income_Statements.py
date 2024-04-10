@@ -191,19 +191,22 @@ st.write("<span style='font-size: 16px;'>* All values in millions $</span>", uns
 styled_income_statement = income_statement.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
     {'selector': 'th, td', 'props': [('text-align', 'center'), ('border', '1px solid blue')]},
-    {'selector': 'th', 'props': [('text-align', 'left')]}
+    {'selector': 'th', 'props': [('text-align', 'left')]},
+    {'selector': '', 'props': [('font-size', '15px')]}  # Adjust font size for the entire table
 ])
 
-# # Convert the styled DataFrame to HTML
-# styled_income_statement_html = styled_income_statement.render()
 
-# # Use st.markdown to add a vertical scroll bar without expanding
-# st.markdown(
-#     f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
-#     unsafe_allow_html=True
-# )
 
-st.write(styled_income_statement)
+# Convert the styled DataFrame to HTML
+styled_income_statement_html = styled_income_statement.render()
+
+# Use st.markdown to add a vertical scroll bar without expanding
+st.markdown(
+    f'<div style="max-height: 400px; overflow-y: auto;">{styled_income_statement_html}</div>',
+    unsafe_allow_html=True
+)
+
+# st.write(styled_income_statement)
 st.write("")
 st.write("")
 
@@ -248,7 +251,7 @@ with col1:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=colors[i % len(colors)], line=dict(width=2, color='black')),
-                insidetextfont=dict(size=25),
+                insidetextfont=dict(size=15),
             ))
 
         # Update layout
@@ -264,7 +267,7 @@ with col1:
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
-            font=dict(size=20),
+            font=dict(size=15),
             legend=dict(orientation="h", yanchor="bottom", y=1.07, xanchor="center", x=0.45),
             # Center the legend
         )
@@ -306,7 +309,7 @@ with col1:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=bar_colors, line=dict(width=2, color='black')),
-                insidetextfont=dict(size=20) if metric == 'Total Revenue' or metric == 'Operating Income' else dict(
+                insidetextfont=dict(size=15) if metric == 'Total Revenue' or metric == 'Operating Income' else dict(
                     size=15),
             ))
 
@@ -325,7 +328,7 @@ with col1:
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
-            font=dict(size=20),
+            font=dict(size=15),
             legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45),  # Center the legend
         )
 
@@ -361,7 +364,7 @@ with col2:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=colors_expenses[i], line=dict(width=2, color='black')),
-                insidetextfont=dict(size=25),  # Use the same size as in the first chart
+                insidetextfont=dict(size=15),  # Use the same size as in the first chart
             ))
 
         # Update layout to match the first chart
@@ -599,7 +602,7 @@ with col1:
             x=0.45
         ),
         font=dict(
-            size=14  # Adjust font size of values on bars
+            size=15  # Adjust font size of values on bars
         )
     )
 
@@ -670,7 +673,7 @@ with col2:
             x=0.45
         ),
         font=dict(
-            size=14  # Adjust font size of values on bars
+            size=15  # Adjust font size of values on bars
         )
     )
     # Display the chart without the menu
