@@ -184,7 +184,7 @@ income_statement = income_statement.apply(
 
 
 
-st.write(f'* values in millions $')
+st.write(f'*values in millions $')
 
 
 
