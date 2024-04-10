@@ -398,7 +398,8 @@ with col3:
             title_x=0.20,  # Center the title
             title_font_size=25,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
-            title_yanchor='top'  # Anchor the title at the top
+            title_yanchor='top',  # Anchor the title at the top
+            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)  # Adjust legend position
         )
 
         candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
