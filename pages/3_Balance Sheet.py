@@ -150,8 +150,7 @@ desired_order = [
     'Total Debt', 'Net Debt', 'Share Issued', 'Ordinary Shares Number', 'Treasury Shares Number'
 ]
 
-# # Checkbox to toggle display of extended balance sheet
-# is_extended = st.checkbox("Show extended Balance Sheet", value=False)
+
 
 
 st.write("<span style='font-size: 16px;'>* values in millions $</span>", unsafe_allow_html=True)
@@ -209,11 +208,13 @@ st.write(
     f'<span style="font-size:30px;">Chart Zone</span>',
     unsafe_allow_html=True
 )
-st.write(f'*All charts are interactive by clicking legend elements')
-st.write(f'*values in millions $')
+st.write(f'* All charts are interactive by clicking legend elements')
+st.write(f'* values in millions $')
 
 
 col1, col2 = st.columns([0.8, 0.2])  # Adjust the width ratio of col1 and col2 as needed
+
+
 
 with col1:
 
@@ -255,9 +256,7 @@ with col1:
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
 
-    # st.write(balance_sheet)
 
-    # Assuming balance_sheet is your DataFrame containing the balance sheet data
 
     # Define a function to convert strings with commas to float
 
@@ -280,12 +279,14 @@ with col1:
     # Replace NaN values with 0
     percentage_change_balance.iloc[:, 0] = percentage_change_balance.iloc[:, 0].fillna(0)
 
-    # Display the resulting DataFrame
-    # st.write(percentage_change_balance)
+
+    st.write("")
+    st.subheader(f"Assets & Liabilities")
 
 # ******************************************   CHARTS 'Total Assets', 'Current Assets', 'Total Non Current Assets', ' Cash  & Cash Equivalents And Short Term Investments' ***************************************************
 
 col1, col2, col3, col4 = st.columns([0.25, 0.25, 0.25, 0.25])
+
 
 with col1:
 
@@ -324,6 +325,11 @@ with col1:
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
+
+
+
+
 
 with col2:
     data_percentage_change_balance = percentage_change_balance.loc['Current Assets'].transpose()
@@ -405,7 +411,12 @@ with col3:
 
 # ******************************************   CHARTS 'Total Liabilities Net Minority Interest', 'Current Liabilities' & MORE *************************************************
 
+
+st.write("")
+
+st.subheader(f"Cash & Debt ")
 with col1:
+
 
     data_percentage_change_balance = percentage_change_balance.loc[
         'Total Liabilities Net Minority Interest'].transpose()
