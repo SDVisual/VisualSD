@@ -161,11 +161,13 @@ else:
     cash_flow = cash_flow.reindex(desired_order_first, fill_value='0')
 
 
+
 def str_to_float(value):
     try:
         return float(value.replace(',', ''))  # Assuming the numbers are formatted with commas
     except ValueError:
         return value  # Return the original value if conversion fails
+
 
 # Convert values to millions
 cash_flow = cash_flow.astype(float) / 1_000_000  # Divide by 1 million
@@ -202,6 +204,7 @@ percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].
 
 
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
+
 # Apply styling to the cash flow DataFrame
 styled_cash_flow = cash_flow.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
@@ -223,7 +226,19 @@ st.write(cash_flow)
 st.write("")
 st.write("")
 
+
+# Define the color code for the "Chart Zone" text
+color_code_chart_zone = "white"  # Example color code
+
+# Display the styled header using st.write() with HTML
+st.write(
+    f'<span style="font-size:30px;">Chart Zone</span>',
+    unsafe_allow_html=True
+)
 st.write(f'* All charts are interactive by clicking legend elements')
+st.write(f'* values in millions $')
+st.write("")
+
 col1, col2 = st.columns([0.6, 0.4])
 
 with col1:
@@ -585,11 +600,11 @@ with col3:
 
     # Add bar trace for Issuance Of Debt
     fig.add_trace(
-        go.Bar(x=Issuance_Of_Debt.index, y=Issuance_Of_Debt.values, name='Issuance Of Debt', marker_color='red'))
+        go.Bar(x=Issuance_Of_Debt.index, y=Issuance_Of_Debt.values, name='Issuance Of Debt', marker_color='green'))
 
     # Add bar trace for Repayment Of Debt
     fig.add_trace(
-        go.Bar(x=Repayment_Of_Debt.index, y=Repayment_Of_Debt.values, name='Repayment Of Debt', marker_color='green'))
+        go.Bar(x=Repayment_Of_Debt.index, y=Repayment_Of_Debt.values, name='Repayment Of Debt', marker_color='red'))
 
     # Update layout
     fig.update_layout(
