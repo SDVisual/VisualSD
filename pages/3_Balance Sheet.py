@@ -209,8 +209,8 @@ st.write(
     f'<span style="font-size:30px;">Chart Zone</span>',
     unsafe_allow_html=True
 )
-st.write(f'* All charts are interactive by clicking legend elements')
-st.write(f'* values in millions $')
+st.write(f'*All charts are interactive by clicking legend elements')
+st.write(f'*values in millions $')
 
 
 col1, col2 = st.columns([0.8, 0.2])  # Adjust the width ratio of col1 and col2 as needed
