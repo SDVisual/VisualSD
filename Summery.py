@@ -395,7 +395,7 @@ with col3:
                        "<span style='font-size: 18px;'>                                                  Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                 start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
                 min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-            title_x=0.25,  # Center the title
+            title_x=0.20,  # Center the title
             title_font_size=25,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top'  # Anchor the title at the top
