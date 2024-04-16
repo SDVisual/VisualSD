@@ -57,11 +57,10 @@ if not new_symbol or new_symbol.isspace():
 
 # Check if the entered symbol is valid
 historical_data = yf.Ticker(new_symbol).history(period='1d')
-
 income_statement = yf.Ticker(new_symbol).income_stmt
 
 if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
-    st.error("Invalid symbol. Please enter a valid symbol.")
+    st.error("Invalid symbol. Please enter Only Stocks symbols.")
 
 else:
     # Add valid symbol to session state if it's not already present
@@ -90,6 +89,8 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 
 # Display a message box in the sidebar
 st.sidebar.info("For the best experience, maximize your screen.")
+
+
 
 # df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
@@ -161,7 +162,7 @@ label_mapping = {
     '50d Average Price': 'fiftyDayAverage',
     '200d Average Price': 'twoHundredDayAverage',
     'Volume': 'volume',
-    'Avg. Volume (10d)': 'averageVolume10days',
+    'Avg.Volume (10d)': 'averageVolume10days',
     'Shares Outstanding (In M$)': 'sharesOutstanding',
     'Market Cap (In B$)': 'marketCap',
     'Company EV': 'enterpriseValue',
@@ -173,6 +174,7 @@ label_mapping = {
     'Short % Of Float': 'shortPercentOfFloat',
     'Shares Short': 'sharesShort',
     '1YTarget Est': 'targetMeanPrice',
+    'Forward PE': 'forwardPE'
 }
 
 pairs = [
@@ -184,9 +186,9 @@ pairs = [
     ('52 Week Low', 'Dividend Yield'),
     ('52 Week High', 'Dividend'),
     ('50d Average Price', '1YTarget Est'),
-    ('200d Average Price', 'Short % Of Float'),
+    ('200d Average Price', 'Forward PE'),
     ('Volume', 'Shares Short'),
-    ('Avg. Volume (10d)', ''),
+    ('Avg.Volume (10d)', 'Short % Of Float'),
     ('Shares Outstanding (In M$)', '')
 ]
 
@@ -207,16 +209,14 @@ with col1:
     # Render subheader with customized font size and color
     st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
 
-    color_code1 = "#ffffff"
-
-
-    # st.subheader(f'{StockInfo["shortName"]}')
     # Write the sector and industry with custom styling
     st.write(
-        f"<h1 style='color:{color_code1}; font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
-        f"<h1 style='color:{color_code1}; font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+        f"<h1 style='font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+        f"<h1 style='font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
         unsafe_allow_html=True
     )
+
+
 
     st.write("")
     st.write("")
@@ -291,19 +291,45 @@ with col1:
         label2_value2 = f"{formatted_label2}: {formatted_value2}" if formatted_label2 else ''
 
         # Display pairs in the same line without the "|" string
-        st.text(f"{label1_value1:<40} {label2_value2}")
+        st.text(f"{label1_value1:<45} {label2_value2}")
 
     st.write("")
     st.write("")
+
+
+
+
     st.subheader(f'Company Summery')
-
-
-    st.write("")
-    st.write(StockInfo['longBusinessSummary'])
-
-    st.write("")
     st.write("Company Website:", StockInfo['website'])
+    st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
 
+    st.write(StockInfo['longBusinessSummary'])
+    st.write("")
+    st.subheader("Recommendation")
+    st.write("Number Of Analyst Opinions: ",
+             "<span style='font-size: 16px;'>" + str(StockInfo['numberOfAnalystOpinions']) + "</span>",
+             unsafe_allow_html=True)
+    st.write("Recommendation Key: ",
+             "<span style='font-size: 16px;'>" + StockInfo['recommendationKey'].upper() + "</span>",
+             unsafe_allow_html=True)
+    st.write("Target Low Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetLowPrice']) + "</span>",
+             unsafe_allow_html=True)
+    st.write("Target Mean Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetMeanPrice']) + "</span>",
+             unsafe_allow_html=True)
+    st.write("Target High Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
+             unsafe_allow_html=True)
+
+
+    # st.write("Number Of Analyst Opinions:", StockInfo['numberOfAnalystOpinions'])
+    # st.write("Recommendation Key:", StockInfo['recommendationKey'].upper())
+    # st.write("Target Low Price:", StockInfo['targetLowPrice'])
+    # st.write("Target Mean Price:", StockInfo['targetMeanPrice'])
+    # st.write("Target High Price:", StockInfo['targetHighPrice'])
+    # st.write("")
+    # st.write("")
+
+
+    # st.write(StockInfo)
 
 with col2:
     st.write("")
@@ -397,10 +423,10 @@ with col3:
                        "<span style='font-size: 18px;'>                                                  Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                 start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
                 min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-            title_x=0.20,  # Center the title
+            title_x=0.2,  # Center the title
             title_font_size=25,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
-            title_yanchor='top',  # Anchor the title at the top
+            title_yanchor='top',
             legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)  # Adjust legend position
         )
 
