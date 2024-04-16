@@ -21,12 +21,16 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="auto",)
 
-# Display the image with the caption
-st.image('Logo.png')
-st.write("")
+color_code = "#0ECCEC"
+header_html = f'<h1 style="color:{color_code};">{APP_NAME} </h1>'
+st.markdown(header_html, unsafe_allow_html=True)
 
-# Define sidebar elements
-st.sidebar.image("Side.png", use_column_width=True)
+# # Display the image with the caption
+# st.image('Logo.png')
+# st.write("")
+
+# # Define sidebar elements
+# st.sidebar.image("Side.png", use_column_width=True)
 
 # # Display title with blue color using Markdown
 # st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
