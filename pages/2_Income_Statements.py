@@ -550,10 +550,10 @@ with col1:
                         yshift=0,  # vertical shift of the annotation
                     )
                     # Define the color based on CAGR value
-                color = 'red' if cagr < 0 else 'blue'  # Change to 'red' if CAGR is negative, else 'green'
+                color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
                 # Update layout for the current chart
                 fig.update_layout(
-                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>{'     CQGR' if is_quarterly else 'CAGR'}: <span style=\"color: yellow;\">{cagr:.2%}</span>",
+                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>{'    CQGR' if is_quarterly else 'CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>",
                     title_x=0.3,  # Set the title's horizontal position to the center
                     xaxis=dict(title=''),
                     yaxis=dict(title='% Growth'),
