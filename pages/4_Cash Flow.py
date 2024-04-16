@@ -48,17 +48,20 @@ selected_symbol = st.session_state.valid_tickers[selected_ticker_index]
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
-else:
-    if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
+# else:
+#     if new_symbol in st.session_state.valid_tickers:
+#         st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
 
 
 
 # Check if the entered symbol is valid
 historical_data = yf.Ticker(new_symbol).history(period='1d')
+income_statement = yf.Ticker(new_symbol).income_stmt
 
-if new_symbol != selected_symbol and historical_data.empty:
-    st.error("Invalid symbol. Please enter a valid symbol.")
+if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+    st.error("Invalid symbol. Please enter Only Stocks symbols.")
+
+
 else:
     if new_symbol not in st.session_state.valid_tickers:
         st.session_state.valid_tickers.append(new_symbol)
@@ -91,9 +94,12 @@ StockInfo = yf.Ticker(ticker).info
 symbol = StockInfo["shortName"]
 color_code = "#0ECCEC"  # Color for the symbol
 
-# Combine st.write() with HTML-styled header
-st.write(f'<span style="color:white; font-size:30px;">Cash Flow - </span>'
+st.write(f'<span style="font-size:30px;">Cash Flow - </span>'
          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
+
+# # Combine st.write() with HTML-styled header
+# st.write(f'<span style="color:white; font-size:30px;">Cash Flow - </span>'
+#          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
 balance_sheetYear = yf.Ticker(ticker).balance_sheet
 balance_sheetQuarterly = yf.Ticker(ticker).quarterly_balance_sheet
@@ -246,11 +252,24 @@ with col1:
 
     selected_data = transposed_cash_flow_sheet[selected_columns]
 
-    # Define colors for each column
-    colors = {'Operating Cash Flow': 'blue',
-              'Investing Cash Flow': 'lightgreen',
-              'Financing Cash Flow': 'red',
-              'Free Cash Flow': 'green'}
+
+    # Remove commas from the values and then convert to float
+    selected_data = selected_data.replace(',', '', regex=True).astype(float)
+    # Convert selected data to numeric type
+    selected_data = selected_data.astype(float)
+
+    # Define colors for each column based on their values
+    colors = {}
+
+    # Additional conditions for specific columns
+    colors['Operating Cash Flow'] = ['#006400' if value > 0 else 'red' if value < 0 else 'white' for value in
+                                     selected_data['Operating Cash Flow']]
+    colors['Investing Cash Flow'] = ['green' if value > 0 else '#ff6347' if value < 0 else 'white' for value in
+                                     selected_data['Investing Cash Flow']]
+    colors['Financing Cash Flow'] = ['#3cb371' if value > 0 else '#f08080' if value < 0 else 'white' for value in
+                                     selected_data['Financing Cash Flow']]
+    colors['Free Cash Flow'] = ['lightgreen' if value > 0 else '#ffa07a' if value < 0 else 'white' for value in
+                                selected_data['Free Cash Flow']]
 
     # Convert column headers to datetime
     cash_flow.columns = pd.to_datetime(cash_flow.columns)
@@ -299,7 +318,7 @@ with col1:
 
     # Add line trace for percentage growth
     fig.add_trace(
-        go.Scatter(x=percentage_change_cash_flow.columns, y=free_cash_flow_growth, name='Percentage Growth',
+        go.Scatter(x=percentage_change_cash_flow.columns, y=free_cash_flow_growth, name='Growth Trend',
                    mode='lines+markers', line=dict(color='red'), yaxis='y2'))
 
     # Add text annotations for growth values above the bars
@@ -308,14 +327,15 @@ with col1:
                            y=value + 1,  # Shift the text 1 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color and size of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(
-        title='Company Free Cash Flow',
+        title=f"Company Free Cash Flow {'QoQ' if is_quarterly else 'YoY'}",
         title_x=0.25,
         xaxis=dict(
             title='',
@@ -343,7 +363,7 @@ with col1:
     free_cash_flow = cash_flow.transpose()['Free Cash Flow'].apply(str_to_float)
 
     # Perform division operation after applying conversion function to both columns
-    free_cash_flow_per_share = free_cash_flow / ordinary_shares_number
+    free_cash_flow_per_share = (free_cash_flow * 1000000) / ordinary_shares_number
 
     # # Print Free Cash Flow per Share
     # st.write("Free Cash Flow per Share (After Division):")
@@ -394,7 +414,7 @@ with col1:
         go.Scatter(
             x=Capital_Expenditure.index,
             y=Capital_Expenditure_percentage_change,
-            name='Percentage Growth',
+            name='Growth Trend',
             mode='lines+markers',
             line=dict(color='red'),
             yaxis='y2'  # Assign the line to the secondary y-axis
@@ -408,7 +428,8 @@ with col1:
             y=value + 1,  # Shift the text 1 above the point
             text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
             showarrow=False,  # whether to show arrow or not
-            font=dict(color='white', size=15),  # color and size of the annotation text
+            font=dict(color='black', size=15),  # color of the annotation text
+            bgcolor='yellow',
             yref='y2',  # reference point on the y-axis (in this case, it's the secondary y-axis)
             align='left',  # alignment of the text
             xanchor='left'  # anchor point along x-axis for alignment
@@ -416,7 +437,7 @@ with col1:
 
     # Update layout
     fig.update_layout(
-        title='Company Capital Expenditure',
+        title=f"Company Capital Expenditure {'QoQ' if is_quarterly else 'YoY'}",
         title_x=0.25,
         xaxis=dict(
             title='',
@@ -448,7 +469,7 @@ with col2:
     fig.add_trace(
         go.Scatter(x=free_cash_flow_per_share_df.index,
                    y=percentage_change_cash_flow_per_share,
-                   name='Percentage Growth',
+                   name='Growth Trend',
                    mode='lines+markers',
                    line=dict(color='red'),
                    yaxis='y2'))
@@ -459,15 +480,16 @@ with col2:
                            y=value + 1,  # Shift the text 1 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color and size of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(
-        title='Free Cash Flow Per Share',
-        title_x=0.25,
+        title=f"Free Cash Flow Per Share {'QoQ' if is_quarterly else 'YoY'}",
+        title_x=0.3,
         xaxis=dict(
             title='',
             tickmode='array',  # Set tick values manually
@@ -511,8 +533,8 @@ with col2:
 
     # Update layout
     fig.update_layout(
-        title='End Cash Position and Changes In Cash',
-        title_x=0.20,
+        title=f"End Cash Position and Changes In Cash {'QoQ' if is_quarterly else 'YoY'}",
+        title_x=0.28,
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
         yaxis=dict(title='Amount ($)'),
         barmode='group',  # Group bars
@@ -564,13 +586,13 @@ with col3:
             text=[f'{val:.2f}%' for val in free_cash_flow_margin_percentage.values],  # Text for each bar
             textposition='auto',
             # Position of the text (auto places the text inside the bars if there's enough space, otherwise outside)
-            textfont=dict(size=15, color='white'),  # Set font size to 14
+            textfont=dict(size=15),  # Set font size to 14
         )
     )
 
     # Update layout
     fig.update_layout(
-        title='Free Cash Flow Margin',
+        title=f"Free Cash Flow Margin {'QoQ' if is_quarterly else 'YoY'}",
         title_x=0.35,
         xaxis=dict(title='', tickmode='array',
                    tickvals=free_cash_flow_margin_percentage.index.strftime('%Y-%m-%d'),
@@ -606,9 +628,9 @@ with col3:
 
     # Update layout
     fig.update_layout(
-        title='Issuance and Repayment of Debt',
+        title=f"Issuance and Repayment of Debt {'QoQ' if is_quarterly else 'YoY'}",
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
-        title_x=0.25,
+        title_x=0.3,
         yaxis=dict(title='Amount ($)'),
         legend=dict(x=0.45, y=1.16, xanchor='center', yanchor='top', orientation='h')
     )
