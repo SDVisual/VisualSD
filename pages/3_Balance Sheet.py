@@ -49,16 +49,19 @@ selected_symbol = st.session_state.valid_tickers[selected_ticker_index]
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
-else:
-    if new_symbol in st.session_state.valid_tickers:
-        st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
+# else:
+#     if new_symbol in st.session_state.valid_tickers:
+#         st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
 
 
 # Check if the entered symbol is valid
 historical_data = yf.Ticker(new_symbol).history(period='1d')
+income_statement = yf.Ticker(new_symbol).income_stmt
 
-if new_symbol != selected_symbol and historical_data.empty:
-    st.error("Invalid symbol. Please enter a valid symbol.")
+if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+    st.error("Invalid symbol. Please enter Only Stocks symbols.")
+
+
 else:
     if new_symbol not in st.session_state.valid_tickers:
         st.session_state.valid_tickers.append(new_symbol)
@@ -92,9 +95,12 @@ balance_sheet = balance_sheetYear
 symbol = StockInfo["shortName"]
 color_code = "#0ECCEC"  # Color for the symbol
 
-# Combine st.write() with HTML-styled header
-st.write(f'<span style="color:white; font-size:30px;">Balance Sheet - </span>'
+st.write(f'<span style="font-size:30px;">Balance Sheet - </span>'
          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
+
+# # Combine st.write() with HTML-styled header
+# st.write(f'<span style="color:white; font-size:30px;">Balance Sheet - </span>'
+#          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
 st.write("")
 
@@ -228,13 +234,13 @@ with col1:
                         'Total Non Current Liabilities Net Minority Interest',
                         'Total Equity Gross Minority Interest']
     selected_data = transposed_balance_sheet[selected_columns]
-
+    colors1 = ['#0080ff', '#5483b3', '#7da0ca', '#c1e8ff']  # Add more colors if needed
     # Define colors for each column
-    colors = {'Current Assets': 'green',
-              'Total Non Current Assets': 'lightgreen',
+    colors = {'Current Assets': 'blue',
+              'Total Non Current Assets': '#0080ff',
               'Current Liabilities': 'red',
               'Total Non Current Liabilities Net Minority Interest': 'lightcoral',
-              'Total Equity Gross Minority Interest': 'blue'}
+              'Total Equity Gross Minority Interest': '#5483b3'}
 
     # Create a Plotly figure
     fig = go.Figure()
@@ -287,17 +293,30 @@ with col1:
 
 col1, col2, col3, col4 = st.columns([0.25, 0.25, 0.25, 0.25])
 
+# Determine the text color based on the theme
+# theme = st.get_option('theme.backgroundColor')
+# if theme == 'light':
+#     text_color = 'black'
+# elif theme == 'dark':
+#     text_color = 'white'
+# else:
+#     text_color = 'white'  # Default to black if theme is not recognized
+#
+# st.write(text_color)
+
 
 with col1:
 
     data_percentage_change_balance = percentage_change_balance.loc['Total Assets'].transpose()
+
+    # text_color = "#0ECCEC"  # Color for the symbol
     # Create a figure
     fig = go.Figure()
 
     # Add bar trace for total assets
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Assets'], name='Total Assets',
-               marker_color='green'))
+               marker_color="#0ECCEC"))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
@@ -305,22 +324,25 @@ with col1:
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
-        fig.add_annotation(x=data_percentage_change_balance.index[i],  # x-coordinate for annotation
-                           y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
-                           text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
-                           showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
-                           yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
-                           align='left',  # alignment of the text
-                           xanchor='left')  # anchor point along x-axis for alignment
+        fig.add_annotation(
+            x=data_percentage_change_balance.index[i],  # x-coordinate for annotation
+            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
+            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
+            showarrow=False,  # whether to show arrow or not
+            font=dict(size=15, color='black'),  # font properties for the annotation text
+            bgcolor='yellow',
+            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
+            align='left',  # alignment of the text
+            xanchor='left'  # anchor point along x-axis for alignment
+        )
 
     # Update layout
     fig.update_layout(title='Total Assets',
-                      title_x=0.25,  # Set the title position to the center
+                      title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top',
+                      legend=dict(x=0.4, y=1.15, xanchor='center', yanchor='top',
                                   orientation='h'))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
@@ -340,7 +362,7 @@ with col2:
     # Add bar trace for total assets
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Current Assets'], name='Current Assets',
-               marker_color='blue'))
+               marker_color="#0ECCEC"))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
@@ -352,18 +374,19 @@ with col2:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(title='Current Assets',
-                      title_x=0.25,  # Set the title position to the center
+                      title_x=0.4,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top',
+                      legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
                                   orientation='h'))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
@@ -379,7 +402,7 @@ with col3:
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Non Current Assets'],
                name='Total Non Current Assets',
-               marker_color='blue'))
+               marker_color="#0ECCEC"))
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
@@ -391,14 +414,15 @@ with col3:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(title='Total Non Current Assets',
-                      title_x=0.25,  # Set the title position to the center
+                      title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
@@ -440,18 +464,19 @@ with col1:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(title='Total Liabilities Net Minority Interest',
-                      title_x=0.15,  # Set the title position to the center
+                      title_x=0.25,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top',
+                      legend=dict(x=0.42, y=1.15, xanchor='center', yanchor='top',
                                   orientation='h'))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
@@ -479,18 +504,19 @@ with col2:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(title='Current Liabilities',
-                      title_x=0.25,  # Set the title position to the center
+                      title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top',
+                      legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top',
                                   orientation='h'))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
@@ -520,18 +546,19 @@ with col3:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
     fig.update_layout(title='Total Non Current Liabilities',
-                      title_x=0.25,  # Set the title position to the center
+                      title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top',
+                      legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top',
                                   orientation='h'))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
@@ -566,7 +593,8 @@ with col1:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
@@ -608,7 +636,8 @@ with col2:
                            y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
                            text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
                            showarrow=False,  # whether to show arrow or not
-                           font=dict(color='white', size=15),  # color of the annotation text
+                           font=dict(color='black', size=15),  # color of the annotation text
+                           bgcolor='yellow',
                            yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
                            align='left',  # alignment of the text
                            xanchor='left')  # anchor point along x-axis for alignment
