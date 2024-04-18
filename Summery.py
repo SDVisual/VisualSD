@@ -90,9 +90,11 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # start_date = st.sidebar.date_input('Start date - Historical Prices', datetime(2000, 1, 1))
 # end_date = st.sidebar.date_input('End date', datetime.now().date())
 
-# Display a message box in the sidebar
-st.sidebar.info("For the best experience, maximize your screen.")
 
+# Display a message box in the sidebar
+st.sidebar.info("- For the best experience, maximize your screen.")
+st.sidebar.info("- recommend dark mode in setting menu.")
+st.sidebar.info("- רונן אתה אלוף")
 
 
 # df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
