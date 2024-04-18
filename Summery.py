@@ -94,7 +94,7 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- Close side bar for better visualization.")
-st.sidebar.info("- recommend dark mode in setting menu.")
+st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- רונן אתה אלוף")
 
 
