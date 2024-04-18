@@ -443,38 +443,6 @@ data = income_statement.loc[['Total Revenue', 'Gross Profit', 'Operating Income'
 # Convert string values to numeric
 data = pd.DataFrame(data).apply(lambda x: x.str.replace(',', '').astype(float))
 
-# # Calculate CAGR for each column
-# cagr_results = {}
-# for column in data.columns:
-#     # Check if start and end values have different signs
-#     if (data[column].iloc[0] < 0 and data[column].iloc[-1] > 0) or (
-#             data[column].iloc[0] > 0 and data[column].iloc[-1] < 0):
-#         # Calculate CAGR for the current metric with directional adjustment
-#         start_value = abs(data[column].iloc[0])
-#         end_value = abs(data[column].iloc[-1])
-#         num_periods = len(data) - 1
-#         cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
-#     else:
-#         # Regular CAGR calculation
-#         start_value = data[column].iloc[0]
-#         end_value = data[column].iloc[-1]
-#         num_periods = len(data) - 1
-#         cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
-#
-#     # Store CAGR result
-#     cagr_results[column] = cagr
-#
-# # Display the results in Streamlit
-# st.title("CAGR Calculation")
-# st.write("CAGR for each element:")
-# # st.write(cagr_results)
-# for column, cagr in cagr_results.items():
-#     st.write(f"{column}: {cagr:.2%}")
-
-
-
-
-
 
 # Now you can proceed with the rest of your code
 with col1:
@@ -484,17 +452,12 @@ with col1:
 
 
     st.write("")
+
     # Use Streamlit's columns layout manager to display charts side by side
     col1, col2 = st.columns(2)
-    # Define colors for each quarter
-    # colors = ['#0080ff', '#5483b3', '#7da0ca', '#c1e8ff']  # Add more colors if needed
-
-
 
     # Define colors for each metric
-    line_colors = ['blue', '#0080ff']
-
-
+    line_colors = ['red', 'red']
 
     # Create a new figure for the line chart
     line_fig = go.Figure()
@@ -504,18 +467,31 @@ with col1:
 
     # Iterate over each metric and create a chart
     for metric, col in zip(metrics, [col1, col2]):
-        # Check if start and end values have different signs
-        if (data[metric].iloc[0] < 0 and data[metric].iloc[-1] > 0) or (data[metric].iloc[0] > 0 and data[metric].iloc[-1] < 0):
-            # Calculate CAGR for the current metric
-            start_value = abs(data[metric].iloc[0])
-            end_value = abs(data[metric].iloc[-1])
-            num_periods = len(data) - 1
-            cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
+
+
+        # Regular CAGR calculation
+        start_value = data[metric].iloc[0]
+        end_value = data[metric].iloc[-1]
+        num_periods = len(data)
+
+        if start_value == 0:
+            # Handle zero starting value
+            cagr = 0  # Or set a specific value (e.g., "Not Applicable")
+
+        if start_value < 0 and end_value > 0:
+            # Scenario: Negative Starting Value and Positive Ending Value (N, P)
+            dif = abs(start_value) + end_value
+            cagr = ((dif / abs(start_value)) ** (1 / num_periods)) - 1
+        elif start_value < 0 and end_value < 0:
+            # Scenario: Negative Starting Value and Negative Ending Value (N, N)
+            if abs(end_value) < abs(start_value):
+                # Lost less money
+                cagr = ((end_value / start_value) ** (1 / num_periods)) + 1
+            else:
+                # Lost more money
+                cagr = -((end_value / start_value) ** (1 / num_periods)) - 1
         else:
-            # Regular CAGR calculation
-            start_value = data[metric].iloc[0]
-            end_value = data[metric].iloc[-1]
-            num_periods = len(data) - 1
+            # Regular CAGR calculation (P, P or N, N with same sign)
             cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
 
         # Create a new chart for the current metric
@@ -524,12 +500,13 @@ with col1:
                 # Create a new figure for the current metric
                 fig = go.Figure()
 
-                # Add trace for the current metric
+                # Add trace for the line chart
                 fig.add_trace(go.Scatter(
                     x=pd.to_datetime(data_percentage_change_df.index).strftime('%Y-%m-%d' if is_quarterly else '%YY'),
                     y=data_percentage_change_df[metric],
                     mode='lines',
-                    name=metric,
+                    name="Growth Trend Line",
+                    yaxis='y2',  # Assign the line to the secondary y-axis
                     line=dict(color=line_colors[metrics.index(metric)], width=3)  # Assign color from the list
                 ))
 
@@ -538,10 +515,10 @@ with col1:
                     index_dt = pd.to_datetime(index)  # Convert index to datetime object
                     fig.add_annotation(
                         x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%YY'),
-                        # Use specific x-value for each data point
                         y=row[metric],  # y-coordinate of the annotation
                         text=f"{row[metric]:.2f}%",  # text to display (format as needed)
                         showarrow=False,  # don't show an arrow
+                        yref='y2',
                         xanchor='right',  # anchor point for x-coordinate
                         yanchor='middle',  # anchor point for y-coordinate
                         align='left',  # alignment of the annotation text
@@ -549,27 +526,146 @@ with col1:
                         xshift=5,  # horizontal shift of the annotation
                         yshift=0,  # vertical shift of the annotation
                     )
-                    # Define the color based on CAGR value
+
+                # Add trace for the bar chart representing metric values
+                fig.add_trace(go.Bar(
+                    x=pd.to_datetime(data_percentage_change_df.index).strftime('%Y-%m-%d' if is_quarterly else '%YY'),
+                    y=data[metric],
+                    name=f"{metric}",
+                    marker_color='#0080ff',  # Blue bars with transparency
+                    opacity=1,  # Set the opacity for bars
+                    yaxis='y',  # Use the primary y-axis for bars
+
+                ))
+
+
+                # Define the color based on CAGR value
                 color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
                 # Update layout for the current chart
                 fig.update_layout(
-                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>{'    CQGR' if is_quarterly else 'CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>",
-                    title_x=0.3,  # Set the title's horizontal position to the center
+                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>" + ('' if is_quarterly else f"{'    ' if is_quarterly else 'Yearly CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>"),
+                    title_x=0.35,  # Set the title's horizontal position to the center
                     xaxis=dict(title=''),
-                    yaxis=dict(title='% Growth'),
+                    yaxis=dict(title=f"{metric} (M$)"),
+                    yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),  # Add secondary y-axis
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
                     font=dict(size=15, color='black'),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=1),
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5)  # Adjust legend position
                 )
 
                 # Plot the current chart
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-                # # Display the CAGR value with reduced space
-                # st.write(f"<div style='text-align: center; margin-top: -45px;'>CAGR for {metric}: {cagr:.2%}</div>",
-                #          unsafe_allow_html=True)
+            else:
+                st.write("Data is empty for metric:", metric)
 
+
+
+    # Define colors for each metric
+    line_colors = ['red', 'red']
+
+    # Create a new figure for the line chart
+    line_fig = go.Figure()
+
+    # Define the list of metrics
+    metrics = ['Operating Income', 'Net Income']
+
+
+
+
+
+    # Iterate over each metric and create a chart
+    for metric, col in zip(metrics, [col1, col2]):
+
+        # Regular CAGR calculation
+        start_value = data[metric].iloc[0]
+        end_value = data[metric].iloc[-1]
+        num_periods = len(data)
+
+
+        if start_value == 0:
+            # Handle zero starting value
+            cagr = 0  # Or set a specific value (e.g., "Not Applicable")
+
+        if start_value < 0 and end_value > 0:
+            # Scenario: Negative Starting Value and Positive Ending Value (N, P)
+            dif = abs(start_value) + end_value
+            cagr = ((dif / abs(start_value)) ** (1 / num_periods)) - 1
+        elif start_value < 0 and end_value < 0:
+            # Scenario: Negative Starting Value and Negative Ending Value (N, N)
+            if abs(end_value) < abs(start_value):
+                # Lost less money
+                cagr = ((end_value / start_value) ** (1 / num_periods)) + 1
+            else:
+                # Lost more money
+                cagr = -((end_value / start_value) ** (1 / num_periods)) - 1
+        else:
+            # Regular CAGR calculation (P, P or N, N with same sign)
+            cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
+
+        # Create a new chart for the current metric
+        with col:
+            if not data_percentage_change_df.empty:
+                # Create a new figure for the current metric
+                fig = go.Figure()
+
+                # Add trace for the line chart
+                fig.add_trace(go.Scatter(
+                    x=pd.to_datetime(data_percentage_change_df.index).strftime('%Y-%m-%d' if is_quarterly else '%YY'),
+                    y=data_percentage_change_df[metric],
+                    mode='lines',
+                    name="Growth Trend Line",
+                    yaxis='y2',  # Assign the line to the secondary y-axis
+                    line=dict(color=line_colors[metrics.index(metric)], width=3)  # Assign color from the list
+                ))
+
+                # Add annotations for each point on the line
+                for index, row in data_percentage_change_df.iterrows():
+                    index_dt = pd.to_datetime(index)  # Convert index to datetime object
+                    fig.add_annotation(
+                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%YY'),
+                        y=row[metric],  # y-coordinate of the annotation
+                        text=f"{row[metric]:.2f}%",  # text to display (format as needed)
+                        showarrow=False,  # don't show an arrow
+                        yref='y2',
+                        xanchor='right',  # anchor point for x-coordinate
+                        yanchor='middle',  # anchor point for y-coordinate
+                        align='left',  # alignment of the annotation text
+                        bgcolor='yellow',
+                        xshift=5,  # horizontal shift of the annotation
+                        yshift=0,  # vertical shift of the annotation
+                    )
+
+                # Add trace for the bar chart representing metric values
+                fig.add_trace(go.Bar(
+                    x=pd.to_datetime(data_percentage_change_df.index).strftime('%Y-%m-%d' if is_quarterly else '%YY'),
+                    y=data[metric],
+                    name=f"{metric}",
+                    marker_color='#0080ff',  # Blue bars with transparency
+                    opacity=1,  # Set the opacity for bars
+                    yaxis='y',  # Use the primary y-axis for bars
+
+                ))
+
+                # Define the color based on CAGR value
+                color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
+                # Update layout for the current chart
+                fig.update_layout(
+                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>" + ('' if is_quarterly else f"{'    ' if is_quarterly else 'Yearly CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>"),
+                    title_x=0.35,  # Set the title's horizontal position to the center
+                    xaxis=dict(title=''),
+                    yaxis=dict(title=f"{metric} (M$)"),
+                    yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),  # Add secondary y-axis
+                    width=800,  # Adjust the width of each chart as needed
+                    height=400,  # Adjust the height of each chart as needed
+                    font=dict(size=15, color='black'),
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5)
+                    # Adjust legend position
+                )
+
+                # Plot the current chart
+                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
             else:
                 st.write("Data is empty for metric:", metric)
@@ -578,88 +674,10 @@ with col1:
 
 
 
-    # Define colors for each metric
-    line_colors = ['#5483b3', '#c1e8ff']
-
-    # Create a new figure for the line chart
-    line_fig = go.Figure()
-
-    # Define the list of metrics
-    metrics = ['Operating Income', 'Net Income']
-
-    # Iterate over each metric and create a chart
-    for metric, col in zip(metrics, [col1, col2]):
-        # Check if start and end values have different signs
-        if (data[metric].iloc[0] < 0 and data[metric].iloc[-1] > 0) or (data[metric].iloc[0] > 0 and data[metric].iloc[-1] < 0):
-            # Calculate CAGR for the current metric
-            start_value = abs(data[metric].iloc[0])
-            end_value = abs(data[metric].iloc[-1])
-            num_periods = len(data) - 1
-            cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
-        else:
-            # Regular CAGR calculation
-            start_value = data[metric].iloc[0]
-            end_value = data[metric].iloc[-1]
-            num_periods = len(data) - 1
-            cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
-
-        # Create a new chart for the current metric
-        with col:
-            if not data_percentage_change_df.empty:
-                # Create a new figure for the current metric
-                fig = go.Figure()
-
-                # Add trace for the current metric
-                fig.add_trace(go.Scatter(
-                    x=pd.to_datetime(data_percentage_change_df.index).strftime(
-                        '%Y-%m-%d' if is_quarterly else '%YY'),
-                    y=data_percentage_change_df[metric],
-                    mode='lines',
-                    name=metric,
-                    line=dict(color=line_colors[metrics.index(metric)], width=3)  # Assign color from the list
-                ))
-
-                # Add annotations for each point on the line
-                for index, row in data_percentage_change_df.iterrows():
-                    index_dt = pd.to_datetime(index)  # Convert index to datetime object
-                    fig.add_annotation(
-                        x=index_dt.strftime('%Y-%m-%d' if is_quarterly else '%YY'),
-                        # Use specific x-value for each data point
-                        y=row[metric],  # y-coordinate of the annotation
-                        text=f"{row[metric]:.2f}%",  # text to display (format as needed)
-                        showarrow=False,  # don't show an arrow
-                        xanchor='right',  # anchor point for x-coordinate
-                        yanchor='middle',  # anchor point for y-coordinate
-                        align='left',  # alignment of the annotation text
-                        bgcolor='yellow',
-                        xshift=5,  # horizontal shift of the annotation
-                        yshift=0,  # vertical shift of the annotation
-                    )
-                # Define the color based on CAGR value
-                color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
-
-                # Update layout for the current chart
-                fig.update_layout(
-                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>{'    CQGR' if is_quarterly else 'CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>",
-                    title_x=0.3,  # Set the title's horizontal position to the center
-                    xaxis=dict(title=''),
-                    yaxis=dict(title='% Growth'),
-                    width=800,  # Adjust the width of each chart as needed
-                    height=400,  # Adjust the height of each chart as needed
-                    font=dict(size=15, color='black'),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=1),
-                )
-
-                # Plot the current chart
-                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
-
-
-
-
-
 
 
 # Basic EPS and Diluted EPS data for all years *****************************************************
+st.write("")
 st.subheader(f"profitability")
 col1, col2, col3 = st.columns([0.3, 0.3, 0.4])
 
