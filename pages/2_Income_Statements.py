@@ -79,6 +79,11 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
+# Display a message box in the sidebar
+st.sidebar.info("- For the best experience, maximize your screen.")
+st.sidebar.info("- Close side bar for better visualization.")
+st.sidebar.info("- Recommended dark mode in setting menu.")
+st.sidebar.markdown("&copy;Dan Oren. All rights reserved.", unsafe_allow_html=True)
 
 # # Sidebar date inputs
 # start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
