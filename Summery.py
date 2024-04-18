@@ -19,13 +19,14 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="auto",)
 
+
 color_code = "#0ECCEC"
 header_html = f'<h1 style="color:{color_code};">{APP_NAME} </h1>'
 st.markdown(header_html, unsafe_allow_html=True)
 
-# # Display the image with the caption
+# Display the image with the caption
 # st.image('Logo.png')
-# st.write("")
+
 
 # # Define sidebar elements
 # st.sidebar.image("Side.png", use_column_width=True)
@@ -302,10 +303,13 @@ with col1:
 
 
     st.subheader(f'Company Summery')
-    st.write("Company Website:", StockInfo['website'])
-    st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
+
+
 
     st.write(StockInfo['longBusinessSummary'])
+    st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
+    st.write("Company Website:", StockInfo['website'])
+
     st.write("")
     st.subheader("Recommendation")
     st.write("Number Of Analyst Opinions: ",
