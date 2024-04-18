@@ -28,7 +28,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 # # Display the image with the caption
 # st.image('Logo.png')
 # st.write("")
-
+#
 # # Define sidebar elements
 # st.sidebar.image("Side.png", use_column_width=True)
 
@@ -297,24 +297,13 @@ with col1:
 
 col1, col2, col3, col4 = st.columns([0.25, 0.25, 0.25, 0.25])
 
-# Determine the text color based on the theme
-# theme = st.get_option('theme.backgroundColor')
-# if theme == 'light':
-#     text_color = 'black'
-# elif theme == 'dark':
-#     text_color = 'white'
-# else:
-#     text_color = 'white'  # Default to black if theme is not recognized
-#
-# st.write(text_color)
 
 
 with col1:
 
     data_percentage_change_balance = percentage_change_balance.loc['Total Assets'].transpose()
 
-    # text_color = "#0ECCEC"  # Color for the symbol
-    # Create a figure
+
     fig = go.Figure()
 
     # Add bar trace for total assets
@@ -337,7 +326,8 @@ with col1:
             bgcolor='yellow',
             yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
             align='left',  # alignment of the text
-            xanchor='left'  # anchor point along x-axis for alignment
+            xanchor='left',  # anchor point along x-axis for alignment
+
         )
 
     # Update layout
