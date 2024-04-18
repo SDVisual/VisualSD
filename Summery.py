@@ -95,6 +95,8 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- Close side bar for better visualization.")
 st.sidebar.info("- Recommended dark mode in setting menu.")
+st.sidebar.info("- "This app version is less suitable for stocks in the finance industry")
+
 st.sidebar.markdown("&copy;Dan Oren. All rights reserved.", unsafe_allow_html=True)
 
 
