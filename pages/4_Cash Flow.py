@@ -83,7 +83,14 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
-StockInfo = yf.Ticker(ticker).info
+# Display a message box in the sidebar
+st.sidebar.info("- For the best experience, maximize your screen.")
+st.sidebar.info("- Close side bar for better visualization.")
+st.sidebar.info("- Recommended dark mode in setting menu.")
+st.sidebar.markdown("&copy;Dan Oren. All rights reserved.", unsafe_allow_html=True)
+
+
+
 
 
 # # Sidebar date inputs
@@ -94,7 +101,7 @@ StockInfo = yf.Ticker(ticker).info
 
 # ***************************************     Cash Flow   ************************************************************************
 
-
+StockInfo = yf.Ticker(ticker).info
 symbol = StockInfo["shortName"]
 color_code = "#0ECCEC"  # Color for the symbol
 
