@@ -26,7 +26,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 # # Display the image with the caption
 # st.image('Logo.png')
 # st.write("")
-
+#
 # # Define sidebar elements
 # st.sidebar.image("Side.png", use_column_width=True)
 
