@@ -228,7 +228,7 @@ st.write(f'*All charts are interactive by clicking legend elements')
 st.write(f'*values in millions $')
 st.write("")
 
-col1, col2 = st.columns([0.5, 0.5])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Selling General And Administration',
                                   'Research And Development', 'Operating Expense', 'Operating Income',
@@ -267,7 +267,7 @@ with col1:
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=colors[i % len(colors)], line=dict(width=1, color='black')),
-                insidetextfont=dict(size=15),
+                insidetextfont=dict(size=25),
             ))
 
         # Update layout
