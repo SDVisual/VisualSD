@@ -317,31 +317,43 @@ with col1:
     st.write("Company Website:", StockInfo['website'])
 
     st.write("")
-    st.subheader("Recommendation")
-    st.write("Number Of Analyst Opinions: ",
-             "<span style='font-size: 16px;'>" + str(StockInfo['numberOfAnalystOpinions']) + "</span>",
-             unsafe_allow_html=True)
-    st.write("Recommendation Key: ",
-             "<span style='font-size: 16px;'>" + StockInfo['recommendationKey'].upper() + "</span>",
-             unsafe_allow_html=True)
-    st.write("Target Low Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetLowPrice']) + "</span>",
-             unsafe_allow_html=True)
-    st.write("Target Mean Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetMeanPrice']) + "</span>",
-             unsafe_allow_html=True)
-    st.write("Target High Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
-             unsafe_allow_html=True)
+
+    ##############################################################################
+    st.subheader("Analyst Recommendation")
+
+    calendar = yf.Ticker(ticker).calendar
+    # Extracting the earnings dates
+    calendar_dates = calendar["Earnings Date"]
+
+    # Formatting the dates as strings
+    calendar_dates_str = [date.strftime("%d-%m-%Y") for date in calendar_dates]
+
+    # If there's only one earnings date, display it as a single date
+    if len(calendar_dates_str) == 1:
+        st.write("Next Earnings Date:", calendar_dates_str[0])
+    else:
+        # If there are multiple earnings dates, display them as a range
+        st.write("Next Earnings Dates:", " to ".join(calendar_dates_str))
+
+    if pd.isna(StockInfo.get('recommendationKey')) or StockInfo.get(
+            'recommendationKey') == "none":  # Check if recommendationKey is empty or equals "NONE"
+        st.write("No Analyst Recommendation For current company")
+    else:
+        st.write("Number Of Analyst Opinions: ",
+                 "<span style='font-size: 16px;'>" + str(StockInfo['numberOfAnalystOpinions']) + "</span>",
+                 unsafe_allow_html=True)
+        st.write("Recommendation Key: ",
+                 "<span style='font-size: 16px;'>" + StockInfo['recommendationKey'].upper() + "</span>",
+                 unsafe_allow_html=True)
+        st.write("Target Low Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetLowPrice']) + "</span>",
+                 unsafe_allow_html=True)
+        st.write("Target Mean Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetMeanPrice']) + "</span>",
+                 unsafe_allow_html=True)
+        st.write("Target High Price: ", "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
+                 unsafe_allow_html=True)
 
 
-    # st.write("Number Of Analyst Opinions:", StockInfo['numberOfAnalystOpinions'])
-    # st.write("Recommendation Key:", StockInfo['recommendationKey'].upper())
-    # st.write("Target Low Price:", StockInfo['targetLowPrice'])
-    # st.write("Target Mean Price:", StockInfo['targetMeanPrice'])
-    # st.write("Target High Price:", StockInfo['targetHighPrice'])
-    # st.write("")
-    # st.write("")
-
-
-    # st.write(StockInfo)
+        
 
 with col2:
     st.write("")
