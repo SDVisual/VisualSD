@@ -83,13 +83,6 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
 
-# Display a message box in the sidebar
-st.sidebar.info("- For the best experience, maximize your screen.")
-st.sidebar.info("- Close side bar for better visualization.")
-st.sidebar.info("- Recommended dark mode in setting menu.")
-st.sidebar.markdown("&copy;Dan Oren. All rights reserved.", unsafe_allow_html=True)
-
-
 # # Sidebar date inputs
 # start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
 # end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
@@ -320,7 +313,7 @@ with col1:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='red'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='red'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -367,7 +360,7 @@ with col2:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='red'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='red'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -407,7 +400,7 @@ with col3:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='red'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='red'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -457,7 +450,7 @@ with col1:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='blue'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='blue'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -497,7 +490,7 @@ with col2:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='blue'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='blue'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -539,7 +532,7 @@ with col3:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='blue'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='blue'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -586,7 +579,7 @@ with col1:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='red'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='red'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
@@ -629,7 +622,7 @@ with col2:
 
     # Add line trace for growth rate
     fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Rate', line=dict(color='blue'), yaxis='y2'))
+                             mode='lines+markers', name='Growth Trend Line', line=dict(color='blue'), yaxis='y2'))
 
     # Add text annotations for growth rate values above the linear points
     for i, value in enumerate(data_percentage_change_balance.values):
