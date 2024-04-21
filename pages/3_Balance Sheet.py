@@ -88,6 +88,16 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
 
+# Display a message box in the sidebar
+st.sidebar.info("- For the best experience, maximize your screen.")
+st.sidebar.info("- Close side bar for better visualization.")
+st.sidebar.info("- Recommended dark mode in setting menu.")
+st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
+
+st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
+
+
+
 StockInfo = yf.Ticker(ticker).info
 
 balance_sheetYear = yf.Ticker(ticker).balance_sheet
