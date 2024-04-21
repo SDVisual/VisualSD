@@ -313,7 +313,10 @@ with col1:
 
 
     st.write(StockInfo['longBusinessSummary'])
-    st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
+
+    if 'fullTimeEmployees' in StockInfo and StockInfo['fullTimeEmployees']:
+        st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
+    
     st.write("Company Website:", StockInfo['website'])
 
     st.write("")
