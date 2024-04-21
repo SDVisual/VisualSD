@@ -373,7 +373,7 @@ with col1:
 
 
 
-col1, col2 = st.columns([0.4, 0.4])
+col1, col2 = st.columns([0.8, 0.2])
 
 with col1:
     if st.checkbox('Show Stock Price History Data', value=False):
