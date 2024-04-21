@@ -314,7 +314,7 @@ with col1:
 
     st.write(StockInfo['longBusinessSummary'])
 
-    if 'fullTimeEmployees' in StockInfo and StockInfo['fullTimeEmployees']:
+    if 'fullTimeEmployees' in StockInfo:
         st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
     
     st.write("Company Website:", StockInfo['website'])
