@@ -79,6 +79,11 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
+
+# # Sidebar date inputs
+# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
+# end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
+
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- Close side bar for better visualization.")
@@ -86,13 +91,6 @@ st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
 st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
-
-# # Sidebar date inputs
-# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
-# end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
-
-# # Add a menu to the sidebar
-# menu_option = st.sidebar.radio("Menu", ["Company Summary", "Income Statements", "Balance Sheet", "Cash Flow"])
 
 StockInfo = yf.Ticker(ticker).info
 income_statementYear = yf.Ticker(ticker).income_stmt
@@ -475,11 +473,11 @@ with col1:
     # Iterate over each metric and create a chart
     for metric, col in zip(metrics, [col1, col2]):
 
-
         # Regular CAGR calculation
         start_value = data[metric].iloc[0]
         end_value = data[metric].iloc[-1]
         num_periods = len(data)
+        Ncagr = False
 
         if start_value == 0:
             # Handle zero starting value
@@ -497,6 +495,11 @@ with col1:
             else:
                 # Lost more money
                 cagr = -((end_value / start_value) ** (1 / num_periods)) - 1
+        elif start_value > 0 and end_value < 0:
+
+            Ncagr = True
+            st.write(Ncagr)
+
         else:
             # Regular CAGR calculation (P, P or N, N with same sign)
             cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
@@ -545,20 +548,27 @@ with col1:
 
                 ))
 
+                if Ncagr == True:
+                    title = f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>"
+                    if not is_quarterly:
+                        title += f"{''if not is_quarterly else 'Yearly CAGR:'}<span style=\"color: red;\">No CAGR (End value negative)</span>"
 
-                # Define the color based on CAGR value
-                color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
+                else:
+                    color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
+                    title = title = f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>" + (
+                        '' if is_quarterly else f"{'    ' if is_quarterly else 'Yearly CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>")
+
                 # Update layout for the current chart
                 fig.update_layout(
-                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>" + ('' if is_quarterly else f"{'    ' if is_quarterly else 'Yearly CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>"),
-                    title_x=0.35,  # Set the title's horizontal position to the center
+                    title=title,
+                    title_x=0.30,  # Set the title's horizontal position to the center
                     xaxis=dict(title=''),
                     yaxis=dict(title=f"{metric} (M$)"),
                     yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),  # Add secondary y-axis
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
                     font=dict(size=15, color='black'),
-                    legend=dict(orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5)  # Adjust legend position
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5)  # Adjust legend position
                 )
 
                 # Plot the current chart
@@ -580,8 +590,6 @@ with col1:
 
 
 
-
-
     # Iterate over each metric and create a chart
     for metric, col in zip(metrics, [col1, col2]):
 
@@ -589,7 +597,6 @@ with col1:
         start_value = data[metric].iloc[0]
         end_value = data[metric].iloc[-1]
         num_periods = len(data)
-
 
         if start_value == 0:
             # Handle zero starting value
@@ -607,6 +614,11 @@ with col1:
             else:
                 # Lost more money
                 cagr = -((end_value / start_value) ** (1 / num_periods)) - 1
+        elif start_value > 0 and end_value < 0:
+
+            Ncagr = True
+            st.write(Ncagr)
+
         else:
             # Regular CAGR calculation (P, P or N, N with same sign)
             cagr = ((end_value / start_value) ** (1 / num_periods)) - 1
@@ -655,11 +667,18 @@ with col1:
 
                 ))
 
-                # Define the color based on CAGR value
-                color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
-                # Update layout for the current chart
+                if Ncagr == True:
+                    title = f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>"
+                    if not is_quarterly:
+                        title += f"{'' if not is_quarterly else 'Yearly CAGR:'} <span style=\"color: red;\">No CAGR (End value negative)</span>"
+
+                else:
+                    color = 'red' if cagr < 0 else 'green'  # Change to 'red' if CAGR is negative, else 'green'
+                    title = title = f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>" + (
+                        '' if is_quarterly else f"{'    ' if is_quarterly else 'Yearly CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>")
+
                 fig.update_layout(
-                    title=f"{metric} {'QoQ' if is_quarterly else 'YoY'}<br>" + ('' if is_quarterly else f"{'    ' if is_quarterly else 'Yearly CAGR'}: <span style=\"color: {color};\">{cagr:.2%}</span>"),
+                    title=title,
                     title_x=0.35,  # Set the title's horizontal position to the center
                     xaxis=dict(title=''),
                     yaxis=dict(title=f"{metric} (M$)"),
@@ -667,7 +686,7 @@ with col1:
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
                     font=dict(size=15, color='black'),
-                    legend=dict(orientation="h", yanchor="bottom", y=-0.3, xanchor="center", x=0.5)
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5)
                     # Adjust legend position
                 )
 
