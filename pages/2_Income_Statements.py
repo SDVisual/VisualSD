@@ -592,7 +592,7 @@ with col1:
 
     # Iterate over each metric and create a chart
     for metric, col in zip(metrics, [col1, col2]):
-
+        Ncagr = False
         # Regular CAGR calculation
         start_value = data[metric].iloc[0]
         end_value = data[metric].iloc[-1]
