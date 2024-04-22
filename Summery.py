@@ -48,7 +48,7 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add Stock Symbol to Symbols List (e.g., AAPL)").strip().upper()
+new_symbol = st.text_input("Add Only Stock Symbol to Symbols List (e.g., AAPL)").strip().upper()
 
 
 
