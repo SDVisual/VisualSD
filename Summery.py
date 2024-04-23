@@ -48,8 +48,7 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)").strip().upper()
-
+new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks Symboles").strip().upper()
 
 
 # Check if the entered symbol is empty or consists only of whitespace characters
