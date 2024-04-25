@@ -510,7 +510,7 @@ with col2:
         ),
         yaxis_title='Amount ($)',
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
-        legend=dict(x=0.45, y=1.18, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top', orientation='h')
     )
 
     # Display the chart without the menu
@@ -550,7 +550,7 @@ with col2:
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
         yaxis=dict(title='Amount ($)'),
         barmode='group',  # Group bars
-        legend=dict(x=0.45, y=1.16, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top', orientation='h')
     )
 
     # Display the chart without the menu
@@ -644,7 +644,7 @@ with col3:
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
         title_x=0.3,
         yaxis=dict(title='Amount ($)'),
-        legend=dict(x=0.45, y=1.16, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top', orientation='h')
     )
 
     # Display the chart without the menu
