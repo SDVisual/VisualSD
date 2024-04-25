@@ -621,39 +621,44 @@ with col1:
 
 with col2:
 
-    data_percentage_change_balance = percentage_change_balance.loc['Total Debt'].transpose()
-    # Create a figure
-    fig = go.Figure()
+    if 'Total Debt' in balance_sheet.transpose():  # Checking if 'Total Debt' is present in the columns
+        data_percentage_change_balance = percentage_change_balance.loc['Total Debt'].transpose()
 
-    # Add bar trace for total assets
-    fig.add_trace(
-        go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Debt'], name='Total Debt',
-               marker_color='red'))
+        # Create a figure
+        fig = go.Figure()
 
-    # Add line trace for growth rate
-    fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
-                             mode='lines+markers', name='Growth Trend Line', line=dict(color='blue'), yaxis='y2'))
+        # Add bar trace for total assets
+        fig.add_trace(
+            go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Debt'], name='Total Debt',
+                   marker_color='red'))
 
-    # Add text annotations for growth rate values above the linear points
-    for i, value in enumerate(data_percentage_change_balance.values):
-        fig.add_annotation(x=data_percentage_change_balance.index[i],  # x-coordinate for annotation
-                           y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
-                           text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
-                           showarrow=False,  # whether to show arrow or not
-                           font=dict(color='black', size=15),  # color of the annotation text
-                           bgcolor='yellow',
-                           yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
-                           align='left',  # alignment of the text
-                           xanchor='left')  # anchor point along x-axis for alignment
+        # Add line trace for growth rate
+        fig.add_trace(go.Scatter(x=data_percentage_change_balance.index, y=data_percentage_change_balance.values,
+                                 mode='lines+markers', name='Growth Trend Line', line=dict(color='blue'), yaxis='y2'))
 
-    # Update layout
-    fig.update_layout(title='Total Debt',
-                      title_x=0.35,  # Set the title position to the center
-                      xaxis_title='',
-                      yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.35, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+        # Add text annotations for growth rate values above the linear points
+        for i, value in enumerate(data_percentage_change_balance.values):
+            fig.add_annotation(x=data_percentage_change_balance.index[i],  # x-coordinate for annotation
+                               y=data_percentage_change_balance.values[i] + 0.7,  # Shift the text 0.05 above the point
+                               text=f"{value:.2f}%",  # text to be displayed (formatted to two decimal places)
+                               showarrow=False,  # whether to show arrow or not
+                               font=dict(color='black', size=15),  # color of the annotation text
+                               bgcolor='yellow',
+                               yref='y2',  # reference point on the y-axis (in this case, it's the y2 axis)
+                               align='left',  # alignment of the text
+                               xanchor='left')  # anchor point along x-axis for alignment
 
-    # Display the chart without the menu
-    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        # Update layout
+        fig.update_layout(title='Total Debt',
+                          title_x=0.35,  # Set the title position to the center
+                          xaxis_title='',
+                          yaxis_title='Amount (M$)',
+                          yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                          legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.4))
+
+        # Display the chart without the menu
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+    else:
+        st.write("")
+        st.write("")
+        st.write("* **Current company does not have Debt**", unsafe_allow_html=True)
