@@ -654,8 +654,8 @@ with col2:
                           xaxis_title='',
                           yaxis_title='Amount (M$)',
                           yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                          legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.4))
-
+                          legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
+                                  orientation='h'))  # Set legend to horizontal orientation
         # Display the chart without the menu
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     else:
