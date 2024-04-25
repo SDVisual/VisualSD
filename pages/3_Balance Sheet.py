@@ -661,4 +661,4 @@ with col2:
     else:
         st.write("")
         st.write("")
-        st.write("* **Current company does not have Debt**", unsafe_allow_html=True)
+        # st.write("* **Current company does not have Debt**", unsafe_allow_html=True)
