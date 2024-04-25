@@ -498,7 +498,7 @@ with col1:
         elif start_value > 0 and end_value < 0:
 
             Ncagr = True
-            st.write(Ncagr)
+            # st.write(Ncagr)
 
         else:
             # Regular CAGR calculation (P, P or N, N with same sign)
