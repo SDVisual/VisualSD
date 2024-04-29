@@ -105,7 +105,7 @@ st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=Tr
 StockInfo = yf.Ticker(ticker).info
 # stocknews = yf.Ticker(ticker).news
 
-earnings_dates = yf.Ticker(ticker).earnings_dates
+# earnings_dates = yf.Ticker(ticker).earnings_dates
 # analyst_price_target = yf.Ticker(ticker).revenue_forecasts
 rec_summery = yf.Ticker(ticker).recommendations_summary
 
