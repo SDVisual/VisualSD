@@ -21,7 +21,7 @@ st.set_page_config(
 
 
 color_code = "#0ECCEC"
-header_html = f'<h1 style="color:{color_code};">{APP_NAME} </h1>'
+header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 # Display the image with the caption
@@ -222,7 +222,7 @@ with col1:
     color_code = "#0ECCEC"
 
 
-    font_size = "30px"  # You can adjust the font size as needed
+    font_size = "25px"  # You can adjust the font size as needed
 
     # Render subheader with customized font size and color
     st.markdown(f'<h2 style="color:{color_code}; font-size:{font_size}">{StockInfo["shortName"]}</h2>', unsafe_allow_html=True)
@@ -245,8 +245,11 @@ with col1:
 col1, col2, col3, col4 = st.columns([0.6, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
 
+
+
+
 with col2:
-    st.write("")
+    # st.write("")
     st.write("")
     st.write("")
 
@@ -256,7 +259,7 @@ with col2:
     end_date = datetime.now()
     # Buttons for selecting different time periods
     time_periods = ['7D', '2M', '6M', 'YTD', '1Y', '5Y', 'MAX']
-    for _ in range(6):
+    for _ in range(2):
         st.write("")
 
     # Display buttons in a single row
@@ -266,7 +269,7 @@ with col2:
     # selected_time_period = '1Y'
 
     with button_container:
-        button_spacing = 7  # Adjust spacing between buttons
+        button_spacing = 2  # Adjust spacing between buttons
         st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
 
         for period in time_periods:
@@ -299,8 +302,8 @@ with col2:
 
 
 with col1:
-    st.write("")
-    st.write("")
+    # st.write("")
+    # st.write("")
     # df_ticker = yf.download(ticker, period='max').reset_index()
 
 
@@ -340,8 +343,8 @@ with col1:
         # Set the title of the chart with both main and additional information
         candlestick_chart.update_layout(
             title_text="<span style='text-align: center;'>Stock Chart For Dates: {} to {}</span><br>"
-                       "<span style='font-size: 18px;'>Low Price: {:.2f} | High Price: {:.2f} | Range Low To High: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                                                  Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+                       "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
+                       "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                 start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
                 min_price, max_price, range_low_to_high, yield_color, yield_percentage),
             title_x=0.15,  # Center the title
@@ -360,7 +363,7 @@ with col1:
                                                     side='right',  # Move to the right side
                                                     position=1,  # Move outside the plot area
                                                     showgrid=False),  # Remove gridlines from y2-axis
-                                        height=600)
+                                        height=500)
 
         # Hide Plotly toolbar and directly display the chart
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
@@ -516,7 +519,6 @@ with col1:
         st.write("Target High Price: ",
                  "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
                  unsafe_allow_html=True)
-
 
 
 
