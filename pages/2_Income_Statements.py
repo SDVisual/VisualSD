@@ -20,7 +20,7 @@ st.set_page_config(
 
 
 color_code = "#0ECCEC"
-header_html = f'<h1 style="color:{color_code};">{APP_NAME} </h1>'
+header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
