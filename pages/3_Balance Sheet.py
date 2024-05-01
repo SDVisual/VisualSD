@@ -344,7 +344,7 @@ with col1:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.4))  # Adjust legend position
 
     # Display the chart without the menu
