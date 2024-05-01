@@ -1,5 +1,4 @@
 
-
 import datetime
 import streamlit as st
 import yfinance as yf
@@ -19,7 +18,7 @@ APP_NAME = "Visual Stock Data"
 st.set_page_config(
     page_title=APP_NAME,
     layout="wide",
-    initial_sidebar_state="auto",)
+    initial_sidebar_state="auto" ,)
 
 color_code = "#0ECCEC"
 header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
@@ -239,7 +238,7 @@ col1, col2 = st.columns([0.8, 0.2])  # Adjust the width ratio of col1 and col2 a
 with col1:
 
 
-    
+
     # Transpose the balance sheet DataFrame
     transposed_balance_sheet = balance_sheet.transpose()
 
@@ -346,8 +345,7 @@ with col1:
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.4, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.4))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -390,8 +388,7 @@ with col2:
                       xaxis_title='',
                       yaxis_title='Amount',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -430,8 +427,7 @@ with col3:
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -480,8 +476,7 @@ with col1:
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.42, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -520,8 +515,7 @@ with col2:
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -562,8 +556,7 @@ with col3:
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -605,7 +598,7 @@ with col1:
 
     # Update layout
     fig.update_layout(title='Cash & Cash Equivalents And Short Term Investments',
-                      title_x=0.25,  # Set the title position to the center
+                      title_x=0.20,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
                       yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
@@ -655,10 +648,9 @@ with col2:
                           yaxis_title='Amount (M$)',
                           yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
                           legend=dict(x=0.4, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                                      orientation='h'))  # Set legend to horizontal orientation
         # Display the chart without the menu
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     else:
         st.write("")
         st.write("")
-        # st.write("* **Current company does not have Debt**", unsafe_allow_html=True)
