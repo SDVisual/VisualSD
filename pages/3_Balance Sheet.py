@@ -387,7 +387,7 @@ with col2:
                       title_x=0.4,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
@@ -426,7 +426,7 @@ with col3:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
@@ -475,7 +475,7 @@ with col1:
                       title_x=0.25,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
@@ -514,7 +514,7 @@ with col2:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
@@ -555,7 +555,7 @@ with col3:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
 
     # Display the chart without the menu
@@ -601,7 +601,7 @@ with col1:
                       title_x=0.20,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                       legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
                                   orientation='h'))  # Set legend to horizontal orientation
 
@@ -646,7 +646,7 @@ with col2:
                           title_x=0.35,  # Set the title position to the center
                           xaxis_title='',
                           yaxis_title='Amount (M$)',
-                          yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                          yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
                           legend=dict(x=0.4, y=1.15, xanchor='center', yanchor='top',
                                       orientation='h'))  # Set legend to horizontal orientation
         # Display the chart without the menu
