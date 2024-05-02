@@ -36,7 +36,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks Symbols").strip().upper()
+new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
 # st.write("")
 # st.write("")
@@ -90,7 +90,7 @@ st.sidebar.info("- Close side bar for better visualization.")
 st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
-st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
+st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
 
 StockInfo = yf.Ticker(ticker).info
 income_statementYear = yf.Ticker(ticker).income_stmt
@@ -296,7 +296,7 @@ with col1:
 
 
 
-st.subheader(f"revenues & expenses ")
+st.subheader(f"Revenues & Expenses ")
 
 
 
@@ -348,7 +348,8 @@ with col1:
             yaxis=dict(title='Amount (M$)'),
             width=300,
             height=500,
-            title_text=f'Company Revenues' + (" QoQ" if is_quarterly else " YoY"),
+            title_text=f'',
+            # title_text=f'Company Revenues' + (" QoQ" if is_quarterly else " YoY"),
             # Update title based on checkbox value
             title_x=0.5,
             title_y=0.98,
@@ -402,7 +403,8 @@ with col2:
             yaxis=dict(title='Amount (M$)'),
             width=300,  # Use the same width as in the first chart
             height=500,  # Use the same height as in the first chart
-            title_text=f'Company Expenses' + (" QoQ" if is_quarterly else " YoY"),
+            # title_text=f'Company Expenses' + (" QoQ" if is_quarterly else " YoY"),
+            title_text=f'',
             # Update title based on checkbox value
             title_x=0.5,
             title_y=0.98,
@@ -498,7 +500,7 @@ with col1:
         elif start_value > 0 and end_value < 0:
 
             Ncagr = True
-            # st.write(Ncagr)
+            st.write(Ncagr)
 
         else:
             # Regular CAGR calculation (P, P or N, N with same sign)
@@ -592,6 +594,7 @@ with col1:
 
     # Iterate over each metric and create a chart
     for metric, col in zip(metrics, [col1, col2]):
+
         Ncagr = False
         # Regular CAGR calculation
         start_value = data[metric].iloc[0]
@@ -617,7 +620,7 @@ with col1:
         elif start_value > 0 and end_value < 0:
 
             Ncagr = True
-            # st.write(Ncagr)
+            st.write(Ncagr)
 
         else:
             # Regular CAGR calculation (P, P or N, N with same sign)
@@ -704,7 +707,7 @@ with col1:
 
 # Basic EPS and Diluted EPS data for all years *****************************************************
 st.write("")
-st.subheader(f"profitability")
+st.subheader(f"Profitability")
 col1, col2, col3 = st.columns([0.3, 0.3, 0.4])
 
 with col1:
@@ -745,7 +748,8 @@ with col1:
 
     # Update layout
     fig.update_layout(
-        title='Basic EPS vs Diluted EPS',
+        #
+        title_text=f'',
         title_x=0.38,
         xaxis=dict(title='' if is_quarterly else ''),
         yaxis=dict(title='EPS Value'),
@@ -819,7 +823,8 @@ with col2:
 
     # Update layout
     fig.update_layout(
-        title='EBIT VS EBITDA vs Net Income (M$)',
+        # title='EBIT VS EBITDA vs Net Income (M$)',
+        title_text=f'',
         title_x=0.35,
         xaxis=dict(title='' if is_quarterly else ''),
         yaxis=dict(title='Value'),
