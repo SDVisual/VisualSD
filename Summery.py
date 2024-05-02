@@ -29,10 +29,10 @@ def show_disclaimer():
         # # Set the width of the form frame to match the column width
         # st.markdown("<style>div[data-testid='stForm'] div{max-width:600px}</style>", unsafe_allow_html=True)
         disclaimer_content = (
-            "This web application (Beta Version) aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret complex information beyond mere numerical values."
-            "\n\nThe information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
-            "\n\nThe creators of this application do not guarantee the accuracy, completeness, or reliability of the information provided."
-            "\n\nBy continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
+            "- This web application (Beta Version) aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret complex information beyond mere numerical values."
+            "\n\n- The information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
+            "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved via Yahoo! Finance's API."
+            "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
         )
 
 
