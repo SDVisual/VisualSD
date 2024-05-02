@@ -19,7 +19,7 @@ st.set_page_config(
     initial_sidebar_state="auto",)
 
 
-color_code = "#0ECCEC"
+color_code = "red"
 header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
