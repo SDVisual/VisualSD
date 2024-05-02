@@ -36,7 +36,6 @@ def show_disclaimer():
         )
 
 
-
         # Place the disclaimer content within column col1 with width 0.6
         col1, col2 = st.columns([0.6, 0.4])
 
@@ -220,20 +219,22 @@ else:
         'Forward PE': 'forwardPE'
     }
 
-    pairs = [
-        ('Last Price', 'Market Cap (In B$)'),
-        ('Previous Close', 'Company EV'),
-        ('Open', 'PE Ratio (TTM)'),
-        ('Day High', 'Price to Sales (TTM)'),
-        ('Day Low', 'Beta (5Y Monthly)'),
-        ('52 Week Low', 'Dividend Yield'),
-        ('52 Week High', 'Dividend'),
-        ('50d Average Price', '1YTarget Est'),
-        ('200d Average Price', 'Forward PE'),
-        ('Volume', 'Shares Short'),
-        ('Avg.Volume (10d)', 'Short % Of Float'),
-        ('Shares Outstanding (In M$)', '')
-    ]
+    # pairs = [
+    #     ('Last Price', 'Market Cap (In B$)'),
+    #     ('Previous Close', 'Company EV'),
+    #     ('Open', 'PE Ratio (TTM)'),
+    #     ('Day High', 'Price to Sales (TTM)'),
+    #     ('Day Low', 'Beta (5Y Monthly)'),
+    #     ('52 Week Low', 'Dividend Yield'),
+    #     ('52 Week High', 'Dividend'),
+    #     ('50d Average Price', '1YTarget Est'),
+    #     ('200d Average Price', 'Forward PE'),
+    #     ('Volume', 'Shares Short'),
+    #     ('Avg.Volume (10d)', 'Short % Of Float'),
+    #     ('Shares Outstanding (In M$)', '')
+    # ]
+
+
 
     col1, col2, col3, col4 = st.columns([0.3, 0.03, 0.3, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
@@ -384,7 +385,22 @@ else:
             sorted_df = df_ticker.sort_values(by='Date', ascending=False)
             st.write(sorted_df)
 
-    # col1, col2 = st.columns([0.7, 0.3])
+    pairs = [
+        ('Last Price', 'Market Cap (In B$)'),
+        ('Previous Close', 'Company EV'),
+        ('Open', 'PE Ratio (TTM)'),
+        ('Day High', 'Price to Sales (TTM)'),
+        ('Day Low', 'Beta (5Y Monthly)'),
+        ('52 Week Low', 'Dividend Yield'),
+        ('52 Week High', 'Dividend'),
+        ('50d Average Price', '1YTarget Est'),
+        ('200d Average Price', 'Forward PE'),
+        ('Volume', 'Shares Short'),
+        ('Avg.Volume (10d)', 'Short % Of Float'),
+        ('Shares Outstanding (In M$)', '')
+    ]
+
+
 
     with col1:
         st.write("")
@@ -458,6 +474,8 @@ else:
             label1_value1 = f"{formatted_label1}: {formatted_value1}"
             label2_value2 = f"{formatted_label2}: {formatted_value2}" if formatted_label2 else ''
 
+
+
             # Display pairs in the same line without the "|" string
             st.text(f"{label1_value1:<45} {label2_value2}")
 
@@ -514,5 +532,3 @@ else:
             st.write("Target High Price: ",
                      "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
                      unsafe_allow_html=True)
-
-
