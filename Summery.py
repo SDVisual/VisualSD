@@ -21,7 +21,7 @@ col1, col2 = st.columns([0.7, 0.3])
 def show_disclaimer():
     # st.title("Disclaimer")
     color_code = "#0ECCEC"
-    header_html = f'<h2 style="color:{color_code};">Disclaimer </h2>'
+    header_html = f'<h2 style="color:{color_code};">DISCLAIMER</h2>'
     st.markdown(header_html, unsafe_allow_html=True)
 
     with st.form(key="disclaimer_form"):
