@@ -24,17 +24,6 @@ header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
-# # Display the image with the caption
-# st.image('Logo.png')
-# st.write("")
-
-# # Define sidebar elements
-# st.sidebar.image("Side.png", use_column_width=True)
-
-# # Display title with blue color using Markdown
-# st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
-
-
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
