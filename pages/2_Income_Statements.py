@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
-APP_NAME = "Visual Stock Data"
+APP_NAME = "Visual Stock Data "
 
 # Set page configuration
 st.set_page_config(
