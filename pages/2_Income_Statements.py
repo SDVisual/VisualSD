@@ -24,6 +24,17 @@ header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
+# # Display the image with the caption
+# st.image('Logo.png')
+# st.write("")
+
+# # Define sidebar elements
+# st.sidebar.image("Side.png", use_column_width=True)
+
+# # Display title with blue color using Markdown
+# st.markdown(f"<h1 style='color:blue;'>{APP_NAME}</h1>", unsafe_allow_html=True)
+
+
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
@@ -79,7 +90,7 @@ st.sidebar.info("- Close side bar for better visualization.")
 st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
-st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
+st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
 
 StockInfo = yf.Ticker(ticker).info
 income_statementYear = yf.Ticker(ticker).income_stmt
@@ -244,7 +255,7 @@ with col1:
                 name=label,  # Use the formatted date as the legend label
                 text=[f"{value:.2f}%" for value in data.loc[date]],
 
-                
+
                 insidetextanchor='start',
                 marker=dict(color=colors[i % len(colors)], line=dict(width=1, color='black')),
                 insidetextfont=dict(size=20),
@@ -256,9 +267,9 @@ with col1:
             xaxis=dict(title=''),  # Set x-axis title
             yaxis=dict(title='%  of  Total  Revenue'),
             height=400,
-            title_text=f'Income Statment Margins By {"Quarters" if is_quarterly else "Years"}',
+            title_text=f'Income Statment Margins By {"Quarters" if is_quarterly else "Years"} ',
             # Update title
-            title_x=0.5,
+            title_x=0.48,
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
@@ -283,7 +294,7 @@ st.subheader(f"Revenues & Expenses ")
 
 st.write("")
 st.write("")
-col1, col2, col3 = st.columns([0.35, 0.35, 0.3])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
 
