@@ -109,19 +109,9 @@ color_code = "#0ECCEC"  # Color for the symbol
 st.write(f'<span style="font-size:30px;">Income Statement - </span>'
          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
-# # Combine st.write() with HTML-styled header
-# st.write(f'<span style= font-size:30px;">Income Statement - </span>'
-#          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
-
-
 
 
 st.write("")
-
-
-
-
-
 
 # Checkbox to select between annual and quarterly
 is_quarterly = st.checkbox("Quarterly Income Statement", value=False)
@@ -198,7 +188,7 @@ income_statement = income_statement.apply(
 
 
 
-st.write(f'*values in millions $')
+st.write(f'*Values in millions $')
 
 
 
@@ -264,7 +254,8 @@ with col1:
                 y=data.loc[date],
                 name=label,  # Use the formatted date as the legend label
                 text=[f"{value:.2f}%" for value in data.loc[date]],
-                textposition='auto',
+
+                
                 insidetextanchor='start',
                 marker=dict(color=colors[i % len(colors)], line=dict(width=1, color='black')),
                 insidetextfont=dict(size=20),
@@ -275,16 +266,15 @@ with col1:
             barmode='group',
             xaxis=dict(title=''),  # Set x-axis title
             yaxis=dict(title='%  of  Total  Revenue'),
-            width=800,
-            height=500,
-            title_text=f'Visual BreakDown Income Statment Margins By {"Quarters" if is_quarterly else "Years"} (As%)',
+            height=400,
+            title_text=f'Income Statment Margins By {"Quarters" if is_quarterly else "Years"} ',
             # Update title
             title_x=0.5,
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
-            font=dict(size=15),
-            legend=dict(orientation="h", yanchor="bottom", y=1.07, xanchor="center", x=0.45, font=dict(size=13)),
+            font=dict(size=18),
+            legend=dict(orientation="h", yanchor="bottom", y=1.07, xanchor="center", x=0.45, font=dict(size=15)),
             # Center the legend
         )
 
@@ -356,7 +346,7 @@ with col1:
             title_xanchor='center',
             title_yanchor='top',
             font=dict(size=15),
-            legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=13)),  # Center the legend
+            legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Center the legend
         )
 
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -411,7 +401,7 @@ with col2:
             title_xanchor='center',
             title_yanchor='top',
             font=dict(size=15),  # Use the same font size as in the first chart
-            legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45),  # Center the legend
+            legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Center the legend
         )
 
         st.plotly_chart(fig_expenses, use_container_width=True, config={'displayModeBar': False})
@@ -424,7 +414,7 @@ with col2:
 
 # Plot bar Revenue Growth ***************************************************************************************
 
-col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2 = st.columns([0.7, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
 percentage_change_df = income_statement_numeric
 
@@ -570,7 +560,7 @@ with col1:
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
                     font=dict(size=15, color='black'),
-                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5)  # Adjust legend position
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(size=15))  # Adjust legend position
                 )
 
                 # Plot the current chart
@@ -689,7 +679,7 @@ with col1:
                     width=800,  # Adjust the width of each chart as needed
                     height=400,  # Adjust the height of each chart as needed
                     font=dict(size=15, color='black'),
-                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5)
+                    legend=dict(orientation="h", yanchor="bottom", y=-0.35, xanchor="center", x=0.5, font=dict(size=15))
                     # Adjust legend position
                 )
 
@@ -708,7 +698,7 @@ with col1:
 # Basic EPS and Diluted EPS data for all years *****************************************************
 st.write("")
 st.subheader(f"Profitability")
-col1, col2, col3 = st.columns([0.3, 0.3, 0.4])
+col1, col2, col3 = st.columns([0.35, 0.35, 0.3])
 
 with col1:
 
@@ -759,7 +749,8 @@ with col1:
             yanchor="bottom",
             y=1.02,
             xanchor="center",
-            x=0.45
+            x=0.45,
+            font=dict(size=15),
         ),
         font=dict(
             size=15  # Adjust font size of values on bars
@@ -834,12 +825,12 @@ with col2:
             yanchor="bottom",
             y=1.02,
             xanchor="center",
-            x=0.45
+            x=0.45,
+            font=dict(size=15),
         ),
         font=dict(
-            size=15  # Adjust font size of values on bars
+            size=18  # Adjust font size of values on bars
         )
     )
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
-
