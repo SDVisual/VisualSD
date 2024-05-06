@@ -256,7 +256,7 @@ with col1:
             xaxis=dict(title=''),  # Set x-axis title
             yaxis=dict(title='%  of  Total  Revenue'),
             height=400,
-            title_text=f'Income Statment Margins By {"Quarters" if is_quarterly else "Years"} ',
+            title_text=f'Income Statment Margins By {"Quarters" if is_quarterly else "Years"}',
             # Update title
             title_x=0.5,
             title_y=0.98,
