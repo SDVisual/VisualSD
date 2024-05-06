@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
-APP_NAME = "Visual Stock Data "
+APP_NAME = "Visual Stock Data"
 
 # Set page configuration
 st.set_page_config(
@@ -283,7 +283,7 @@ st.subheader(f"Revenues & Expenses ")
 
 st.write("")
 st.write("")
-col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3 = st.columns([0.35, 0.35, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
 data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
 
