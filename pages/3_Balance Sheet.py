@@ -95,7 +95,7 @@ st.write(f'<span style="font-size:30px;">Balance Sheet - </span>'
 # st.write(f'<span style="color:white; font-size:30px;">Balance Sheet - </span>'
 #          f'<span style="color:{color_code}; font-size:30px;">{symbol}</span>', unsafe_allow_html=True)
 
-st.write("gggggg")
+st.write("")
 
 # Checkbox layout
 col1, col2, col3, col4 = st.columns(4)
