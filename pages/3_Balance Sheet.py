@@ -24,15 +24,6 @@ color_code = "#0ECCEC"
 header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
-# # Display the image with the caption
-# st.image('Logo.png')
-# st.write("")
-#
-# # Define sidebar elements
-# st.sidebar.image("Side.png", use_column_width=True)
-
-# # Display title with blue color using Markdown
-# st.markdown(f"<h2 style='color:blue;'>{APP_NAME}</h2>", unsafe_allow_html=True)
 
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks Symbols").strip().upper()
@@ -45,16 +36,10 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 selected_ticker_index = st.session_state.selected_ticker_index
 selected_symbol = st.session_state.valid_tickers[selected_ticker_index]
 
-# # Display the selected ticker index and symbol
-# st.write("Selected ticker index:", selected_ticker_index)
-# st.write("Selected symbol:", selected_symbol)
 
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
     new_symbol = DEFAULT_SYMBOL
-# else:
-#     if new_symbol in st.session_state.valid_tickers:
-#         st.warning(f"'{new_symbol}' is already in Symbols List - Clear Text")
 
 
 # Check if the entered symbol is valid
@@ -80,11 +65,6 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
-
-
-# # Sidebar date inputs
-# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
-# end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
 
 
 # Display a message box in the sidebar
@@ -170,8 +150,6 @@ desired_order = [
 ]
 
 
-
-
 st.write("<span style='font-size: 16px;'>* values in millions $</span>", unsafe_allow_html=True)
 
 
@@ -227,11 +205,11 @@ st.write(
     f'<span style="font-size:30px;">Chart Zone</span>',
     unsafe_allow_html=True
 )
-st.write(f'* All charts are interactive by clicking legend elements')
-st.write(f'* values in millions $')
+st.write(f'*All charts are interactive by clicking legend elements')
+st.write(f'*values in millions $')
 
 
-col1, col2 = st.columns([0.8, 0.2])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2 = st.columns([0.7, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
 
 
@@ -299,12 +277,12 @@ with col1:
     percentage_change_balance.iloc[:, 0] = percentage_change_balance.iloc[:, 0].fillna(0)
 
 
-    st.write("")
+    # st.write("")
     st.subheader(f"Assets & Liabilities")
-
+    st.write("")
 # ******************************************   CHARTS 'Total Assets', 'Current Assets', 'Total Non Current Assets', ' Cash  & Cash Equivalents And Short Term Investments' ***************************************************
 
-col1, col2, col3, col4 = st.columns([0.25, 0.25, 0.25, 0.25])
+col1, col2, col3, col4 = st.columns([0.30, 0.30, 0.30, 0.1])
 
 
 
@@ -340,17 +318,17 @@ with col1:
         )
 
     # Update layout
-    fig.update_layout(title='Total Assets',
-                      title_x=0.35,  # Set the title position to the center
+    fig.update_layout(title='',
+                      title_x=0.30,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.4))  # Adjust legend position
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
+                      )
+
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
-
-
 
 
 
@@ -383,12 +361,12 @@ with col2:
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
-    fig.update_layout(title='Current Assets',
+    fig.update_layout(title='',
                       title_x=0.4,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -402,7 +380,7 @@ with col3:
     # Add bar trace for total assets
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index, y=balance_sheet.loc['Total Non Current Assets'],
-               name='Total Non Current Assets',
+               name='Non Current Assets',
                marker_color="#0ECCEC"))
 
     # Add line trace for growth rate
@@ -422,12 +400,12 @@ with col3:
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
-    fig.update_layout(title='Total Non Current Assets',
+    fig.update_layout(title='',
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -471,12 +449,12 @@ with col1:
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
-    fig.update_layout(title='Total Liabilities Net Minority Interest',
+    fig.update_layout(title='',
                       title_x=0.25,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -510,12 +488,12 @@ with col2:
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
-    fig.update_layout(title='Current Liabilities',
+    fig.update_layout(title='',
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -531,7 +509,7 @@ with col3:
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index,
                y=balance_sheet.loc['Total Non Current Liabilities Net Minority Interest'],
-               name='Total Non Current Liabilities Net Minority Interest ',
+               name='Non Current Liabilities Net Minority Interest',
                marker_color='red'))
 
     # Add line trace for growth rate
@@ -551,19 +529,19 @@ with col3:
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
-    fig.update_layout(title='Total Non Current Liabilities',
+    fig.update_layout(title='',
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(orientation="h", yanchor="bottom", y=-0.4, xanchor="center", x=0.5))  # Adjust legend position
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
 
 
-col1, col2, col3 = st.columns([0.3, 0.3, 0.4])
+col1, col2, col3 = st.columns([0.35, 0.35, 0.3])
 
 
 with col1:
@@ -577,7 +555,7 @@ with col1:
     fig.add_trace(
         go.Bar(x=data_percentage_change_balance.index,
                y=balance_sheet.loc['Cash Cash Equivalents And Short Term Investments'],
-               name='Cash Cash Equivalents And Short Term Investments',
+               name='C&C Equivalents And Short Term Investments',
                marker_color='green'))
 
     # Add line trace for growth rate
@@ -597,13 +575,12 @@ with col1:
                            xanchor='left')  # anchor point along x-axis for alignment
 
     # Update layout
-    fig.update_layout(title='Cash & Cash Equivalents And Short Term Investments',
+    fig.update_layout(title='',
                       title_x=0.20,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                      legend=dict(x=0.5, y=1.15, xanchor='center', yanchor='top',
-                                  orientation='h'))  # Set legend to horizontal orientation
+                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.40, font=dict(size=15)))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
@@ -642,13 +619,14 @@ with col2:
                                xanchor='left')  # anchor point along x-axis for alignment
 
         # Update layout
-        fig.update_layout(title='Total Debt',
+        fig.update_layout(title='',
                           title_x=0.35,  # Set the title position to the center
                           xaxis_title='',
                           yaxis_title='Amount (M$)',
-                          yaxis2=dict(title='Growth (%)', overlaying='y', side='right', showgrid=False),
-                          legend=dict(x=0.4, y=1.15, xanchor='center', yanchor='top',
-                                      orientation='h'))  # Set legend to horizontal orientation
+                          yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                          legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Set legend to horizontal orientation
+
+
         # Display the chart without the menu
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     else:
