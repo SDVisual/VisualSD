@@ -246,7 +246,7 @@ with col1:
         xaxis_title='',
         yaxis_title='Amount (M$)',
         height=500,  # Set a fixed height
-        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.45, font=dict(size=15)),
+        legend=dict(orientation="h", yanchor="bottom", y=1.08, xanchor="center", x=0.45, font=dict(size=15)),
         # Center the legend
     )
 
