@@ -350,7 +350,7 @@ else:
 
             # Set the title of the chart with both main and additional information
             candlestick_chart.update_layout(
-                title_text="<span style='text-align: center;'>Stock Chart For Dates: {} to {}</span><br>"
+                title_text="<span style='text-align: center;'>  Chart For Dates: {} to {}</span><br>"
                            "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
                            "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                     start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
