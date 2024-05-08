@@ -602,6 +602,7 @@ with col3:
     fig.update_layout(
         title=f"FCF Margin {'QoQ' if is_quarterly else 'YoY'}",
         title_x=0.35,
+        title_y=0.85,  # Adjust the title position downward by changing this value
         xaxis=dict(title='', tickmode='array',
                    tickvals=free_cash_flow_margin_percentage.index.strftime('%Y-%m-%d'),
                    ticktext=free_cash_flow_margin_percentage.index.strftime('%m/%Y')),
