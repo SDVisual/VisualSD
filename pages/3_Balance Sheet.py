@@ -209,19 +209,17 @@ st.write(f'*All charts are interactive by clicking legend elements')
 st.write(f'*values in millions $')
 
 
-col1, col2 = st.columns([0.7, 0.3])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 
 
 with col1:
 
-
-
     # Transpose the balance sheet DataFrame
     transposed_balance_sheet = balance_sheet.transpose()
 
     # Select relevant columns from the transposed balance sheet DataFrame
-    selected_columns = ['Current Assets', 'Total Non Current Assets', 'Current Liabilities',
+    selected_columns = ['Current Assets', 'Current Liabilities', 'Total Non Current Assets',
                         'Total Non Current Liabilities Net Minority Interest',
                         'Total Equity Gross Minority Interest']
     selected_data = transposed_balance_sheet[selected_columns]
@@ -246,7 +244,8 @@ with col1:
         title='Balance Sheet Elements Break Down',
         title_x=0.3,
         xaxis_title='',
-        yaxis_title='Amount (M$)'
+        yaxis_title='Amount (M$)',
+        height=500,  # Set a fixed height
     )
 
     # Display the chart without the menu
@@ -322,7 +321,7 @@ with col1:
                       title_x=0.30,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
                       )
 
@@ -365,7 +364,7 @@ with col2:
                       title_x=0.4,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
@@ -404,7 +403,7 @@ with col3:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
@@ -453,7 +452,7 @@ with col1:
                       title_x=0.25,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
@@ -492,7 +491,7 @@ with col2:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
@@ -533,7 +532,7 @@ with col3:
                       title_x=0.35,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Adjust legend position
 
     # Display the chart without the menu
@@ -579,7 +578,7 @@ with col1:
                       title_x=0.20,  # Set the title position to the center
                       xaxis_title='',
                       yaxis_title='Amount (M$)',
-                      yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                      yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                       legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.40, font=dict(size=15)))  # Set legend to horizontal orientation
 
     # Display the chart without the menu
@@ -623,7 +622,7 @@ with col2:
                           title_x=0.35,  # Set the title position to the center
                           xaxis_title='',
                           yaxis_title='Amount (M$)',
-                          yaxis2=dict(title='Percentage Growth', overlaying='y', side='right', showgrid=False),
+                          yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False),
                           legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)))  # Set legend to horizontal orientation
 
 
