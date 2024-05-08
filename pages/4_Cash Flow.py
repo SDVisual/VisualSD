@@ -304,10 +304,11 @@ with col1:
 
     # Update layout if needed
     fig.update_layout(
-        title='Cash Flow Elements Break Down',
+        title='',
         title_x=0.3,
         xaxis_title='',
-        yaxis_title='Amount ($)'
+        yaxis_title='Amount ($)',
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.45, font=dict(size=15)),
     )
 
     # Display the chart without the menu
