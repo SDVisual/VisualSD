@@ -35,7 +35,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 
 # Input box for user to enter symbol
-new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks Symbols").strip().upper()
+new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
@@ -45,9 +45,7 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 selected_ticker_index = st.session_state.selected_ticker_index
 selected_symbol = st.session_state.valid_tickers[selected_ticker_index]
 
-# # Display the selected ticker index and symbol
-# st.write("Selected ticker index:", selected_ticker_index)
-# st.write("Selected symbol:", selected_symbol)
+
 
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
@@ -83,13 +81,15 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
+
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- Close side bar for better visualization.")
 st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
-st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
+st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
+
 
 
 
@@ -97,6 +97,8 @@ st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=Tr
 # # Sidebar date inputs
 # start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
 # end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
+
+
 
 
 
@@ -330,7 +332,7 @@ with col1:
 
     # Add line trace for percentage growth
     fig.add_trace(
-        go.Scatter(x=percentage_change_cash_flow.columns, y=free_cash_flow_growth, name='Growth Trend',
+        go.Scatter(x=percentage_change_cash_flow.columns, y=free_cash_flow_growth, name='Growth Trend Line',
                    mode='lines+markers', line=dict(color='red'), yaxis='y2'))
 
     # Add text annotations for growth values above the bars
@@ -347,7 +349,7 @@ with col1:
 
     # Update layout
     fig.update_layout(
-        title=f"Company Free Cash Flow {'QoQ' if is_quarterly else 'YoY'}",
+        title='',
         title_x=0.25,
         xaxis=dict(
             title='',
@@ -357,7 +359,7 @@ with col1:
         ),
         yaxis_title='Amount ($)',
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
-        legend=dict(x=0.40, y=1.15, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
 
     # Display the chart without the menu
@@ -367,9 +369,6 @@ with col1:
     ordinary_shares_number = balance_sheet.transpose()['Ordinary Shares Number'].apply(
         lambda x: str_to_float(x) if isinstance(x, str) else x)
 
-    # # Print Ordinary Shares Number after conversion
-    # st.write("Ordinary Shares Number (After Conversion):")
-    # st.write(ordinary_shares_number)
 
     # Apply str_to_float function to 'Free Cash Flow' column
     free_cash_flow = cash_flow.transpose()['Free Cash Flow'].apply(str_to_float)
@@ -377,9 +376,6 @@ with col1:
     # Perform division operation after applying conversion function to both columns
     free_cash_flow_per_share = (free_cash_flow * 1000000) / ordinary_shares_number
 
-    # # Print Free Cash Flow per Share
-    # st.write("Free Cash Flow per Share (After Division):")
-    # st.write(free_cash_flow_per_share)
 
     # Convert Series to DataFrame with a single column
     free_cash_flow_per_share_df = pd.DataFrame(free_cash_flow_per_share, columns=['Free Cash Flow Per Share'])
@@ -426,7 +422,7 @@ with col1:
         go.Scatter(
             x=Capital_Expenditure.index,
             y=Capital_Expenditure_percentage_change,
-            name='Growth Trend',
+            name='Growth Trend Line',
             mode='lines+markers',
             line=dict(color='red'),
             yaxis='y2'  # Assign the line to the secondary y-axis
@@ -449,7 +445,7 @@ with col1:
 
     # Update layout
     fig.update_layout(
-        title=f"Company Capital Expenditure {'QoQ' if is_quarterly else 'YoY'}",
+        title='',
         title_x=0.25,
         xaxis=dict(
             title='',
@@ -459,7 +455,7 @@ with col1:
         ),
         yaxis=dict(title='Amount ($)'),
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
-        legend=dict(x=0.40, y=1.15, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
 
     # Display the chart without the menu
@@ -481,7 +477,7 @@ with col2:
     fig.add_trace(
         go.Scatter(x=free_cash_flow_per_share_df.index,
                    y=percentage_change_cash_flow_per_share,
-                   name='Growth Trend',
+                   name='Growth Trend Line',
                    mode='lines+markers',
                    line=dict(color='red'),
                    yaxis='y2'))
@@ -500,7 +496,7 @@ with col2:
 
     # Update layout
     fig.update_layout(
-        title=f"Free Cash Flow Per Share {'QoQ' if is_quarterly else 'YoY'}",
+        title='',
         title_x=0.3,
         xaxis=dict(
             title='',
@@ -510,7 +506,7 @@ with col2:
         ),
         yaxis_title='Amount ($)',
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
-        legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
 
     # Display the chart without the menu
@@ -545,12 +541,12 @@ with col2:
 
     # Update layout
     fig.update_layout(
-        title=f"End Cash Position and Changes In Cash {'QoQ' if is_quarterly else 'YoY'}",
+        title='',
         title_x=0.28,
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
         yaxis=dict(title='Amount ($)'),
         barmode='group',  # Group bars
-        legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
 
     # Display the chart without the menu
@@ -604,7 +600,7 @@ with col3:
 
     # Update layout
     fig.update_layout(
-        title=f"Free Cash Flow Margin {'QoQ' if is_quarterly else 'YoY'}",
+        title=f"FCF Margin {'QoQ' if is_quarterly else 'YoY'}",
         title_x=0.35,
         xaxis=dict(title='', tickmode='array',
                    tickvals=free_cash_flow_margin_percentage.index.strftime('%Y-%m-%d'),
@@ -640,11 +636,11 @@ with col3:
 
     # Update layout
     fig.update_layout(
-        title=f"Issuance and Repayment of Debt {'QoQ' if is_quarterly else 'YoY'}",
+        title='',
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
         title_x=0.3,
         yaxis=dict(title='Amount ($)'),
-        legend=dict(x=0.45, y=1.15, xanchor='center', yanchor='top', orientation='h')
+        legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
 
     # Display the chart without the menu
