@@ -241,11 +241,13 @@ with col1:
 
     # Update layout if needed
     fig.update_layout(
-        title='Balance Sheet Elements Break Down',
+        title='',
         title_x=0.3,
         xaxis_title='',
         yaxis_title='Amount (M$)',
         height=500,  # Set a fixed height
+        legend=dict(orientation="h", yanchor="bottom", y=1.00, xanchor="center", x=0.45, font=dict(size=15)),
+        # Center the legend
     )
 
     # Display the chart without the menu
