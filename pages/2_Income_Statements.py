@@ -276,7 +276,7 @@ with col1:
 
 
 
-st.subheader(f"Revenues & Expenses ")
+st.subheader(f"Company Revenues & Expenses ")
 
 
 
