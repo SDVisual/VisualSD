@@ -350,13 +350,13 @@ else:
 
             # Set the title of the chart with both main and additional information
             candlestick_chart.update_layout(
-                title_text="<span style='text-align: center;'>  Chart For Dates: {} to {}</span><br>"
+                title_text="<span style='text-align: center;'>        Chart For Dates: {} to {}</span><br>"
                            "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
                            "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                     start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
                     min_price, max_price, range_low_to_high, yield_color, yield_percentage),
                 title_x=0.15,  # Center the title
-                title_font_size=25,  # Increase font size
+                title_font_size=22,  # Increase font size
                 title_y=0.95,  # Adjust title vertical position
                 title_yanchor='top',
                 legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
