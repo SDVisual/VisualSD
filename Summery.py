@@ -29,7 +29,7 @@ def show_disclaimer():
         # # Set the width of the form frame to match the column width
         # st.markdown("<style>div[data-testid='stForm'] div{max-width:600px}</style>", unsafe_allow_html=True)
         disclaimer_content = (
-            "- This Web Application (Beta Version for Desktop Computers) aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
+            "- This Web Application (Beta Version for Desktop Computers) Aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
             "\n\n- The information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
             "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved from Financial Data APIs."
             "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
@@ -350,7 +350,7 @@ else:
 
             # Set the title of the chart with both main and additional information
             candlestick_chart.update_layout(
-                title_text="<span style='text-align: center;'>        Chart For Dates: {} to {}</span><br>"
+                title_text="<span style='text-align: center;'>          Chart Dates: {} to {}</span><br>"
                            "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
                            "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                     start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
