@@ -85,7 +85,7 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- Close side bar for better visualization.")
-st.sidebar.info("- Recommended dark mode in setting menu.")
+# st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
 st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
@@ -314,7 +314,7 @@ with col1:
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns([0.3, 0.3, 0.3, 0.1])
 
 with col1:
 
