@@ -417,16 +417,14 @@ else:
 
             # Divide values by billions or millions based on labels
             if key1 and label1 in ['Market Cap (In B$)', 'Company EV']:
-                value1 = int(float(
-                    value1) / 1_000_000_000) if value1 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
+                value1 = float(value1) / 1_000_000_000 if value1 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
             elif key1 == 'Avg. Volume (10d)' or key1 == 'Volume':
                 value1 = int(float(value1)) if value1 != 'N/A' else 'N/A'  # Convert to integer
                 if label1 == 'Avg. Volume (10d)' or label1 == 'Volume':
                     value1 = f"{int(value1):,}" if value1 != 'N/A' else 'N/A'  # Format without decimal places
 
             if key2 and label2 in ['Market Cap (In B$)', 'Company EV']:
-                value2 = int(float(
-                    value2) / 1_000_000_000) if value2 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
+                value2 = float(value2) / 1_000_000_000 if value2 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
             elif key2 == 'Avg. Volume (10d)' or key2 == 'Volume':
                 value2 = int(float(value2)) if value2 != 'N/A' else 'N/A'  # Convert to integer
                 if label2 == 'Avg. Volume (10d)' or label2 == 'Volume':
