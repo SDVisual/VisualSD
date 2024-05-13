@@ -462,32 +462,32 @@ else:
 
     with col1:
 
-        # Get dividends data
-        StockDiv = yf.Ticker(ticker).dividends
+        # # Get dividends data
+        # StockDiv = yf.Ticker(ticker).dividends
 
-        # Sort dividends data by date in descending order
-        StockDiv = StockDiv.sort_index(ascending=False)
+        # # Sort dividends data by date in descending order
+        # StockDiv = StockDiv.sort_index(ascending=False)
 
-        # Check if dividends data is not empty
-        if not StockDiv.empty:
-            st.write("")
-            st.subheader("Dividends History")
+        # # Check if dividends data is not empty
+        # if not StockDiv.empty:
+        #     st.write("")
+        #     st.subheader("Dividends History")
 
-            ShowDiv = st.checkbox("Show Dividends History", value=False)
-            # Calculate percentage growth of dividends
-            dividends_growth = StockDiv.pct_change() * 100
+        #     ShowDiv = st.checkbox("Show Dividends History", value=False)
+        #     # Calculate percentage growth of dividends
+        #     dividends_growth = StockDiv.pct_change() * 100
 
-            # Create a DataFrame with dividends data
-            dividends_df = pd.DataFrame({'Dividends': StockDiv})
+        #     # Create a DataFrame with dividends data
+        #     dividends_df = pd.DataFrame({'Dividends': StockDiv})
 
-            # Add a new column for percentage growth
-            dividends_df['Dividends Growth (%)'] = dividends_growth
+        #     # Add a new column for percentage growth
+        #     dividends_df['Dividends Growth (%)'] = dividends_growth
 
-            if ShowDiv:
-                # Write DataFrame to Streamlit
-                st.write(dividends_df)
-        else:
-            st.write("*No Dividends history")
+        #     if ShowDiv:
+        #         # Write DataFrame to Streamlit
+        #         st.write(dividends_df)
+        # else:
+        #     st.write("*No Dividends history")
 
         st.write("")
         st.subheader(f'Company Summery')
