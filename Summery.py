@@ -29,7 +29,7 @@ def show_disclaimer():
         # # Set the width of the form frame to match the column width
         # st.markdown("<style>div[data-testid='stForm'] div{max-width:600px}</style>", unsafe_allow_html=True)
         disclaimer_content = (
-            "- This Web Application (Beta Version for Desktop Computers) aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
+            "- This Web Application (first Beta Version for Desktop Computers) aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
             "\n\n- The information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
             "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved from Financial Data APIs."
             "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
@@ -98,7 +98,8 @@ else:
     income_statement = yf.Ticker(new_symbol).income_stmt
 
     if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
-        st.error("Invalid symbol. Please enter Only Stocks symbols.")
+
+        st.error("Invalid symbol. Please enter only Stocks symbols.")
 
     else:
         # Add valid symbol to session state if it's not already present
@@ -119,9 +120,6 @@ else:
     # Update session state with the newly selected symbol index
     st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
-    # # Sidebar date inputs
-    # start_date = st.sidebar.date_input('Start date - Historical Prices', datetime(2000, 1, 1))
-    # end_date = st.sidebar.date_input('End date', datetime.now().date())
 
     # Display a message box in the sidebar
     st.sidebar.info("- For the best experience, maximize your screen.")
@@ -132,10 +130,7 @@ else:
     st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
     StockInfo = yf.Ticker(ticker).info
-    # stocknews = yf.Ticker(ticker).news
 
-    # earnings_dates = yf.Ticker(ticker).earnings_dates
-    # analyst_price_target = yf.Ticker(ticker).revenue_forecasts
     rec_summery = yf.Ticker(ticker).recommendations_summary
 
     # Check if "companyOfficers" exists before dropping
@@ -219,21 +214,6 @@ else:
         'Forward PE': 'forwardPE'
     }
 
-    # pairs = [
-    #     ('Last Price', 'Market Cap (In B$)'),
-    #     ('Previous Close', 'Company EV'),
-    #     ('Open', 'PE Ratio (TTM)'),
-    #     ('Day High', 'Price to Sales (TTM)'),
-    #     ('Day Low', 'Beta (5Y Monthly)'),
-    #     ('52 Week Low', 'Dividend Yield'),
-    #     ('52 Week High', 'Dividend'),
-    #     ('50d Average Price', '1YTarget Est'),
-    #     ('200d Average Price', 'Forward PE'),
-    #     ('Volume', 'Shares Short'),
-    #     ('Avg.Volume (10d)', 'Short % Of Float'),
-    #     ('Shares Outstanding (In M$)', '')
-    # ]
-
 
 
     col1, col2, col3, col4 = st.columns([0.3, 0.03, 0.3, 0.01])  # Adjust the width ratio of col1 and col2 as needed
@@ -312,9 +292,7 @@ else:
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
     with col1:
-        # st.write("")
-        # st.write("")
-        # df_ticker = yf.download(ticker, period='max').reset_index()
+
 
         if df_ticker.empty:
             st.warning(f"No data found for {ticker} in the selected date range.")
@@ -350,7 +328,7 @@ else:
 
             # Set the title of the chart with both main and additional information
             candlestick_chart.update_layout(
-                title_text="<span style='text-align: center;'>          Chart Dates: {} to {}</span><br>"
+                title_text="<span style='text-align: center;'>        Chart Dates: {} to {}</span><br>"
                            "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
                            "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                     start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
@@ -478,12 +456,40 @@ else:
             st.text(f"{label1_value1:<45} {label2_value2}")
 
         st.write("")
-        st.write("")
+
 
     col1, col2 = st.columns([0.3, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
     with col1:
 
+        # Get dividends data
+        StockDiv = yf.Ticker(ticker).dividends
+
+        # Sort dividends data by date in descending order
+        StockDiv = StockDiv.sort_index(ascending=False)
+
+        # Check if dividends data is not empty
+        if not StockDiv.empty:
+            st.write("")
+            st.subheader("Dividends History")
+
+            ShowDiv = st.checkbox("Show Dividends History", value=False)
+            # Calculate percentage growth of dividends
+            dividends_growth = StockDiv.pct_change() * 100
+
+            # Create a DataFrame with dividends data
+            dividends_df = pd.DataFrame({'Dividends': StockDiv})
+
+            # Add a new column for percentage growth
+            dividends_df['Dividends Growth (%)'] = dividends_growth
+
+            if ShowDiv:
+                # Write DataFrame to Streamlit
+                st.write(dividends_df)
+        else:
+            st.write("*No Dividends history")
+
+        st.write("")
         st.subheader(f'Company Summery')
 
         st.write(StockInfo['longBusinessSummary'])
@@ -530,3 +536,6 @@ else:
             st.write("Target High Price: ",
                      "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
                      unsafe_allow_html=True)
+
+
+
