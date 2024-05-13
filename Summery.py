@@ -29,7 +29,7 @@ def show_disclaimer():
         # # Set the width of the form frame to match the column width
         # st.markdown("<style>div[data-testid='stForm'] div{max-width:600px}</style>", unsafe_allow_html=True)
         disclaimer_content = (
-            "- This Web Application (first Beta Version for Desktop Computers) Aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
+            "- This Web Application (first Beta Version for Desktop Computers) aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
             "\n\n- The information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
             "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved from Financial Data APIs."
             "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
@@ -462,32 +462,31 @@ else:
 
     with col1:
 
-        # # Get dividends data
-        # StockDiv = yf.Ticker(ticker).dividends
+        # Get dividends data
+        StockDiv = yf.Ticker(ticker).dividends
 
-        # # Sort dividends data by date in descending order
-        # StockDiv = StockDiv.sort_index(ascending=False)
 
-        # # Check if dividends data is not empty
-        # if not StockDiv.empty:
-        #     st.write("")
-        #     st.subheader("Dividends History")
+        # Check if dividends data is not empty
+        if not StockDiv.empty:
+            st.write("")
+            st.subheader("Dividends History")
 
-        #     ShowDiv = st.checkbox("Show Dividends History", value=False)
-        #     # Calculate percentage growth of dividends
-        #     dividends_growth = StockDiv.pct_change() * 100
+            ShowDiv = st.checkbox("Show Dividends History", value=False)
+            # Calculate percentage growth of dividends
+            dividends_growth = StockDiv.pct_change() * 100
 
-        #     # Create a DataFrame with dividends data
-        #     dividends_df = pd.DataFrame({'Dividends': StockDiv})
+            # Create a DataFrame with dividends data
+            dividends_df = pd.DataFrame({'Dividends': StockDiv})
 
-        #     # Add a new column for percentage growth
-        #     dividends_df['Dividends Growth (%)'] = dividends_growth
+            # Add a new column for percentage growth
+            dividends_df['Dividends Growth (%)'] = dividends_growth
 
-        #     if ShowDiv:
-        #         # Write DataFrame to Streamlit
-        #         st.write(dividends_df)
-        # else:
-        #     st.write("*No Dividends history")
+            if ShowDiv:
+                dividends_df = dividends_df.sort_index(ascending=False)
+                # Write DataFrame to Streamlit
+                st.write(dividends_df)
+        else:
+            st.write("*No Dividends history")
 
         st.write("")
         st.subheader(f'Company Summery')
@@ -515,7 +514,7 @@ else:
             st.write("Next Earnings Date:", calendar_dates_str[0])
         else:
             # If there are multiple earnings dates, display them as a range
-            st.write("Next Earnings Dates:", " to ".join(calendar_dates_str))
+            st.write("Next Earnings Date:", " to ".join(calendar_dates_str))
 
         if pd.isna(StockInfo.get('recommendationKey')) or StockInfo.get(
                 'recommendationKey') == "none":  # Check if recommendationKey is empty or equals "NONE"
