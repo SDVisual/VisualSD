@@ -465,13 +465,13 @@ else:
         # Get dividends data
         StockDiv = yf.Ticker(ticker).dividends
 
-
         # Check if dividends data is not empty
         if not StockDiv.empty:
             st.write("")
             st.subheader("Dividends History")
 
             ShowDiv = st.checkbox("Show Dividends History", value=False)
+            ShowDivG = st.checkbox("Show Dividends History Chart", value=False)
             # Calculate percentage growth of dividends
             dividends_growth = StockDiv.pct_change() * 100
 
@@ -485,8 +485,19 @@ else:
                 dividends_df = dividends_df.sort_index(ascending=False)
                 # Write DataFrame to Streamlit
                 st.write(dividends_df)
+
+
+
+            if ShowDivG:
+
+                # Create a line chart with dates on the x-axis and dividends on the y-axis
+                st.line_chart(dividends_df['Dividends'])
+
         else:
             st.write("*No Dividends history")
+
+
+
 
         st.write("")
         st.subheader(f'Company Summery')
