@@ -130,7 +130,6 @@ else:
     st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
     StockInfo = yf.Ticker(ticker).info
-
     rec_summery = yf.Ticker(ticker).recommendations_summary
 
     # Check if "companyOfficers" exists before dropping
@@ -470,8 +469,8 @@ else:
             st.write("")
             st.subheader("Dividends History")
 
-            ShowDiv = st.checkbox("Show Dividends History", value=False)
-            ShowDivG = st.checkbox("Show Dividends History Chart", value=False)
+            ShowDiv = st.checkbox("Dividends History", value=False)
+            ShowDivG = st.checkbox("Dividends History Chart", value=False)
             # Calculate percentage growth of dividends
             dividends_growth = StockDiv.pct_change() * 100
 
@@ -546,6 +545,60 @@ else:
             st.write("Target High Price: ",
                      "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
                      unsafe_allow_html=True)
+
+
+
+    st.subheader("Holders")
+
+
+    StockInsider = yf.Ticker(ticker).insider_transactions
+    StockInstitutional = yf.Ticker(ticker).institutional_holders
+    StockMajor = yf.Ticker(ticker).major_holders
+    StockInsiderPurchases = yf.Ticker(ticker).insider_purchases
+    StockInsider_roster_holders = yf.Ticker(ticker).insider_roster_holders
+    StockFund = yf.Ticker(ticker).mutualfund_holders
+
+    # Initialize session state
+    if 'visibility' not in st.session_state:
+        st.session_state.visibility = {
+            "institutional": False,
+            "major": False,
+            "insider": False,
+            "transactions": False,
+            "roster": False  # Initialize the "roster" key
+        }
+
+        # Button to toggle major holders data visibility
+    if st.button("Major Holders"):
+        st.session_state.visibility["major"] = not st.session_state.visibility["major"]
+
+        # Display major holders data if visibility is True
+    if st.session_state.visibility["major"]:
+        st.write("**- Major Holders -**")
+        st.write(StockMajor)
+        st.write("**- Top Institutional Holders -**")
+        st.write(StockInstitutional)
+        st.write("**- Top Mutual Fund Holders -**")
+        st.write(StockFund)
+
+
+
+
+
+    # Button to toggle insider holders data visibility
+    if st.button("Insider Holders & Transactions"):
+        st.session_state.visibility["insider"] = not st.session_state.visibility["insider"]
+
+    # Display insider holders data if visibility is True
+    if st.session_state.visibility["insider"]:
+        st.write("**- Insider Purchases Last 6 Months -**")
+        st.write(StockInsiderPurchases)
+        st.write("**- Insider Transactions Reported - Last Two Years -**")
+        st.write(StockInsider)
+        st.write("**- Insider Roster -**")
+        st.write("*- Insider roster data is derived solely from the last 24 months of Form 3 & Form 4 SEC filings.*")
+
+        st.write(StockInsider_roster_holders)
 
 
 
