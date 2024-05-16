@@ -242,7 +242,7 @@ else:
     col1, col2, col3, col4 = st.columns([0.6, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
     with col2:
-        # st.write("")
+
         st.write("")
         st.write("")
 
@@ -251,8 +251,8 @@ else:
         df_ticker = yf.download(ticker, period='max').reset_index()
         end_date = datetime.now()
         # Buttons for selecting different time periods
-        time_periods = ['7D', '2M', '6M', 'YTD', '1Y', '5Y', 'MAX']
-        for _ in range(2):
+        time_periods = ['1D', '7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
+        for _ in range(1):
             st.write("")
 
         # Display buttons in a single row
@@ -262,7 +262,7 @@ else:
         # selected_time_period = '1Y'
 
         with button_container:
-            button_spacing = 2  # Adjust spacing between buttons
+            button_spacing = 1  # Adjust spacing between buttons
             st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
 
             for period in time_periods:
@@ -272,10 +272,12 @@ else:
 
         # Calculate start date based on selected time period
 
-        if selected_time_period == '7D':
+        if selected_time_period == '1D':
+            start_date = end_date - timedelta(days=2)
+        elif selected_time_period == '7D':
             start_date = end_date - timedelta(days=7)
-        elif selected_time_period == '2M':
-            start_date = end_date - timedelta(days=60)
+        elif selected_time_period == '3M':
+            start_date = end_date - timedelta(days=90)
         elif selected_time_period == '6M':
             start_date = end_date - timedelta(days=180)
         elif selected_time_period == 'YTD':
@@ -287,8 +289,12 @@ else:
         else:  # 'MAX'
             start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
 
-        # Fetch data for the selected time period again
-        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+        if selected_time_period == '1D':
+            # Fetch data for the selected time period again
+            df_ticker = yf.download(ticker, start=start_date, end=end_date, interval='1d').reset_index()
+        else:
+            # Fetch data for the selected time period again
+            df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
     with col1:
 
@@ -336,7 +342,7 @@ else:
                 title_font_size=22,  # Increase font size
                 title_y=0.95,  # Adjust title vertical position
                 title_yanchor='top',
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
+                legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)
                 # Adjust legend position
             )
 
@@ -454,15 +460,15 @@ else:
             # Display pairs in the same line without the "|" string
             st.text(f"{label1_value1:<45} {label2_value2}")
 
-        st.write("")
+        
 
 
     col1, col2 = st.columns([0.3, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
     with col1:
 
+        st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
-        st.write("")
         st.subheader(f'Company Summery')
 
         st.write(StockInfo['longBusinessSummary'])
@@ -470,9 +476,14 @@ else:
             st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
 
         st.write("Company Website:", StockInfo['website'])
-        st.write("****************************************************************************************************")
+        # st.write("****************************************************************************************************")
+        # # Adjust the size of the line using CSS
+        # st.write('<hr style="height:4px;border:none;color:#333;background-color:#333;">', unsafe_allow_html=True)
+        # # Adjust the size and color of the line using CSS
+        # st.write('<hr style="height:5px;border:none;color:blue;background-color:blue;">', unsafe_allow_html=True)
+        # # Adjust the size and color of the line using CSS
 
-
+        st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
         st.subheader("Analyst Recommendation")
 
@@ -510,7 +521,8 @@ else:
                      "<span style='font-size: 16px;'>" + str(StockInfo['targetHighPrice']) + "</span>",
                      unsafe_allow_html=True)
 
-            st.write("****************************************************************************************************")
+            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">',
+                     unsafe_allow_html=True)
 
             # Initialize session state
             if 'dividend_visibility' not in st.session_state:
@@ -559,7 +571,7 @@ else:
 
 
 
-            st.write("****************************************************************************************************")
+            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
 
 
@@ -635,8 +647,8 @@ else:
                     "*- Insider roster data is derived solely from the last 24 months of Form 3 & Form 4 SEC filings.*")
                 st.write(StockInsider_roster_holders)
 
-        st.write("*****************************************************************************************************")
+        st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
-       
+
 
 
