@@ -71,8 +71,6 @@ else:
     header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
     st.markdown(header_html, unsafe_allow_html=True)
 
-
-
     # Initialize session state for selected ticker index and valid tickers
     if 'selected_ticker_index' not in st.session_state:
         st.session_state.selected_ticker_index = 0
@@ -476,11 +474,8 @@ else:
             st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
 
         st.write("Company Website:", StockInfo['website'])
-        # st.write("****************************************************************************************************")
-        # # Adjust the size of the line using CSS
-        # st.write('<hr style="height:4px;border:none;color:#333;background-color:#333;">', unsafe_allow_html=True)
-        # # Adjust the size and color of the line using CSS
-        # st.write('<hr style="height:5px;border:none;color:blue;background-color:blue;">', unsafe_allow_html=True)
+        
+        
         # # Adjust the size and color of the line using CSS
 
         st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
