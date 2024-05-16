@@ -635,7 +635,7 @@ else:
                     "*- Insider roster data is derived solely from the last 24 months of Form 3 & Form 4 SEC filings.*")
                 st.write(StockInsider_roster_holders)
 
-        st.write("****************************************************************************************************")
+        st.write("*****************************************************************************************************")
 
        
 
