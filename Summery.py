@@ -382,7 +382,6 @@ else:
     ]
 
 
-
     with col1:
         st.write("")
         # Iterate through pairs and display labels with values or "N/A"
