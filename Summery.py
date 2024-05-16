@@ -289,7 +289,7 @@ else:
 
         if selected_time_period == '1D':
             # Fetch data for the selected time period again
-            df_ticker = yf.download(ticker, start=start_date, end=end_date, interval='1d').reset_index()
+            df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
         else:
             # Fetch data for the selected time period again
             df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
