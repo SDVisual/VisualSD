@@ -71,6 +71,8 @@ else:
     header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
     st.markdown(header_html, unsafe_allow_html=True)
 
+
+
     # Initialize session state for selected ticker index and valid tickers
     if 'selected_ticker_index' not in st.session_state:
         st.session_state.selected_ticker_index = 0
@@ -382,6 +384,7 @@ else:
     ]
 
 
+
     with col1:
         st.write("")
         # Iterate through pairs and display labels with values or "N/A"
@@ -452,12 +455,10 @@ else:
             label1_value1 = f"{formatted_label1}: {formatted_value1}"
             label2_value2 = f"{formatted_label2}: {formatted_value2}" if formatted_label2 else ''
 
-
-
             # Display pairs in the same line without the "|" string
             st.text(f"{label1_value1:<45} {label2_value2}")
 
-        
+
 
 
     col1, col2 = st.columns([0.3, 0.3])  # Adjust the width ratio of col1 and col2 as needed
@@ -473,8 +474,11 @@ else:
             st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
 
         st.write("Company Website:", StockInfo['website'])
-        
-        
+        # st.write("****************************************************************************************************")
+        # # Adjust the size of the line using CSS
+        # st.write('<hr style="height:4px;border:none;color:#333;background-color:#333;">', unsafe_allow_html=True)
+        # # Adjust the size and color of the line using CSS
+        # st.write('<hr style="height:5px;border:none;color:blue;background-color:blue;">', unsafe_allow_html=True)
         # # Adjust the size and color of the line using CSS
 
         st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
@@ -497,7 +501,7 @@ else:
 
         if pd.isna(StockInfo.get('recommendationKey')) or StockInfo.get(
                 'recommendationKey') == "none":  # Check if recommendationKey is empty or equals "NONE"
-            st.write("No Analyst Recommendation For current company")
+            st.write("No Analyst Recommendation For Current Company")
         else:
             st.write("Number Of Analyst Opinions: ",
                      "<span style='font-size: 16px;'>" + str(StockInfo['numberOfAnalystOpinions']) + "</span>",
@@ -518,7 +522,7 @@ else:
             st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">',
                      unsafe_allow_html=True)
 
-            # Initialize session state
+            # Initialize session state for dividend visibility
             if 'dividend_visibility' not in st.session_state:
                 st.session_state.dividend_visibility = {
                     "history": False,
@@ -530,9 +534,6 @@ else:
 
             # Check if dividends data is not empty
             if not StockDiv.empty:
-                # st.write("")
-                # st.subheader("Dividends History")
-
                 # Button to toggle dividends history visibility
                 show_div_button = st.button("Show Dividends History")
 
@@ -548,20 +549,23 @@ else:
                     dividends_df = dividends_df.sort_index(ascending=False)
                     st.write(dividends_df)
 
-                # Button to toggle dividends history chart visibility
-                show_divg_button = st.button("Show Dividends History Chart")
+                # Check if the DataFrame has more than one row before showing the chart
+                if len(StockDiv) > 1:
+                    # Button to toggle dividends history chart visibility
+                    show_divg_button = st.button("Show Dividends History Chart")
 
-                # Toggle dividends history chart visibility
-                if show_divg_button:
-                    st.session_state.dividend_visibility["chart"] = not st.session_state.dividend_visibility["chart"]
+                    # Toggle dividends history chart visibility
+                    if show_divg_button:
+                        st.session_state.dividend_visibility["chart"] = not st.session_state.dividend_visibility[
+                            "chart"]
 
-                # Show dividends history chart if visibility is True
-                if st.session_state.dividend_visibility["chart"]:
-                    st.line_chart(StockDiv)
-
-
+                    # Show dividends history chart if visibility is True
+                    if st.session_state.dividend_visibility["chart"]:
+                        st.line_chart(StockDiv)
+                else:
+                    st.write("*Chart not available due to insufficient data*")
             else:
-                st.write("*No Dividends history*")
+                st.write("*No Dividends History For Current Company*")
 
 
 
@@ -592,8 +596,8 @@ else:
 
 
         except Exception as e:
-            st.write("")
-            st.write("Stock Holders Not Available: ", str(e))
+
+            st.write("*Currently Stock Holders Not Available*")
             # Set all data frames to None
             StockInsider = None
             StockInstitutional = None
