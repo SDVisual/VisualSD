@@ -17,6 +17,7 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
+
 def show_disclaimer():
     # st.title("Disclaimer")
     color_code = "#0ECCEC"
@@ -558,6 +559,21 @@ else:
 
             ########################### Dividends #################################################################
 
+            calendar_data = yf.Ticker(ticker).calendar
+
+            dividend_date = calendar_data.get('Dividend Date', None)
+            ex_dividend_date = calendar_data.get('Ex-Dividend Date', None)
+
+            output = ""
+            if dividend_date is not None:
+                output += f"Dividend Date: {dividend_date}  ||"
+
+            if ex_dividend_date is not None:
+                output += f"   Ex-Dividend Date: {ex_dividend_date}"
+
+            st.write(output)
+
+
             # Get dividends data
             StockDiv = yf.Ticker(ticker).dividends
 
@@ -648,5 +664,9 @@ else:
                         "*- Insider roster data is derived solely from the last 24 months of Form 3 & Form 4 SEC filings.*")
                     st.write(StockInsider_roster_holders)
 
-            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">',
-                     unsafe_allow_html=True)
+            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+
+
+          
+
+
