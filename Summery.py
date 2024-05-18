@@ -522,12 +522,42 @@ else:
             st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">',
                      unsafe_allow_html=True)
 
-            # Initialize session state for dividend visibility
+########################### Dividends #################################################################
+
+            # Initialize session state for visibility
             if 'dividend_visibility' not in st.session_state:
                 st.session_state.dividend_visibility = {
                     "history": False,
                     "chart": False
                 }
+            if 'visibility' not in st.session_state:
+                st.session_state.visibility = {
+                    "institutional": False,
+                    "major": False,
+                    "insider": False,
+                    "transactions": False,
+                    "roster": False
+                }
+            if 'current_ticker' not in st.session_state:
+                st.session_state.current_ticker = None
+
+
+            # If ticker changes, reset all visibility states
+            if st.session_state.current_ticker != ticker:
+                st.session_state.dividend_visibility = {
+                    "history": False,
+                    "chart": False
+                }
+                st.session_state.visibility = {
+                    "institutional": False,
+                    "major": False,
+                    "insider": False,
+                    "transactions": False,
+                    "roster": False
+                }
+                st.session_state.current_ticker = ticker
+
+            ########################### Dividends #################################################################
 
             # Get dividends data
             StockDiv = yf.Ticker(ticker).dividends
@@ -535,10 +565,7 @@ else:
             # Check if dividends data is not empty
             if not StockDiv.empty:
                 # Button to toggle dividends history visibility
-                show_div_button = st.button("Show Dividends History")
-
-                # Toggle dividends history visibility
-                if show_div_button:
+                if st.button("Show Dividends History"):
                     st.session_state.dividend_visibility["history"] = not st.session_state.dividend_visibility[
                         "history"]
 
@@ -552,10 +579,7 @@ else:
                 # Check if the DataFrame has more than one row before showing the chart
                 if len(StockDiv) > 1:
                     # Button to toggle dividends history chart visibility
-                    show_divg_button = st.button("Show Dividends History Chart")
-
-                    # Toggle dividends history chart visibility
-                    if show_divg_button:
+                    if st.button("Show Dividends History Chart"):
                         st.session_state.dividend_visibility["chart"] = not st.session_state.dividend_visibility[
                             "chart"]
 
@@ -567,86 +591,63 @@ else:
             else:
                 st.write("*No Dividends History For Current Company*")
 
+            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">',
+                     unsafe_allow_html=True)
 
+            ########################### Holders #################################################################
 
-            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+            # Fetch data with exception handling
+            try:
+                StockInsider = yf.Ticker(ticker).insider_transactions
+                StockInstitutional = yf.Ticker(ticker).institutional_holders
+                StockMajor = yf.Ticker(ticker).major_holders
+                StockInsiderPurchases = yf.Ticker(ticker).insider_purchases
+                StockInsider_roster_holders = yf.Ticker(ticker).insider_roster_holders
+                StockFund = yf.Ticker(ticker).mutualfund_holders
+            except Exception as e:
+                st.write("*Currently Stock Holders Not Available*")
+                StockInsider = None
+                StockInstitutional = None
+                StockMajor = None
+                StockInsiderPurchases = None
+                StockInsider_roster_holders = None
+                StockFund = None
 
+            # Button to toggle major holders data visibility
+            if not all(df is None for df in [StockMajor, StockInstitutional, StockFund]) and st.button("Major Holders"):
+                st.session_state.visibility["major"] = not st.session_state.visibility["major"]
 
+            # Display major holders data if visibility is True
+            if st.session_state.visibility["major"]:
+                if StockMajor is not None:
+                    st.write("**- Major Holders -**")
+                    st.write(StockMajor)
+                if StockInstitutional is not None:
+                    st.write("**- Top Institutional Holders -**")
+                    st.write(StockInstitutional)
+                if StockFund is not None:
+                    st.write("**- Top Mutual Fund Holders -**")
+                    st.write(StockFund)
 
-        # Initialize session state
-        if 'visibility' not in st.session_state:
-            st.session_state.visibility = {
-                "institutional": False,
-                "major": False,
-                "insider": False,
-                "transactions": False,
-                "roster": False  # Initialize the "roster" key
-            }
+            # Button to toggle insider holders data visibility
+            if not all(df is None for df in
+                       [StockInsiderPurchases, StockInsider, StockInsider_roster_holders]) and st.button(
+                    "Insider Holders & Transactions"):
+                st.session_state.visibility["insider"] = not st.session_state.visibility["insider"]
 
+            # Display insider holders data if visibility is True
+            if st.session_state.visibility["insider"]:
+                if StockInsiderPurchases is not None:
+                    st.write("**- Insider Purchases Last 6 Months -**")
+                    st.write(StockInsiderPurchases)
+                if StockInsider is not None:
+                    st.write("**- Insider Transactions Reported - Last Two Years -**")
+                    st.write(StockInsider)
+                if StockInsider_roster_holders is not None:
+                    st.write("**- Insider Roster -**")
+                    st.write(
+                        "*- Insider roster data is derived solely from the last 24 months of Form 3 & Form 4 SEC filings.*")
+                    st.write(StockInsider_roster_holders)
 
-        # Fetch data with exception handling
-        try:
-            # Fetch data
-            StockInsider = yf.Ticker(ticker).insider_transactions
-            StockInstitutional = yf.Ticker(ticker).institutional_holders
-            StockMajor = yf.Ticker(ticker).major_holders
-            StockInsiderPurchases = yf.Ticker(ticker).insider_purchases
-            StockInsider_roster_holders = yf.Ticker(ticker).insider_roster_holders
-            StockFund = yf.Ticker(ticker).mutualfund_holders
-
-
-        except Exception as e:
-
-            st.write("*Currently Stock Holders Not Available*")
-            # Set all data frames to None
-            StockInsider = None
-            StockInstitutional = None
-            StockMajor = None
-            StockInsiderPurchases = None
-            StockInsider_roster_holders = None
-            StockFund = None
-
-        # Button to toggle major holders data visibility
-        show_major_button = not all(df is None for df in [StockMajor, StockInstitutional, StockFund])
-        if show_major_button and st.button("Major Holders"):
-            st.session_state.visibility["major"] = not st.session_state.visibility["major"]
-
-        # Display major holders data if visibility is True
-        if st.session_state.visibility["major"]:
-            if StockMajor is not None:
-                st.write("**- Major Holders -**")
-                st.write(StockMajor)
-            if StockInstitutional is not None:
-                st.write("**- Top Institutional Holders -**")
-                st.write(StockInstitutional)
-            if StockFund is not None:
-                st.write("**- Top Mutual Fund Holders -**")
-                st.write(StockFund)
-
-        # Button to toggle insider holders data visibility
-        show_insider_button = not all(
-            df is None for df in [StockInsiderPurchases, StockInsider, StockInsider_roster_holders])
-        if show_insider_button and st.button("Insider Holders & Transactions"):
-            st.session_state.visibility["insider"] = not st.session_state.visibility["insider"]
-
-
-
-        # Display insider holders data if visibility is True
-        if st.session_state.visibility["insider"]:
-            if StockInsiderPurchases is not None:
-                st.write("**- Insider Purchases Last 6 Months -**")
-                st.write(StockInsiderPurchases)
-            if StockInsider is not None:
-                st.write("**- Insider Transactions Reported - Last Two Years -**")
-                st.write(StockInsider)
-            if StockInsider_roster_holders is not None:
-                st.write("**- Insider Roster -**")
-                st.write(
-                    "*- Insider roster data is derived solely from the last 24 months of Form 3 & Form 4 SEC filings.*")
-                st.write(StockInsider_roster_holders)
-
-        st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
-
-
-
-
+            st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">',
+                     unsafe_allow_html=True)
