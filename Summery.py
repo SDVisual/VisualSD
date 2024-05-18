@@ -199,7 +199,7 @@ else:
         '200d Average Price': 'twoHundredDayAverage',
         'Volume': 'volume',
         'Avg.Volume (10d)': 'averageVolume10days',
-        'Shares Outstanding (In M$)': 'sharesOutstanding',
+        'S.Outstanding (M$)': 'sharesOutstanding',
         'Market Cap (In B$)': 'marketCap',
         'Company EV': 'enterpriseValue',
         'PE Ratio (TTM)': 'trailingPE',
@@ -380,7 +380,7 @@ else:
         ('200d Average Price', 'Forward PE'),
         ('Volume', 'Shares Short'),
         ('Avg.Volume (10d)', 'Short % Of Float'),
-        ('Shares Outstanding (In M$)', '')
+        ('S.Outstanding (M$)', '')
     ]
 
 
