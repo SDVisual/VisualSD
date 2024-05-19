@@ -237,7 +237,7 @@ else:
 
         st.write("")
         st.write("")
-        st.write("")
+
 
     col1, col2, col3, col4 = st.columns([0.6, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
@@ -246,7 +246,7 @@ else:
         st.write("")
         st.write("")
 
-        # Fetch data based on the selected time period or default to '1Y'
+        # Fetch data based on the selected time period or default to '7D'
         selected_time_period = st.session_state.get('selected_time_period', '7D')
         df_ticker = yf.download(ticker, period='max').reset_index()
         end_date = datetime.now()
@@ -258,8 +258,7 @@ else:
         # Display buttons in a single row
         button_container = st.container()
 
-        # # # Initialize selected_time_period to '1Y' as default
-        # selected_time_period = '1Y'
+
 
         with button_container:
             button_spacing = 1  # Adjust spacing between buttons
@@ -366,10 +365,43 @@ else:
     col1, col2 = st.columns([0.8, 0.2])
 
     with col1:
-        if st.checkbox('Show Stock Price History Data', value=False):
+
+
+        # Initialize session state for checkbox and previous ticker
+        if 'show_stock_data' not in st.session_state:
+            st.session_state.show_stock_data = False
+
+        if 'previous_ticker' not in st.session_state:
+            st.session_state.previous_ticker = ''
+
+
+        # Check if the ticker has changed
+        ticker_changed = st.session_state.previous_ticker != ticker
+
+        # Update the previous ticker to the current one
+        st.session_state.previous_ticker = ticker
+
+        # Reset checkbox if ticker changes
+        if ticker_changed:
+            st.session_state.show_stock_data = False
+
+        # Generate a unique key for the checkbox based on the ticker
+        checkbox_key = f"show_stock_data_{ticker}"
+
+        # Checkbox for showing stock price history data
+        show_stock_data = st.checkbox('Show Stock Price History Data', value=st.session_state.show_stock_data,
+                                      key=checkbox_key)
+
+        # Display the stock data only if the checkbox is checked
+        if show_stock_data:
             st.subheader('Stock History - {}'.format(selected_time_period))
+            # Assuming df_ticker is defined earlier in your code as the dataframe containing the stock data
             sorted_df = df_ticker.sort_values(by='Date', ascending=False)
             st.write(sorted_df)
+
+
+
+
 
     pairs = [
         ('Last Price', 'Market Cap (In B$)'),
@@ -386,10 +418,14 @@ else:
         ('S.Outstanding', '')
     ]
 
+    col1, col2 = st.columns([0.3, 0.3])
+
+
 
 
     with col1:
-        st.write("")
+        st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+        st.subheader(f'**Key Stats**')
         # Iterate through pairs and display labels with values or "N/A"
         for label1, label2 in pairs:
             key1 = label_mapping.get(label1)
