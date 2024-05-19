@@ -17,7 +17,6 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
-
 def show_disclaimer():
     # st.title("Disclaimer")
     color_code = "#0ECCEC"
@@ -62,7 +61,6 @@ if "disclaimer_accepted" not in st.session_state:
         st.empty()
 
 else:
-
 
     StockInfo = {}
     StockInfo_df = pd.DataFrame()
