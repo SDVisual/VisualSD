@@ -247,7 +247,7 @@ else:
         st.write("")
 
         # Fetch data based on the selected time period or default to '1Y'
-        selected_time_period = st.session_state.get('selected_time_period', '1Y')
+        selected_time_period = st.session_state.get('selected_time_period', '7D')
         df_ticker = yf.download(ticker, period='max').reset_index()
         end_date = datetime.now()
         # Buttons for selecting different time periods
@@ -273,7 +273,10 @@ else:
         # Calculate start date based on selected time period
 
         if selected_time_period == '1D':
-            start_date = end_date - timedelta(days=2)
+            if end_date.weekday() == 6:  # Sunday
+                start_date = end_date - timedelta(days=3)
+            else:
+                start_date = end_date - timedelta(days=2)
         elif selected_time_period == '7D':
             start_date = end_date - timedelta(days=7)
         elif selected_time_period == '3M':
@@ -667,6 +670,6 @@ else:
             st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
 
-          
+            # st.write(yf.Ticker(ticker).news)
 
 
