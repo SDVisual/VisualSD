@@ -17,6 +17,7 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
+
 def show_disclaimer():
     # st.title("Disclaimer")
     color_code = "#0ECCEC"
@@ -61,6 +62,7 @@ if "disclaimer_accepted" not in st.session_state:
         st.empty()
 
 else:
+
 
     StockInfo = {}
     StockInfo_df = pd.DataFrame()
@@ -417,12 +419,14 @@ else:
     ]
 
     col1, col2 = st.columns([0.3, 0.3])
-
-
-
-
     with col1:
         st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+
+
+    col1, col2 = st.columns([0.8, 0.2])
+
+    with col1:
+
         st.subheader(f'**Key Stats**')
         # Iterate through pairs and display labels with values or "N/A"
         for label1, label2 in pairs:
@@ -595,6 +599,8 @@ else:
                 st.session_state.current_ticker = ticker
 
             ########################### Dividends #################################################################
+
+
 
             calendar_data = yf.Ticker(ticker).calendar
 
