@@ -244,8 +244,8 @@ else:
         st.write("")
         st.write("")
 
-        # Fetch data based on the selected time period or default to '7D'
-        selected_time_period = st.session_state.get('selected_time_period', '7D')
+        # Fetch data based on the selected time period or default to '1Y'
+        selected_time_period = st.session_state.get('selected_time_period', '1Y')
         df_ticker = yf.download(ticker, period='max').reset_index()
         end_date = datetime.now()
         # Buttons for selecting different time periods
