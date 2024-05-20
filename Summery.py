@@ -250,7 +250,7 @@ else:
         df_ticker = yf.download(ticker, period='max').reset_index()
         end_date = datetime.now()
         # Buttons for selecting different time periods
-        time_periods = ['1D', '7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
+        time_periods = ['3D', '7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
         for _ in range(1):
             st.write("")
 
