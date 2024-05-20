@@ -270,11 +270,11 @@ else:
 
         # Calculate start date based on selected time period
 
-        if selected_time_period == '1D':
+        if selected_time_period == '3D':
             if end_date.weekday() == 6:  # Sunday
                 start_date = end_date - timedelta(days=3)
             else:
-                start_date = end_date - timedelta(days=2)
+                start_date = end_date - timedelta(days=3)
         elif selected_time_period == '7D':
             start_date = end_date - timedelta(days=7)
         elif selected_time_period == '3M':
