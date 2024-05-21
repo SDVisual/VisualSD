@@ -478,7 +478,7 @@ else:
         st.markdown(f"<p style='font-size:12px;'>As of Date: {current_date}</p>", unsafe_allow_html=True)
         
         # st.subheader(f'**Key Stats**')
-        st.subheader(f'**Trading Information**')
+        # st.subheader(f'**Trading Information**')
         # Iterate through pairs and display labels with values or "N/A"
         for label1, label2 in pairs:
             key1 = label_mapping.get(label1)
