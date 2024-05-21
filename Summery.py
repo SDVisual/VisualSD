@@ -536,8 +536,8 @@ else:
                 formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
             elif label2 == 'Profit Margins':
                 formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
-
-
+            elif label2 == 'Revenue (TTM)':
+                formatted_value2 = f"{value2:,.2f}B" if value2 != 'N/A' else ''
             elif label2 == 'Dividend':
                 formatted_value2 = f"{value2:,.2f}" if value2 != 'N/A' else ''
             else:
