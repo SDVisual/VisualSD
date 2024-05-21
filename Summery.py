@@ -17,6 +17,7 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
+
 def show_disclaimer():
     # st.title("Disclaimer")
     color_code = "#0ECCEC"
@@ -198,7 +199,7 @@ else:
         '200d Average Price': 'twoHundredDayAverage',
         'Volume': 'volume',
         'Avg.Volume (10d)': 'averageVolume10days',
-        'S.Outstanding': 'sharesOutstanding',
+        'S.Outstanding (B)': 'sharesOutstanding',
         'Market Cap (In B$)': 'marketCap',
         'Company EV': 'enterpriseValue',
         'PE Ratio (TTM)': 'trailingPE',
@@ -209,6 +210,15 @@ else:
         'Short % Of Float': 'shortPercentOfFloat',
         'Shares Short': 'sharesShort',
         '1YTarget Est': 'targetMeanPrice',
+        'Gross Margins': 'grossMargins',
+        'Operating Margins': 'operatingMargins',
+        'Revenue (TTM)': 'totalRevenue',
+        'ROE': 'returnOnEquity',
+        'ROA': 'returnOnAssets',
+        'Debt To Equity': 'debtToEquity',
+        'EPS (TTM)': 'trailingEps',
+        'Profit Margins': 'profitMargins',
+
         'Forward PE': 'forwardPE'
     }
 
@@ -250,7 +260,7 @@ else:
         df_ticker = yf.download(ticker, period='max').reset_index()
         end_date = datetime.now()
         # Buttons for selecting different time periods
-        time_periods = ['3D', '7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
+        time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
         for _ in range(1):
             st.write("")
 
@@ -270,12 +280,8 @@ else:
 
         # Calculate start date based on selected time period
 
-        if selected_time_period == '3D':
-            if end_date.weekday() == 6:  # Sunday
-                start_date = end_date - timedelta(days=3)
-            else:
-                start_date = end_date - timedelta(days=3)
-        elif selected_time_period == '7D':
+
+        if selected_time_period == '7D':
             start_date = end_date - timedelta(days=7)
         elif selected_time_period == '3M':
             start_date = end_date - timedelta(days=90)
@@ -300,16 +306,22 @@ else:
     with col1:
 
 
+
         if df_ticker.empty:
             st.warning(f"No data found for {ticker} in the selected date range.")
+
         else:
+
+            # Filter the DataFrame to exclude non-trading days
+            df_ticker = df_ticker[df_ticker['Volume'] > 0]
+
             # Calculate additional information
             max_price = df_ticker['High'].max()
             min_price = df_ticker['Low'].min()
             range_low_to_high = ((max_price - min_price) / min_price) * 100
 
             initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
-            final_close = df_ticker.iloc[-1]['Close']  # Closing price for the earliest date
+            final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
             yield_percentage = (((final_close / initial_close) - 1) * 100)
 
             # Determine color based on yield
@@ -348,9 +360,13 @@ else:
             )
 
             candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
-                                            xaxis=dict(type='date', range=[start_date, end_date]),
+                                            xaxis=dict(type='date',  # Set type to 'date'
+                                                       range=[start_date, end_date],
+                                                       rangebreaks=[
+                                                           dict(bounds=["sat", "mon"])
+                                                           # Adjust this based on your non-trading days
+                                                       ]),
                                             yaxis=dict(title='Price', showgrid=True),
-                                            # Remove gridlines from y-axis
                                             yaxis2=dict(title='',
                                                         overlaying='y',
                                                         side='right',  # Move to the right side
@@ -360,6 +376,9 @@ else:
 
             # Hide Plotly toolbar and directly display the chart
             st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
+
+
+
 
     col1, col2 = st.columns([0.8, 0.2])
 
@@ -401,21 +420,43 @@ else:
 
 
 
-
     pairs = [
         ('Last Price', 'Market Cap (In B$)'),
-        ('Previous Close', 'Company EV'),
-        ('Open', 'PE Ratio (TTM)'),
-        ('Day High', 'Price to Sales (TTM)'),
-        ('Day Low', 'Beta (5Y Monthly)'),
-        ('52 Week Low', 'Dividend Yield'),
-        ('52 Week High', 'Dividend'),
-        ('50d Average Price', '1YTarget Est'),
-        ('200d Average Price', 'Forward PE'),
-        ('Volume', 'Shares Short'),
-        ('Avg.Volume (10d)', 'Short % Of Float'),
-        ('S.Outstanding', '')
+        ('Volume', 'S.Outstanding (B)'),
+        ('Previous Close', '52 Week Low' ),
+        ('Open', '52 Week High'),
+        ('Day High', 'Beta (5Y Monthly)'),
+        ('Day Low', '50d Average Price'),
+        ('Dividend', '200d Average Price'),
+        ('Dividend Yield', 'Shares Short'),
+        ('1YTarget Est', 'Short % Of Float'),
+
+
+        ('PE Ratio (TTM)', 'EPS (TTM)'),
+        ('Forward PE', 'Revenue (TTM)'),
+        ('Price to Sales (TTM)', 'Gross Margins'),
+
+        ('ROA', 'Operating Margins'),
+        ('ROE', 'Profit Margins'),
+
+
     ]
+
+    # pairs = [
+    #     ('Last Price', 'Market Cap (In B$)'),
+    #     ('Previous Close', 'Company EV'),
+    #     ('Open', 'PE Ratio (TTM)'),
+    #     ('Day High', 'Price to Sales (TTM)'),
+    #     ('Day Low', 'Beta (5Y Monthly)'),
+    #     ('52 Week Low', 'Dividend Yield'),
+    #     ('52 Week High', 'Dividend'),
+    #     ('50d Average Price', '1YTarget Est'),
+    #     ('200d Average Price', 'Forward PE'),
+    #     ('Volume', 'Shares Short'),
+    #     ('Avg.Volume (10d)', 'Short % Of Float'),
+    #     ('S.Outstanding', 'Gross Margins')
+    # ]
+
 
     col1, col2 = st.columns([0.3, 0.3])
     with col1:
@@ -426,7 +467,8 @@ else:
 
     with col1:
 
-        st.subheader(f'**Key Stats**')
+        # st.subheader(f'**Key Stats**')
+        st.subheader(f'**Trading Information**')
         # Iterate through pairs and display labels with values or "N/A"
         for label1, label2 in pairs:
             key1 = label_mapping.get(label1)
@@ -439,14 +481,14 @@ else:
             formatted_label2 = f"{label2}" if label2 else ''
 
             # Divide values by billions or millions based on labels
-            if key1 and label1 in ['Market Cap (In B$)', 'Company EV']:
+            if key1 and label1 in ['Market Cap (In B$)', 'Company EV', 'Revenue (TTM)']:
                 value1 = float(value1) / 1_000_000_000 if value1 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
             elif key1 == 'Avg. Volume (10d)' or key1 == 'Volume':
                 value1 = int(float(value1)) if value1 != 'N/A' else 'N/A'  # Convert to integer
                 if label1 == 'Avg. Volume (10d)' or label1 == 'Volume':
                     value1 = f"{int(value1):,}" if value1 != 'N/A' else 'N/A'  # Format without decimal places
 
-            if key2 and label2 in ['Market Cap (In B$)', 'Company EV']:
+            if key2 and label2 in ['Market Cap (In B$)', 'Revenue (TTM)', 'S.Outstanding (B)']:
                 value2 = float(value2) / 1_000_000_000 if value2 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
             elif key2 == 'Avg. Volume (10d)' or key2 == 'Volume':
                 value2 = int(float(value2)) if value2 != 'N/A' else 'N/A'  # Convert to integer
@@ -477,6 +519,25 @@ else:
 
             if label2 == 'Dividend Yield':
                 formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
+
+            if label1 == 'PE Ratio (TTM)':
+                st.subheader(f'**Ratios/Profitability**')
+
+            if label1 == 'ROA':
+                formatted_value1 = f"{value1:.2%}" if value1 != 'N/A' else 'N/A'
+            if label1 == 'ROE':
+                formatted_value1 = f"{value1:,.2%}" if value1 != 'N/A' else 'N/A'
+
+
+
+            if label2 == 'Operating Margins':
+                formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
+            elif label2 == 'Gross Margins':
+                formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
+            elif label2 == 'Profit Margins':
+                formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
+
+
             elif label2 == 'Dividend':
                 formatted_value2 = f"{value2:,.2f}" if value2 != 'N/A' else ''
             else:
