@@ -43,7 +43,7 @@ def show_disclaimer():
             st.write(disclaimer_content)  # Display the disclaimer content
 
             agree_disclaimer = st.checkbox("I have read and agree to the disclaimer")
-            continue_button = st.form_submit_button(label="Click for Continue")
+            continue_button = st.form_submit_button(label="Let's Go !")
             # Apply custom CSS style to adjust the form frame width
 
     return agree_disclaimer, continue_button
