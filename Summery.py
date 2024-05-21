@@ -468,6 +468,15 @@ else:
 
     with col1:
 
+        # Get the current date
+        current_date = datetime.now().strftime("%d-%m-%Y")
+
+        # Display the subheader
+        st.subheader(f'**Trading Information**')
+
+        # Display the date in a smaller font
+        st.markdown(f"<p style='font-size:12px;'>As of Date: {current_date}</p>", unsafe_allow_html=True)
+        
         # st.subheader(f'**Key Stats**')
         st.subheader(f'**Trading Information**')
         # Iterate through pairs and display labels with values or "N/A"
