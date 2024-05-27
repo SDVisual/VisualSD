@@ -24,6 +24,7 @@ header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
+
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
@@ -62,8 +63,6 @@ else:
         st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
 
 
-
-
 # Select box to choose ticker
 ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
                               index=selected_ticker_index)
@@ -79,16 +78,7 @@ st.sidebar.info("- Easy Download Data Tables.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
-st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
-
-
-
-
-
-# # Sidebar date inputs
-# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
-# end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
-
+st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
 
 
 
@@ -206,6 +196,9 @@ cash_flow = cash_flow_formatted
 # Apply the conversion function to all values in the DataFrame
 cash_flow_numeric = cash_flow.applymap(str_to_float)
 
+
+# Show only the latest 4 dates
+cash_flow = cash_flow.iloc[:, -4:]
 # Calculate percentage change for each metric between consecutive periods
 percentage_change_cash_flow = cash_flow_numeric.pct_change(axis=1) * 100
 
@@ -214,7 +207,9 @@ percentage_change_cash_flow.iloc[:, 0] = pd.to_numeric(percentage_change_cash_fl
 
 # Replace NaN values with 0
 percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].fillna(0)
-# st.write(percentage_change_cash_flow)
+
+percentage_change_cash_flow = percentage_change_cash_flow.iloc[:, -4:]
+
 
 
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
@@ -225,6 +220,7 @@ styled_cash_flow = cash_flow.style.set_table_styles([
     {'selector': 'th', 'props': [('text-align', 'center')]},  # Center align headers
     {'selector': 'th:first-child, td:first-child', 'props': [('text-align', 'left')]}  # Align first column to left
 ])
+
 
 
 
@@ -367,6 +363,9 @@ with col1:
 
     # Perform division operation after applying conversion function to both columns
     free_cash_flow_per_share = (free_cash_flow * 1000000) / ordinary_shares_number
+
+    free_cash_flow_per_share.dropna(inplace=True)
+
 
 
     # Convert Series to DataFrame with a single column
@@ -569,6 +568,8 @@ with col3:
 
     free_cash_flow_margin_percentage = (cash_flow_transposed['Free Cash Flow'] / income_statement_transposed[
         'Total Revenue']) * 100
+
+    free_cash_flow_margin_percentage.dropna(inplace=True)
 
     # Create a Plotly figure for the bar chart
     fig = go.Figure()
