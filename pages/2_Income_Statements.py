@@ -24,12 +24,10 @@ header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
-
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
-# st.write("")
-# st.write("")
+
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
@@ -38,9 +36,6 @@ DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_ti
 selected_ticker_index = st.session_state.selected_ticker_index
 selected_symbol = st.session_state.valid_tickers[selected_ticker_index]
 
-# # Display the selected ticker index and symbol
-# st.write("Selected ticker index:", selected_ticker_index)
-# st.write("Selected symbol:", selected_symbol)
 
 # Check if the entered symbol is empty or consists only of whitespace characters
 if not new_symbol or new_symbol.isspace():
@@ -70,9 +65,7 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
 
-# # Sidebar date inputs
-# start_date = st.sidebar.date_input('Start date - Historical Prices', datetime.datetime(2021, 1, 1))
-# end_date = st.sidebar.date_input('End date', datetime.datetime.now().date())
+
 
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
@@ -81,7 +74,7 @@ st.sidebar.info("- Easy Download Data Tables.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
-st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
+st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
 
 StockInfo = yf.Ticker(ticker).info
 income_statementYear = yf.Ticker(ticker).income_stmt
@@ -214,6 +207,7 @@ col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 a
 data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Selling General And Administration',
                                   'Research And Development', 'Operating Expense', 'Operating Income',
                                   'Net Income']].transpose()
+# st.write(data)
 
 # Define a dictionary to map full names to shorter abbreviations
 name_mapping = {
@@ -275,16 +269,12 @@ with col1:
 
 
 
-
-
-st.subheader(f"Company Revenues & Expenses ")
-
-
-
+st.subheader(f"Revenues & Expenses ")
 
 
 st.write("")
 st.write("")
+
 col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
@@ -825,4 +815,3 @@ with col2:
     )
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
-
