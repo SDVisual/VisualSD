@@ -422,13 +422,13 @@ else:
 
     pairs = [
         ('Last Price', 'Market Cap (In B$)'),
-        ('Volume', 'S.Outstanding (B)'),
+        ('Volume', 'Avg.Volume (10d)'),
         ('Previous Close', '52 Week Low' ),
         ('Open', '52 Week High'),
         ('Day High', 'Beta (5Y Monthly)'),
         ('Day Low', '50d Average Price'),
         ('Dividend', '200d Average Price'),
-        ('Dividend Yield', 'Shares Short'),
+        ('Dividend Yield', 'S.Outstanding (B)'),
         ('1YTarget Est', 'Short % Of Float'),
 
 
