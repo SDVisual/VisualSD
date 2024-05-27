@@ -193,7 +193,6 @@ styled_balance_sheet = balance_sheet.style.set_table_styles([
 ])
 
 
-st.write(balance_sheet)
 st.write("")
 st.write("")
 
