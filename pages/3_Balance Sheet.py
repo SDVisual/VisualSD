@@ -160,7 +160,6 @@ if is_extended:
 else:
     balance_sheet = balance_sheet.reindex(desired_order_first, fill_value='0')
 
-# balance_sheet = balance_sheet.reindex(desired_order_first, fill_value='0')
 balance_sheet = balance_sheet.drop('Properties', errors='ignore')
 
 # Convert values to millions
@@ -175,10 +174,11 @@ balance_sheet = balance_sheet.sort_index(axis=1)
 # Format the column headers to remove the timestamp
 balance_sheet.columns = [col.strftime('%d/%m/%Y') for col in balance_sheet.columns]
 
-# Drop rows where all cells are '0' or empty spaces
-balance_sheet = balance_sheet[(balance_sheet != '0')].dropna()
-
-# st.write(balance_sheet)
+# Show only the latest 4 dates
+balance_sheet = balance_sheet.iloc[:, -4:]
+# Replace "None" with 0
+balance_sheet = balance_sheet.fillna(0)
+st.write(balance_sheet)
 
 # Apply the formatting function to the balance sheet DataFrame
 balance_sheet = balance_sheet.applymap(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
