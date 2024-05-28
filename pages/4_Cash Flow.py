@@ -210,6 +210,9 @@ percentage_change_cash_flow.iloc[:, 0] = percentage_change_cash_flow.iloc[:, 0].
 
 percentage_change_cash_flow = percentage_change_cash_flow.iloc[:, -4:]
 
+# Fill the first column of percentage_change_cash_flow DataFrame with 0
+percentage_change_cash_flow.iloc[:, 0] = 0
+
 
 
 st.write("<span style='font-size: 16px;'>* All values in millions $</span>", unsafe_allow_html=True)
