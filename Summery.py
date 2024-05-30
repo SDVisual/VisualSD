@@ -34,7 +34,6 @@ col1, col2 = st.columns([0.7, 0.3])
 #             "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
 #         )
 #
-#
 #         # Place the disclaimer content within column col1 with width 0.6
 #         col1, col2 = st.columns([0.6, 0.4])
 #
