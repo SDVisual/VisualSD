@@ -204,8 +204,7 @@ st.write("")
 
 col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
-data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Selling General And Administration',
-                                  'Research And Development', 'Operating Expense', 'Operating Income',
+data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income',
                                   'Net Income']].transpose()
 # st.write(data)
 
