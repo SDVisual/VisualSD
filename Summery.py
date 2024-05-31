@@ -653,6 +653,7 @@ with col1:
 
         # Display the comparison table
         st.write("Comparison Table Of Ratios/Profitability")
+        st.write("")
         if 'Choose All' in selected_elements:
             selected_elements = [elem[0] for elem in elements if elem[0] != 'Choose All']
         st.dataframe(comparison_df[selected_elements])
