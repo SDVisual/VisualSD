@@ -593,99 +593,98 @@ with col1:
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<45} {label2_value2}")
         st.write("")
+        st.write("")
 
 
 
 
-# Define the elements to compare
-elements = [
-    ('Revenue (TTM)', 'totalRevenue', 'Billions'),
-    ('PE Ratio (TTM)', 'trailingPE', '2 decimals'),
-    ('Forward PE', 'forwardPE', '2 decimals'),
-    ('Price to Sales (TTM)', 'priceToSalesTrailing12Months', '2 decimals'),
-    ('EPS (TTM)', 'trailingEps', '2 decimals'),
-    ('Gross Margins', 'grossMargins', 'percentage'),
-    ('Operating Margins', 'operatingMargins', 'percentage'),
-    ('Profit Margins', 'profitMargins', 'percentage'),
-    ('ROA', 'returnOnAssets', 'percentage'),
-    ('ROE', 'returnOnEquity', 'percentage')
-]
+col1, col2 = st.columns([0.7, 0.3])
+with col1:
 
-# Define function to display comparison table
-def display_comparison_table():
-    # Check if there are enough symbols for comparison
-    if len(st.session_state.valid_tickers) < 2:
-        st.warning("Not enough symbols for comparison. Please add more symbols.")
-        return
-
-    # Initialize an empty DataFrame to store comparison data
-    comparison_df = pd.DataFrame(columns=[elem[0] for elem in elements])
-
-    # Loop through valid tickers and fetch the stock information
-    for ticker in st.session_state.valid_tickers:
-        stock_info = yf.Ticker(ticker).info
-
-        # Collect the elements for the current ticker
-        data = {}
-        for elem in elements:
-            value = stock_info.get(elem[1], None)
-            if value is not None:
-                if elem[2] == 'Billions':
-                    value = f"{value / 1_000_000_000:.2f}B"
-                elif elem[2] == '2 decimals':
-                    value = f"{value:.2f}"
-                elif elem[2] == 'percentage':
-                    value = f"{value * 100:.2f}%"
-            data[elem[0]] = value
-
-        data['Ticker'] = ticker
-
-        # Append the data to the comparison DataFrame using pd.concat
-        comparison_df = pd.concat([comparison_df, pd.DataFrame([data])], ignore_index=True)
-
-    # Set 'Ticker' as the index of the DataFrame
-    comparison_df.set_index('Ticker', inplace=True)
-
-    # Display the comparison table
-    st.write("Comparison Table Of Ratios/Profitability")
-    st.dataframe(comparison_df)
-
-# Check if the visibility flag is set to True and the user clicks the button
-if st.button("New! My Symbols List Comparison Table"):
-    if 'comparison_table_visible' not in st.session_state:
-        st.session_state.comparison_table_visible = True
-
-    st.session_state.comparison_table_visible = not st.session_state.comparison_table_visible
-
-    
-
-# Check if the visibility flag is set to True and the user switches symbols in the list
-if st.session_state.get('comparison_table_visible', False) and st.session_state.selected_ticker_index != -1:
-    display_comparison_table()
-else:
-    # Turn off the visibility flag if the user switches symbols in the list
-    st.session_state.comparison_table_visible = False
+    # Define the elements to compare
+    elements = [
+        ('Choose All', 'all', None),  # Option to choose all elements
+        ('Revenue (TTM)', 'totalRevenue', 'Billions'),
+        ('PE Ratio (TTM)', 'trailingPE', '2 decimals'),
+        ('Forward PE', 'forwardPE', '2 decimals'),
+        ('Price to Sales (TTM)', 'priceToSalesTrailing12Months', '2 decimals'),
+        ('EPS (TTM)', 'trailingEps', '2 decimals'),
+        ('Gross Margins', 'grossMargins', 'percentage'),
+        ('Operating Margins', 'operatingMargins', 'percentage'),
+        ('Profit Margins', 'profitMargins', 'percentage'),
+        ('ROA', 'returnOnAssets', 'percentage'),
+        ('ROE', 'returnOnEquity', 'percentage')
+    ]
 
 
+    # Define function to display comparison table
+    def display_comparison_table(selected_elements):
+        # Check if there are enough symbols for comparison
+        if len(st.session_state.valid_tickers) < 2:
+            st.warning("Not enough symbols for comparison. Please add more symbols.")
+            return
+
+        # Initialize an empty DataFrame to store comparison data
+        comparison_df = pd.DataFrame(columns=[elem[0] for elem in elements])
+
+        # Loop through valid tickers and fetch the stock information
+        for ticker in st.session_state.valid_tickers:
+            stock_info = yf.Ticker(ticker).info
+
+            # Collect the elements for the current ticker
+            data = {}
+            for elem in elements:
+                value = stock_info.get(elem[1], None)
+                if value is not None:
+                    if elem[2] == 'Billions':
+                        value = f"{value / 1_000_000_000:.2f}B"
+                    elif elem[2] == '2 decimals':
+                        value = f"{value:.2f}"
+                    elif elem[2] == 'percentage':
+                        value = f"{value * 100:.2f}%"
+                data[elem[0]] = value
+
+            data['Ticker'] = ticker
+
+            # Append the data to the comparison DataFrame using pd.concat
+            comparison_df = pd.concat([comparison_df, pd.DataFrame([data])], ignore_index=True)
+
+        # Set 'Ticker' as the index of the DataFrame
+        comparison_df.set_index('Ticker', inplace=True)
+
+        # Display the comparison table
+        st.write("Comparison Table Of Ratios/Profitability")
+        if 'Choose All' in selected_elements:
+            selected_elements = [elem[0] for elem in elements if elem[0] != 'Choose All']
+        st.dataframe(comparison_df[selected_elements])
 
 
+    # Check if the visibility flag is set to True and the user clicks the button
+    if st.button("New! My Symbols List Comparison Table"):
+        if 'comparison_table_visible' not in st.session_state:
+            st.session_state.comparison_table_visible = True
 
+        st.session_state.comparison_table_visible = not st.session_state.comparison_table_visible
 
+        # Check if there are enough symbols for comparison
+        if len(st.session_state.valid_tickers) < 2:
+            st.warning("Not enough symbols for comparison. Please add more symbols.")
+            st.session_state.comparison_table_visible = False
 
+    # Check if the visibility flag is set to True and the user switches symbols in the list
+    if st.session_state.get('comparison_table_visible', False):
+        # Create a dropdown list with multiple selection for choosing elements to compare
+        selected_elements = st.multiselect("Select elements to compare:", [elem[0] for elem in elements])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # Check if the user has selected at least one element
+        if st.button("Let's compare"):
+            if selected_elements:
+                display_comparison_table(selected_elements)
+            else:
+                st.warning("Please select at least one element to compare.")
+    else:
+        # Turn off the visibility flag if the user switches symbols in the list
+        st.session_state.comparison_table_visible = False
 
 
 col1, col2 = st.columns([0.3, 0.3])  # Adjust the width ratio of col1 and col2 as needed
