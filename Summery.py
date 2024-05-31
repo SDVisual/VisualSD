@@ -17,6 +17,7 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
+
 # def show_disclaimer():
 #     # st.title("Disclaimer")
 #     color_code = "#0ECCEC"
@@ -33,6 +34,7 @@ col1, col2 = st.columns([0.7, 0.3])
 #             "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved from Financial Data APIs."
 #             "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
 #         )
+#
 #
 #         # Place the disclaimer content within column col1 with width 0.6
 #         col1, col2 = st.columns([0.6, 0.4])
@@ -111,13 +113,36 @@ else:
 # Retrieve the index of the selected ticker symbol from the session state
 selected_ticker_index = st.session_state.selected_ticker_index
 
+
+
+
+# Additional symbols to add when the buttons are pressed
+additional_symbols_1 = ["AA", "BA", "AMD", "ASML"]
+additional_symbols_2 = ["TLRY", "TSLA"]
+
+
 # Select box to choose ticker
 ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
-                              index=selected_ticker_index)
+                              index=st.session_state.selected_ticker_index)
+
+# Button to add additional symbols to the select box list
+if st.sidebar.button("Tech"):
+    st.session_state.valid_tickers.extend(additional_symbols)
+    st.session_state.valid_tickers = list(set(st.session_state.valid_tickers))  # Remove duplicates
+    st.session_state.selected_ticker_index = 0  # Reset selected index
+    st.experimental_rerun()  # Rerun the app to update the select box
+
+# Button to add the second set of additional symbols to the select box list
+if st.sidebar.button("SemiCon"):
+    st.session_state.valid_tickers.extend(additional_symbols_2)
+    st.session_state.valid_tickers = list(set(st.session_state.valid_tickers))  # Remove duplicates
+    st.session_state.selected_ticker_index = 0  # Reset selected index
+    st.experimental_rerun()  # Rerun the app to update the select box
+
+
 
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
-
 
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
@@ -127,6 +152,7 @@ st.sidebar.info("- Easy Download Data Tables.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
+
 
 StockInfo = yf.Ticker(ticker).info
 rec_summery = yf.Ticker(ticker).recommendations_summary
@@ -361,10 +387,10 @@ with col1:
         candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
                                         xaxis=dict(type='date',  # Set type to 'date'
                                                    range=[start_date, end_date],
-                                                   rangebreaks=[
-                                                       dict(bounds=["sat", "mon"])
+                                                   # rangebreaks=[
+                                                   #     dict(bounds=["sat", "mon"])]
                                                        # Adjust this based on your non-trading days
-                                                   ]),
+                                                   ),
                                         yaxis=dict(title='Price', showgrid=True),
                                         yaxis2=dict(title='',
                                                     overlaying='y',
@@ -434,7 +460,6 @@ pairs = [
     ('PE Ratio (TTM)', 'EPS (TTM)'),
     ('Forward PE', 'Revenue (TTM)'),
     ('Price to Sales (TTM)', 'Gross Margins'),
-
     ('ROA', 'Operating Margins'),
     ('ROE', 'Profit Margins'),
 
@@ -568,6 +593,98 @@ with col1:
 
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<45} {label2_value2}")
+        st.write("")
+
+
+
+
+# Define the elements to compare
+elements = [
+    ('Revenue (TTM)', 'totalRevenue', 'Billions'),
+    ('PE Ratio (TTM)', 'trailingPE', '2 decimals'),
+    ('Forward PE', 'forwardPE', '2 decimals'),
+    ('Price to Sales (TTM)', 'priceToSalesTrailing12Months', '2 decimals'),
+    ('EPS (TTM)', 'trailingEps', '2 decimals'),
+    ('Gross Margins', 'grossMargins', 'percentage'),
+    ('Operating Margins', 'operatingMargins', 'percentage'),
+    ('Profit Margins', 'profitMargins', 'percentage'),
+    ('ROA', 'returnOnAssets', 'percentage'),
+    ('ROE', 'returnOnEquity', 'percentage')
+]
+
+# Define function to display comparison table
+def display_comparison_table():
+    # Check if there are enough symbols for comparison
+    if len(st.session_state.valid_tickers) < 2:
+        st.warning("Not enough symbols for comparison. Please add more symbols.")
+        return
+
+    # Initialize an empty DataFrame to store comparison data
+    comparison_df = pd.DataFrame(columns=[elem[0] for elem in elements])
+
+    # Loop through valid tickers and fetch the stock information
+    for ticker in st.session_state.valid_tickers:
+        stock_info = yf.Ticker(ticker).info
+
+        # Collect the elements for the current ticker
+        data = {}
+        for elem in elements:
+            value = stock_info.get(elem[1], None)
+            if value is not None:
+                if elem[2] == 'Billions':
+                    value = f"{value / 1_000_000_000:.2f}B"
+                elif elem[2] == '2 decimals':
+                    value = f"{value:.2f}"
+                elif elem[2] == 'percentage':
+                    value = f"{value * 100:.2f}%"
+            data[elem[0]] = value
+
+        data['Ticker'] = ticker
+
+        # Append the data to the comparison DataFrame using pd.concat
+        comparison_df = pd.concat([comparison_df, pd.DataFrame([data])], ignore_index=True)
+
+    # Set 'Ticker' as the index of the DataFrame
+    comparison_df.set_index('Ticker', inplace=True)
+
+    # Display the comparison table
+    st.write("Comparison Table Of Ratios/Profitability")
+    st.dataframe(comparison_df)
+
+# Check if the visibility flag is set to True and the user clicks the button
+if st.button("New! My Symbols List Comparison Table"):
+    if 'comparison_table_visible' not in st.session_state:
+        st.session_state.comparison_table_visible = True
+
+    st.session_state.comparison_table_visible = not st.session_state.comparison_table_visible
+
+    
+
+# Check if the visibility flag is set to True and the user switches symbols in the list
+if st.session_state.get('comparison_table_visible', False) and st.session_state.selected_ticker_index != -1:
+    display_comparison_table()
+else:
+    # Turn off the visibility flag if the user switches symbols in the list
+    st.session_state.comparison_table_visible = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
