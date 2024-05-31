@@ -115,28 +115,28 @@ selected_ticker_index = st.session_state.selected_ticker_index
 
 
 
-# Additional symbols to add when the buttons are pressed
-additional_symbols_1 = ["AA", "BA", "AMD", "ASML"]
-additional_symbols_2 = ["TLRY", "TSLA"]
+# # Additional symbols to add when the buttons are pressed
+# additional_symbols_1 = ["AA", "BA", "AMD", "ASML"]
+# additional_symbols_2 = ["TLRY", "TSLA"]
 
 
 # Select box to choose ticker
 ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
                               index=st.session_state.selected_ticker_index)
 
-# Button to add additional symbols to the select box list
-if st.sidebar.button("Tech"):
-    st.session_state.valid_tickers.extend(additional_symbols)
-    st.session_state.valid_tickers = list(set(st.session_state.valid_tickers))  # Remove duplicates
-    st.session_state.selected_ticker_index = 0  # Reset selected index
-    st.experimental_rerun()  # Rerun the app to update the select box
+# # Button to add additional symbols to the select box list
+# if st.sidebar.button("Tech"):
+#     st.session_state.valid_tickers.extend(additional_symbols)
+#     st.session_state.valid_tickers = list(set(st.session_state.valid_tickers))  # Remove duplicates
+#     st.session_state.selected_ticker_index = 0  # Reset selected index
+#     st.experimental_rerun()  # Rerun the app to update the select box
 
-# Button to add the second set of additional symbols to the select box list
-if st.sidebar.button("SemiCon"):
-    st.session_state.valid_tickers.extend(additional_symbols_2)
-    st.session_state.valid_tickers = list(set(st.session_state.valid_tickers))  # Remove duplicates
-    st.session_state.selected_ticker_index = 0  # Reset selected index
-    st.experimental_rerun()  # Rerun the app to update the select box
+# # Button to add the second set of additional symbols to the select box list
+# if st.sidebar.button("SemiCon"):
+#     st.session_state.valid_tickers.extend(additional_symbols_2)
+#     st.session_state.valid_tickers = list(set(st.session_state.valid_tickers))  # Remove duplicates
+#     st.session_state.selected_ticker_index = 0  # Reset selected index
+#     st.experimental_rerun()  # Rerun the app to update the select box
 
 
 
