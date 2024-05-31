@@ -597,7 +597,6 @@ with col1:
 
 
 
-
 col1, col2 = st.columns([0.7, 0.3])
 with col1:
 
