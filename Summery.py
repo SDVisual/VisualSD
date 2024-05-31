@@ -592,14 +592,12 @@ with col1:
 
         # Display pairs in the same line without the "|" string
         st.text(f"{label1_value1:<45} {label2_value2}")
-        st.write("")
-        st.write("")
-
+        
 
 
 col1, col2 = st.columns([0.7, 0.3])
 with col1:
-
+    
     # Define the elements to compare
     elements = [
         ('Choose All', 'all', None),  # Option to choose all elements
