@@ -270,7 +270,6 @@ with col2:
     button_container = st.container()
 
 
-
     with button_container:
         button_spacing = 1  # Adjust spacing between buttons
         st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
