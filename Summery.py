@@ -363,8 +363,8 @@ with col1:
         candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
                                         xaxis=dict(type='date',  # Set type to 'date'
                                                    range=[start_date, end_date],
-                                                   # rangebreaks=[
-                                                   #     dict(bounds=["sat", "mon"])]
+                                                   rangebreaks=[
+                                                       dict(bounds=["sat", "mon"])]
                                                        # Adjust this based on your non-trading days
                                                    ),
                                         yaxis=dict(title='Price', showgrid=True),
