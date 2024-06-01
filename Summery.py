@@ -637,7 +637,7 @@ with col1:
 
 
     # Check if the visibility flag is set to True and the user clicks the button
-    if st.button("New! My Symbols List Comparison Table"):
+    if st.button("Compare Ratios/Profitability Between Your Symbols"):
         if 'comparison_table_visible' not in st.session_state:
             st.session_state.comparison_table_visible = True
 
