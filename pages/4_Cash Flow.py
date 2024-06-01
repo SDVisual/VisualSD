@@ -78,7 +78,7 @@ st.sidebar.info("- Easy Download Data Tables.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
-st.sidebar.markdown("&copy;VisualSD by Dan Oren. All rights reserved.", unsafe_allow_html=True)
+st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
 
 
