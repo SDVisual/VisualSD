@@ -653,7 +653,7 @@ with col1:
         comparison_df.set_index('Ticker', inplace=True)
 
         # Display the comparison table
-        st.write("Compare Ratios/Profitability Between Your Symbols")
+        st.write("Compare Ratios/Profitability Between Your Symbols ")
         st.write("")
         if 'Choose All' in selected_elements:
             selected_elements = [elem[0] for elem in elements if elem[0] != 'Choose All']
