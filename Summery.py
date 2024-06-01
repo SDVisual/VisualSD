@@ -588,8 +588,12 @@ with col1:
         ('Gross Margins', 'grossMargins', 'percentage'),
         ('Operating Margins', 'operatingMargins', 'percentage'),
         ('Profit Margins', 'profitMargins', 'percentage'),
+        ('Current Ratio', 'currentRatio', '2 decimals'),
+        ('Quick Ratio', 'quickRatio', '2 decimals'),
         ('ROA', 'returnOnAssets', 'percentage'),
-        ('ROE', 'returnOnEquity', 'percentage')
+        ('ROE', 'returnOnEquity', 'percentage'),
+        ('Beta (5Y Monthly)', 'beta', '2 decimals'),
+        ('Dividend Yield', 'dividendYield', 'percentage')
     ]
 
 
