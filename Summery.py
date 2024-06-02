@@ -826,6 +826,5 @@ with col1:
         st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
 
-        # st.write(yf.Ticker(ticker).news)
-
+   
 
