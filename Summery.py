@@ -1,3 +1,4 @@
+
 from datetime import datetime, timedelta
 import streamlit as st
 import yfinance as yf
@@ -17,51 +18,6 @@ st.set_page_config(
 col1, col2 = st.columns([0.7, 0.3])
 
 
-
-# def show_disclaimer():
-#     # st.title("Disclaimer")
-#     color_code = "#0ECCEC"
-#     header_html = f'<h2 style="color:{color_code};">DISCLAIMER</h2>'
-#     st.markdown(header_html, unsafe_allow_html=True)
-#
-#     with st.form(key="disclaimer_form"):
-#
-#         # # Set the width of the form frame to match the column width
-#         # st.markdown("<style>div[data-testid='stForm'] div{max-width:600px}</style>", unsafe_allow_html=True)
-#         disclaimer_content = (
-#             "- This Web Application (first Beta Version for Desktop Computers) Aims to enhance the accessibility and comprehension of financial data by providing visual representations of various financial metrics, including stock summaries, income statements, balance sheets and cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
-#             "\n\n- The information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
-#             "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved from Financial Data APIs."
-#             "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
-#         )
-#
-#
-#         # Place the disclaimer content within column col1 with width 0.6
-#         col1, col2 = st.columns([0.6, 0.4])
-#
-#         with col1:
-#             st.write(disclaimer_content)  # Display the disclaimer content
-#
-#             agree_disclaimer = st.checkbox("I have read and agree to the disclaimer")
-#             continue_button = st.form_submit_button(label="Click for Continue")
-#             # Apply custom CSS style to adjust the form frame width
-#
-#     return agree_disclaimer, continue_button
-#
-#
-# # Check if the disclaimer has already been accepted
-# if "disclaimer_accepted" not in st.session_state:
-#     agree_disclaimer, continue_button = show_disclaimer()
-#
-#     # Wait until the user checks the box and presses the button to continue
-#     if agree_disclaimer and continue_button:
-#         # Set session state to indicate that the disclaimer has been accepted
-#         st.session_state["disclaimer_accepted"] = True
-#
-#         # Clear the entire layout and proceed with loading the app
-#         st.empty()
-#
-# else:
 
 
 StockInfo = {}
@@ -114,9 +70,13 @@ else:
 selected_ticker_index = st.session_state.selected_ticker_index
 
 
+
+
 # Select box to choose ticker
 ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
                               index=st.session_state.selected_ticker_index)
+
+
 
 
 # Update session state with the newly selected symbol index
@@ -124,10 +84,10 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
-st.sidebar.info("- Close side bar for better visualization.")
+st.sidebar.info("- Compare Ratios/Profitability Between Your Symbols.")
 st.sidebar.info("- Easy Download Data Tables.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
-st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
+st.sidebar.info("- This App Version is Less suitable for stocks in the Finance Industry")
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
 
@@ -204,23 +164,22 @@ label_mapping = {
     'S.Outstanding (B)': 'sharesOutstanding',
     'Market Cap (In B$)': 'marketCap',
     'Company EV': 'enterpriseValue',
-    'PE Ratio (TTM)': 'trailingPE',
-    'Price to Sales (TTM)': 'priceToSalesTrailing12Months',
+    'PE Ratio(TTM)': 'trailingPE',
+    'Price to Sales(TTM)': 'priceToSalesTrailing12Months',
     'Beta (5Y Monthly)': 'beta',
     'Dividend Yield': 'dividendYield',
     'Dividend': 'dividendRate',
     'Short % Of Float': 'shortPercentOfFloat',
     'Shares Short': 'sharesShort',
     '1YTarget Est': 'targetMeanPrice',
-    'Gross Margins': 'grossMargins',
-    'Operating Margins': 'operatingMargins',
-    'Revenue (TTM)': 'totalRevenue',
-    'ROE': 'returnOnEquity',
-    'ROA': 'returnOnAssets',
+    'Gross Margins(TTM)': 'grossMargins',
+    'Operating Margins(TTM)': 'operatingMargins',
+    'Revenue(TTM)': 'totalRevenue',
+    'ROE(TTM)': 'returnOnEquity',
+    'ROA(TTM)': 'returnOnAssets',
     'Debt To Equity': 'debtToEquity',
-    'EPS (TTM)': 'trailingEps',
-    'Profit Margins': 'profitMargins',
-
+    'Diluted EPS(TTM)': 'trailingEps',
+    'Profit Margins(TTM)': 'profitMargins',
     'Forward PE': 'forwardPE'
 }
 
@@ -250,7 +209,7 @@ with col1:
     st.write("")
 
 
-col1, col2, col3, col4 = st.columns([0.6, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3, col4 = st.columns([0.5, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
 with col2:
 
@@ -268,6 +227,7 @@ with col2:
 
     # Display buttons in a single row
     button_container = st.container()
+
 
 
     with button_container:
@@ -304,9 +264,9 @@ with col2:
         # Fetch data for the selected time period again
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
+
+
 with col1:
-
-
 
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
@@ -433,32 +393,17 @@ pairs = [
     ('1YTarget Est', 'Short % Of Float'),
 
 
-    ('PE Ratio (TTM)', 'EPS (TTM)'),
-    ('Forward PE', 'Revenue (TTM)'),
-    ('Price to Sales (TTM)', 'Gross Margins'),
-    ('ROA', 'Operating Margins'),
-    ('ROE', 'Profit Margins'),
-
+    ('PE Ratio(TTM)', 'Diluted EPS(TTM)'),
+    ('Forward PE', 'Revenue(TTM)'),
+    ('Price to Sales(TTM)', 'Gross Margins(TTM)'),
+    ('ROA(TTM)', 'Operating Margins(TTM)'),
+    ('ROE(TTM)', 'Profit Margins(TTM)'),
 
 ]
 
-# pairs = [
-#     ('Last Price', 'Market Cap (In B$)'),
-#     ('Previous Close', 'Company EV'),
-#     ('Open', 'PE Ratio (TTM)'),
-#     ('Day High', 'Price to Sales (TTM)'),
-#     ('Day Low', 'Beta (5Y Monthly)'),
-#     ('52 Week Low', 'Dividend Yield'),
-#     ('52 Week High', 'Dividend'),
-#     ('50d Average Price', '1YTarget Est'),
-#     ('200d Average Price', 'Forward PE'),
-#     ('Volume', 'Shares Short'),
-#     ('Avg.Volume (10d)', 'Short % Of Float'),
-#     ('S.Outstanding', 'Gross Margins')
-# ]
 
 
-col1, col2 = st.columns([0.3, 0.3])
+col1, col2 = st.columns([0.4, 0.3])
 with col1:
     st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
@@ -477,8 +422,6 @@ with col1:
     st.markdown(f"<p style='font-size:12px;'>As of Date: {current_date}</p>", unsafe_allow_html=True)
 
 
-    # # st.subheader(f'**Key Stats**')
-    # st.subheader(f'**Trading Information**')
     # Iterate through pairs and display labels with values or "N/A"
     for label1, label2 in pairs:
         key1 = label_mapping.get(label1)
@@ -491,14 +434,14 @@ with col1:
         formatted_label2 = f"{label2}" if label2 else ''
 
         # Divide values by billions or millions based on labels
-        if key1 and label1 in ['Market Cap (In B$)', 'Company EV', 'Revenue (TTM)']:
+        if key1 and label1 in ['Market Cap (In B$)', 'Company EV', 'Revenue(TTM)']:
             value1 = float(value1) / 1_000_000_000 if value1 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
         elif key1 == 'Avg. Volume (10d)' or key1 == 'Volume':
             value1 = int(float(value1)) if value1 != 'N/A' else 'N/A'  # Convert to integer
             if label1 == 'Avg. Volume (10d)' or label1 == 'Volume':
                 value1 = f"{int(value1):,}" if value1 != 'N/A' else 'N/A'  # Format without decimal places
 
-        if key2 and label2 in ['Market Cap (In B$)', 'Revenue (TTM)', 'S.Outstanding (B)']:
+        if key2 and label2 in ['Market Cap (In B$)', 'Revenue(TTM)', 'S.Outstanding (B)']:
             value2 = float(value2) / 1_000_000_000 if value2 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
         elif key2 == 'Avg. Volume (10d)' or key2 == 'Volume':
             value2 = int(float(value2)) if value2 != 'N/A' else 'N/A'  # Convert to integer
@@ -530,24 +473,24 @@ with col1:
         if label2 == 'Dividend Yield':
             formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
 
-        if label1 == 'PE Ratio (TTM)':
+        if label1 == 'PE Ratio(TTM)':
             st.subheader(f'**Ratios/Profitability**')
 
-        if label1 == 'ROA':
+        if label1 == 'ROA(TTM)':
             formatted_value1 = f"{value1:.2%}" if value1 != 'N/A' else 'N/A'
-        if label1 == 'ROE':
+        if label1 == 'ROE(TTM)':
             formatted_value1 = f"{value1:,.2%}" if value1 != 'N/A' else 'N/A'
 
 
 
-        if label2 == 'Operating Margins':
+        if label2 == 'Operating Margins(TTM)':
             formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
-        elif label2 == 'Gross Margins':
+        elif label2 == 'Gross Margins(TTM)':
             formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
-        elif label2 == 'Profit Margins':
+        elif label2 == 'Profit Margins(TTM)':
             formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
 
-        elif label2 == 'Revenue (TTM)':
+        elif label2 == 'Revenue(TTM)':
             formatted_value2 = f"{value2:,.2f}B" if value2 != 'N/A' else ''
         elif label2 == 'Dividend':
             formatted_value2 = f"{value2:,.2f}" if value2 != 'N/A' else ''
@@ -574,26 +517,28 @@ with col1:
 
 st.write("")
 st.write("")
+
 col1, col2 = st.columns([0.7, 0.3])
 with col1:
-    
+
     # Define the elements to compare
     elements = [
         ('Choose All', 'all', None),  # Option to choose all elements
-        ('Revenue (TTM)', 'totalRevenue', 'Billions'),
-        ('PE Ratio (TTM)', 'trailingPE', '2 decimals'),
+        ('Revenue(TTM)', 'totalRevenue', 'Billions'),
+        ('PE Ratio(TTM)', 'trailingPE', '2 decimals'),
         ('Forward PE', 'forwardPE', '2 decimals'),
-        ('Price to Sales (TTM)', 'priceToSalesTrailing12Months', '2 decimals'),
-        ('EPS (TTM)', 'trailingEps', '2 decimals'),
-        ('Gross Margins', 'grossMargins', 'percentage'),
-        ('Operating Margins', 'operatingMargins', 'percentage'),
-        ('Profit Margins', 'profitMargins', 'percentage'),
-        ('Current Ratio', 'currentRatio', '2 decimals'),
-        ('Quick Ratio', 'quickRatio', '2 decimals'),
-        ('ROA', 'returnOnAssets', 'percentage'),
-        ('ROE', 'returnOnEquity', 'percentage'),
+        ('Price to Sales(TTM)', 'priceToSalesTrailing12Months', '2 decimals'),
+        ('Diluted EPS(TTM)', 'trailingEps', '2 decimals'),
+        ('Gross Margins(TTM)', 'grossMargins', 'percentage'),
+        ('Operating Margins(TTM)', 'operatingMargins', 'percentage'),
+        ('Profit Margins(TTM)', 'profitMargins', 'percentage'),
+        ('ROA(TTM)', 'returnOnAssets', 'percentage'),
+        ('ROE(TTM)', 'returnOnEquity', 'percentage'),
         ('Beta (5Y Monthly)', 'beta', '2 decimals'),
-        ('Dividend Yield', 'dividendYield', 'percentage')
+        ('Quarterly Earnings Growth(YoY)', 'earningsGrowth', 'percentage'),
+        ('Dividend Yield', 'dividendYield', 'percentage'),
+        ('Current Ratio', 'currentRatio', '2 decimals'),
+        ('Quick Ratio', 'quickRatio', '2 decimals')
     ]
 
 
@@ -633,8 +578,7 @@ with col1:
         comparison_df.set_index('Ticker', inplace=True)
 
         # Display the comparison table
-        st.write("Compare Ratios/Profitability Between Your Symbols ")
-        st.write("")
+        st.write("Comparison Table Of Ratios/Profitability")
         if 'Choose All' in selected_elements:
             selected_elements = [elem[0] for elem in elements if elem[0] != 'Choose All']
         st.dataframe(comparison_df[selected_elements])
@@ -668,7 +612,13 @@ with col1:
         st.session_state.comparison_table_visible = False
 
 
-col1, col2 = st.columns([0.3, 0.3])  # Adjust the width ratio of col1 and col2 as needed
+
+
+
+
+
+
+col1, col2 = st.columns([0.4, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
 with col1:
 
