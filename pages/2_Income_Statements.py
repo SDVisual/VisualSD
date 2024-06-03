@@ -28,6 +28,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
 
+
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
 
@@ -906,12 +907,46 @@ with col1:
                     title_xanchor='center',
                     title_yanchor='top',
                     font=dict(size=15),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45,
+                                font=dict(size=15)),
+                )
+
+                # Add percentage growth annotation
+                for i in range(1, len(data_chart)):
+                    growth = ((data_chart[single_axis].iloc[i] - data_chart[single_axis].iloc[i - 1]) /
+                              data_chart[single_axis].iloc[i - 1]) * 100
+                    fig.add_annotation(x=data_chart.index[i], y=data_chart[single_axis].iloc[i],
+                                       text=f"{growth:.2f}%",
+                                       showarrow=False,
+                                       font=dict(color="black", size=15),
+                                       xshift=-20,
+                                       yshift=10,
+                                       bgcolor="yellow",
+                                       bordercolor="black",
+                                       borderwidth=1,
+                                       opacity=0.8)
+
+                # Add a label to indicate that the annotation represents percentage change
+                fig.add_annotation(
+                    x=0.5,
+                    y=-0.2,
+                    xref='paper',
+                    yref='paper',
+                    text='Percentage change (%)',
+                    showarrow=False,
+                    font=dict(size=12, color="black"),
+                    bgcolor="yellow",
+                    bordercolor="black",
+                    borderwidth=1,
+                    opacity=0.8
                 )
 
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             else:
                 st.write("Please select a valid element for the metric.")
+
+
+
     else:
         # Dropdown select boxes and "Go" button for dual axis
         col1, col2, col3 = st.columns(3)
@@ -984,9 +1019,58 @@ with col1:
                     title_xanchor='center',
                     title_yanchor='top',
                     font=dict(size=15),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45,
+                                font=dict(size=15)),
+                )
+
+                # Add percentage growth annotation for x_axis
+                for i in range(1, len(data_chart)):
+                    growth_x = ((data_chart[x_axis].iloc[i] - data_chart[x_axis].iloc[i - 1]) /
+                                data_chart[x_axis].iloc[i - 1]) * 100
+                    fig.add_annotation(x=data_chart.index[i], y=data_chart[x_axis].iloc[i],
+                                       text=f"{growth_x:.2f}%",
+                                       showarrow=False,
+                                       font=dict(color="black", size=15),
+                                       xshift=-30,
+                                       yshift=20,  # Adjusted y-shift to position above the element
+                                       bgcolor="yellow",
+                                       bordercolor="black",
+                                       borderwidth=1,
+                                       opacity=0.8)
+
+                # Add percentage growth annotation for y_axis
+                for i in range(1, len(data_chart)):
+                    growth_y = ((data_chart[y_axis].iloc[i] - data_chart[y_axis].iloc[i - 1]) /
+                                data_chart[y_axis].iloc[i - 1]) * 100
+                    fig.add_annotation(x=data_chart.index[i], y=data_chart[y_axis].iloc[i],
+                                       text=f"{growth_y:.2f}%",
+                                       showarrow=False,
+                                       font=dict(color="black", size=15),
+                                       xshift=25,
+                                       yshift=20,  # Adjusted y-shift to position above the element
+                                       bgcolor="yellow",
+                                       bordercolor="black",
+                                       borderwidth=1,
+                                       opacity=0.8)
+
+                # Add a label to indicate that the annotation represents percentage change
+                fig.add_annotation(
+                    x=0.5,
+                    y=-0.2,
+                    xref='paper',
+                    yref='paper',
+                    text='Percentage change (%)',
+                    showarrow=False,
+                    font=dict(size=12, color="black"),
+                    bgcolor="yellow",
+                    bordercolor="black",
+                    borderwidth=1,
+                    opacity=0.8
                 )
 
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             else:
                 st.write("Please select valid elements for both X-axis and Y-axis.")
+
+
+
