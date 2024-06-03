@@ -677,9 +677,9 @@ with col1:
     # Convert data index to datetime objects if they are not already datetime objects
     data_chart.index = pd.to_datetime(data_chart.index)
 
-    # Display the transposed income statement dataframe
-    st.dataframe(data_chart)
-    st.write("")
+    # # Display the transposed income statement dataframe
+    # st.dataframe(data_chart)
+    # st.write("")
 
     # Option to choose chart type
     chart_type = st.radio('Select Chart Type', ('Single Axis', 'Dual Axis'))
