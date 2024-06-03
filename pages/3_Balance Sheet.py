@@ -71,7 +71,6 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- Close side bar for better visualization.")
 st.sidebar.info("- Easy Download Data Tables.")
-# st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
@@ -160,6 +159,7 @@ if is_extended:
 else:
     balance_sheet = balance_sheet.reindex(desired_order_first, fill_value='0')
 
+
 balance_sheet = balance_sheet.drop('Properties', errors='ignore')
 
 # Convert values to millions
@@ -191,6 +191,7 @@ styled_balance_sheet = balance_sheet.style.set_table_styles([
     {'selector': 'th, td', 'props': [('text-align', 'center'), ('border', '1px solid blue')]},
     {'selector': 'th', 'props': [('text-align', 'left')]}
 ])
+
 
 
 st.write("")
@@ -246,7 +247,7 @@ with col1:
         xaxis_title='',
         yaxis_title='Amount (M$)',
         height=500,  # Set a fixed height
-        legend=dict(orientation="h", yanchor="bottom", y=1.08, xanchor="center", x=0.45, font=dict(size=15)),
+        legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.45, font=dict(size=15)),
         # Center the legend
     )
 
@@ -633,3 +634,181 @@ with col2:
     else:
         st.write("")
         st.write("")
+
+
+
+#####################################################################################################
+
+
+
+
+
+col1, col2 = st.columns([0.6, 0.4])
+
+with col1:
+
+    st.write("")
+    # Custom subheader with color
+    color_code = "#0ECCEC"
+
+    st.markdown(f"<h2>Chart Zone - <span style='color: {color_code};'>Build Your Own Chart</span></h2>", unsafe_allow_html=True)
+
+    st.write("")
+
+    # Assuming the 'Balance Sheet' DataFrame is provided as per the initial input
+    elements = [
+        'Total Assets', 'Current Assets', 'Total Non Current Assets',
+        'Cash Cash Equivalents And Short Term Investments',
+        'Total Liabilities Net Minority Interest', 'Current Liabilities',
+        'Total Non Current Liabilities Net Minority Interest', 'Total Equity Gross Minority Interest',
+        'Total Capitalization', 'Common Stock Equity', 'Net Tangible Assets',
+        'Working Capital', 'Invested Capital', 'Tangible Book Value',
+        'Total Debt', 'Net Debt', 'Share Issued', 'Ordinary Shares Number',
+        'Treasury Shares Number'
+    ]
+
+    # Transposing the income_statement DataFrame to have dates as rows and elements as columns
+    data_chart = balance_sheet.loc[elements].transpose()
+
+    # Convert values to float after removing commas
+    data_chart = data_chart.replace({',': ''}, regex=True).astype(float)
+
+    # Convert data index to datetime objects if they are not already datetime objects
+    data_chart.index = pd.to_datetime(data_chart.index)
+
+    # Display the transposed income statement dataframe
+    st.dataframe(data_chart)
+    st.write("")
+
+    # Option to choose chart type
+    chart_type = st.radio('Select Chart Type', ('Single Axis', 'Dual Axis'))
+
+    chart_style = st.selectbox('Select Chart Style', ('Bar Chart', 'Line Chart'))
+
+    if chart_type == 'Single Axis':
+        # Dropdown for selecting one axis
+        single_axis = st.selectbox('Select Metric', options=[None] + elements, index=0)
+
+        go_button_single = st.button('Make Chart', key='go_single')
+
+        if go_button_single:
+            if single_axis and single_axis in data_chart.columns:
+                fig = go.Figure()
+                if chart_style == 'Bar Chart':
+                    fig.add_trace(go.Bar(
+                        x=data_chart.index,
+                        y=data_chart[single_axis].astype(float),
+                        name=single_axis,
+                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
+                        textposition='auto',
+                        insidetextanchor='start',
+                        marker=dict(color='blue', line=dict(width=2, color='black')),
+                        insidetextfont=dict(size=15),
+                    ))
+                else:
+                    fig.add_trace(go.Scatter(
+                        x=data_chart.index,
+                        y=data_chart[single_axis].astype(float),
+                        mode='lines+markers',
+                        name=single_axis,
+                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
+                        textposition='top center',
+                        marker=dict(color='blue', size=10, line=dict(width=2, color='black')),
+                        line=dict(width=2, color='blue'),
+                    ))
+
+                fig.update_layout(
+                    xaxis=dict(tickvals=data_chart.index, ticktext=data_chart.index.strftime('%d/%m/%Y')),
+                    yaxis=dict(title='Amount (M$)'),
+                    width=800,
+                    height=500,
+                    title_text=f'{single_axis} Over Time',
+                    title_x=0.5,
+                    title_y=0.98,
+                    title_xanchor='center',
+                    title_yanchor='top',
+                    font=dict(size=15),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),
+                )
+
+                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+            else:
+                st.write("Please select a valid element for the metric.")
+    else:
+        # Dropdown select boxes and "Go" button for dual axis
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            x_axis = st.selectbox('X-Axis Metric', options=[None] + elements, index=0)
+
+        y_axis_options = [col for col in elements if col != x_axis]
+
+        with col2:
+            y_axis = st.selectbox('Y-Axis Metric', options=[None] + y_axis_options, index=0)
+
+        go_button_dual = st.button('Make Chart', key='go_dual')
+
+        # Plot the selected elements
+        if go_button_dual:
+            if x_axis and y_axis and x_axis in data_chart.columns and y_axis in data_chart.columns:
+                fig = go.Figure()
+                if chart_style == 'Bar Chart':
+                    fig.add_trace(go.Bar(
+                        x=data_chart.index,
+                        y=data_chart[x_axis].astype(float),
+                        name=x_axis,
+                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
+                        textposition='auto',
+                        insidetextanchor='start',
+                        marker=dict(color='blue', line=dict(width=2, color='black')),
+                        insidetextfont=dict(size=15),
+                    ))
+                    fig.add_trace(go.Bar(
+                        x=data_chart.index,
+                        y=data_chart[y_axis].astype(float),
+                        name=y_axis,
+                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
+                        textposition='auto',
+                        insidetextanchor='start',
+                        marker=dict(color='red', line=dict(width=2, color='black')),
+                        insidetextfont=dict(size=15),
+                    ))
+                else:
+                    fig.add_trace(go.Scatter(
+                        x=data_chart.index,
+                        y=data_chart[x_axis].astype(float),
+                        mode='lines+markers',
+                        name=x_axis,
+                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
+                        textposition='top center',
+                        marker=dict(color='blue', size=10, line=dict(width=2, color='black')),
+                        line=dict(width=2, color='blue'),
+                    ))
+                    fig.add_trace(go.Scatter(
+                        x=data_chart.index,
+                        y=data_chart[y_axis].astype(float),
+                        mode='lines+markers',
+                        name=y_axis,
+                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
+                        textposition='top center',
+                        marker=dict(color='red', size=10, line=dict(width=2, color='black')),
+                        line=dict(width=2, color='red'),
+                    ))
+
+                fig.update_layout(
+                    xaxis=dict(tickvals=data_chart.index, ticktext=data_chart.index.strftime('%d/%m/%Y')),
+                    yaxis=dict(title='Amount (M$)'),
+                    width=800,
+                    height=500,
+                    title_text=f'{x_axis} and {y_axis} Over Time',
+                    title_x=0.5,
+                    title_y=0.98,
+                    title_xanchor='center',
+                    title_yanchor='top',
+                    font=dict(size=15),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),
+                )
+
+                st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+            else:
+                st.write("Please select valid elements for both X-axis and Y-axis.")
