@@ -108,12 +108,12 @@ if is_quarterly:
 
 # Define desired order for the first section
 desired_order_first = [
-    'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
-    'Selling General And Administration', 'Research And Development', 'Operating Income',
-    'Net Non Operating Interest Income Expense', 'Other Income Expense', 'Other Non Operating Income Expenses',
-    'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
-    'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
-]
+        'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
+        'Selling General And Administration', 'Research And Development', 'Operating Income',
+        'Net Non Operating Interest Income Expense', 'Other Income Expense', 'Other Non Operating Income Expenses',
+        'Pretax Income', 'Tax Provision', 'Interest Income', 'Interest Expense', 'Net Interest Income',
+        'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
+    ]
 
 desired_order = [
     'Total Revenue', 'Operating Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
@@ -843,10 +843,11 @@ with col1:
         'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
         'Selling General And Administration', 'Research And Development', 'Operating Income',
         'Net Non Operating Interest Income Expense', 'Other Income Expense', 'Other Non Operating Income Expenses',
-        'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
+        'Pretax Income', 'Tax Provision', 'Interest Income', 'Interest Expense', 'Net Interest Income',
         'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
     ]
 
+    
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
     data_chart = income_statement.loc[elements].transpose()
 
