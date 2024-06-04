@@ -825,6 +825,7 @@ with col2:
 
 
 
+
 col1, col2 = st.columns([0.6, 0.4])
 
 with col1:
@@ -835,6 +836,7 @@ with col1:
 
     st.markdown(f"<h2>Chart Zone - <span style='color: {color_code};'>Build Your Own Chart</span></h2>", unsafe_allow_html=True)
 
+    st.write("Design a Dynamic Visual Chart & Compare Income Statement Key Elements")
     st.write("")
 
     # Assuming the 'income_statement' DataFrame is provided as per the initial input
@@ -896,56 +898,61 @@ with col1:
                         line=dict(width=2, color='blue'),
                     ))
 
+                # Calculate percentage growth and add linear line
+                growth = data_chart[single_axis].pct_change() * 100
+                growth.iloc[0] = 0  # Set the first value to 0%
+                fig.add_trace(go.Scatter(
+                    x=data_chart.index,
+                    y=growth,
+                    mode='lines+markers',
+                    name=f'{single_axis} Growth Trend',
+                    yaxis='y2',
+                    marker=dict(color='red', size=8, line=dict(width=2, color='black')),
+                    line=dict(width=2, color='red'),
+                ))
+
+                # Add annotations for percentage growth
+                for i in range(len(data_chart)):
+                    growth_value = growth.iloc[i]
+                    fig.add_annotation(
+                        x=data_chart.index[i],
+                        y=growth.iloc[i],
+                        text=f"{growth_value:.2f}%",
+                        showarrow=False,  # don't show an arrow
+                        yref='y2',
+                        xanchor='right',  # anchor point for x-coordinate
+                        yanchor='middle',  # anchor point for y-coordinate
+                        align='left',  # alignment of the annotation text
+                        font=dict(color="black", size=15),  # Change the font color to black
+                        bgcolor='yellow',
+                        xshift=5,  # horizontal shift of the annotation
+                        yshift=20,  # vertical shift of the annotation
+
+                    )
+
                 fig.update_layout(
                     xaxis=dict(tickvals=data_chart.index, ticktext=data_chart.index.strftime('%d/%m/%Y')),
                     yaxis=dict(title='Amount (M$)'),
+                    yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False, position=1),
                     width=800,
                     height=500,
-                    title_text=f'{single_axis} Over Time',
+                    # title_text=f'{single_axis} Over Time',
+                    title_text= "",
                     title_x=0.5,
                     title_y=0.98,
                     title_xanchor='center',
                     title_yanchor='top',
                     font=dict(size=15),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45,
+                    legend=dict(orientation="h", yanchor="bottom", y=1.08, xanchor="center", x=0.45,
                                 font=dict(size=15)),
                 )
 
-                # Add percentage growth annotation
-                for i in range(1, len(data_chart)):
-                    growth = ((data_chart[single_axis].iloc[i] - data_chart[single_axis].iloc[i - 1]) /
-                              data_chart[single_axis].iloc[i - 1]) * 100
-                    fig.add_annotation(x=data_chart.index[i], y=data_chart[single_axis].iloc[i],
-                                       text=f"{growth:.2f}%",
-                                       showarrow=False,
-                                       font=dict(color="black", size=15),
-                                       xshift=-20,
-                                       yshift=10,
-                                       bgcolor="yellow",
-                                       bordercolor="black",
-                                       borderwidth=1,
-                                       opacity=0.8)
-
-                # Add a label to indicate that the annotation represents percentage change
-                fig.add_annotation(
-                    x=0.5,
-                    y=-0.2,
-                    xref='paper',
-                    yref='paper',
-                    text='Percentage change (%)',
-                    showarrow=False,
-                    font=dict(size=12, color="black"),
-                    bgcolor="yellow",
-                    bordercolor="black",
-                    borderwidth=1,
-                    opacity=0.8
-                )
-
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
+
+
             else:
                 st.write("Please select a valid element for the metric.")
-
-
 
     else:
         # Dropdown select boxes and "Go" button for dual axis
@@ -1013,22 +1020,25 @@ with col1:
                     yaxis=dict(title='Amount (M$)'),
                     width=800,
                     height=500,
-                    title_text=f'{x_axis} and {y_axis} Over Time',
+                    # title_text=f'{x_axis} and {y_axis} Over Time',
+                    title_text="",
                     title_x=0.5,
                     title_y=0.98,
                     title_xanchor='center',
                     title_yanchor='top',
                     font=dict(size=15),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45,
+                    legend=dict(orientation="h", yanchor="bottom", y=1.08, xanchor="center", x=0.45,
                                 font=dict(size=15)),
                 )
 
+                # Calculate percentage growth for x_axis
+                growth_x = ((data_chart[x_axis] - data_chart[x_axis].shift(1)) / data_chart[x_axis].shift(1)) * 100
+                growth_x.iloc[0] = 0  # Set the first value to 0%
+
                 # Add percentage growth annotation for x_axis
-                for i in range(1, len(data_chart)):
-                    growth_x = ((data_chart[x_axis].iloc[i] - data_chart[x_axis].iloc[i - 1]) /
-                                data_chart[x_axis].iloc[i - 1]) * 100
+                for i in range(0, len(data_chart)):
                     fig.add_annotation(x=data_chart.index[i], y=data_chart[x_axis].iloc[i],
-                                       text=f"{growth_x:.2f}%",
+                                       text=f"{growth_x.iloc[i]:.2f}%",
                                        showarrow=False,
                                        font=dict(color="black", size=15),
                                        xshift=-30,
@@ -1038,12 +1048,14 @@ with col1:
                                        borderwidth=1,
                                        opacity=0.8)
 
+                # Calculate percentage growth for y_axis
+                growth_y = ((data_chart[y_axis] - data_chart[y_axis].shift(1)) / data_chart[y_axis].shift(1)) * 100
+                growth_y.iloc[0] = 0  # Set the first value to 0%
+
                 # Add percentage growth annotation for y_axis
-                for i in range(1, len(data_chart)):
-                    growth_y = ((data_chart[y_axis].iloc[i] - data_chart[y_axis].iloc[i - 1]) /
-                                data_chart[y_axis].iloc[i - 1]) * 100
+                for i in range(0, len(data_chart)):
                     fig.add_annotation(x=data_chart.index[i], y=data_chart[y_axis].iloc[i],
-                                       text=f"{growth_y:.2f}%",
+                                       text=f"{growth_y.iloc[i]:.2f}%",
                                        showarrow=False,
                                        font=dict(color="black", size=15),
                                        xshift=25,
@@ -1059,7 +1071,8 @@ with col1:
                     y=-0.2,
                     xref='paper',
                     yref='paper',
-                    text='Percentage change (%)',
+                    # text='Percentage change (%)',
+                    text=f'Percentage change (%){" QoQ" if is_quarterly else " YoY"}',  # Corrected parentheses
                     showarrow=False,
                     font=dict(size=12, color="black"),
                     bgcolor="yellow",
@@ -1067,6 +1080,9 @@ with col1:
                     borderwidth=1,
                     opacity=0.8
                 )
+
+
+
 
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             else:
