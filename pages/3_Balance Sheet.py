@@ -69,7 +69,7 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 
 # Display a message box in the sidebar
 
-st.sidebar.info("- Make Your Own Charts.")
+st.sidebar.info("- Design Your Own Charts.")
 st.sidebar.info("- Easy Download Data Tables.")
 st.sidebar.info("- For the best experience, maximize your screen.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
