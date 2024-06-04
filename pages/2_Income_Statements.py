@@ -66,7 +66,6 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 
 
 
-
 # Display a message box in the sidebar
 
 st.sidebar.info("- Make Your Own Charts.")
