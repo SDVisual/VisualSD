@@ -68,7 +68,7 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 
 # Display a message box in the sidebar
 
-st.sidebar.info("- Make Your Own Charts.")
+st.sidebar.info("- Design Your Own Charts.")
 st.sidebar.info("- Easy Download Data Tables.")
 st.sidebar.info("- For the best experience, maximize your screen.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
@@ -833,7 +833,7 @@ with col1:
     # Custom subheader with color
     color_code = "#0ECCEC"
 
-    st.markdown(f"<h2>Chart Zone - <span style='color: {color_code};'>Build Your Own Chart</span></h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2>Chart Zone - <span style='color: {color_code};'>Design Your Own Chart</span></h2>", unsafe_allow_html=True)
 
     st.write("Design a Dynamic Visual Chart & Compare Income Statement Key Elements")
     st.write("")
