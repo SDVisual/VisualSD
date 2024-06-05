@@ -14,7 +14,7 @@ def show_disclaimer():
     header_html = f'<h2 style="color:{color_code};">DISCLAIMER</h2>'
     st.markdown(header_html, unsafe_allow_html=True)
 
-   disclaimer_content = (
+    disclaimer_content = (
         "- This Web Application (first Beta Version for Desktop Computers) Aims to enhance the Accessibility and Comprehension of Financial data."
         "\n\n- Designed to Facilitate the Understanding of new companies by presenting data Visually, allowing users to interpret information beyond mere numerical values."
         "\n\n- Providing tools to Design dynamic visual charts and compare key elements of a requested company derived from stocks summaries, income statements, balance sheets, and cash flow statements."
