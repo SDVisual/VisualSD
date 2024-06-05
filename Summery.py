@@ -200,8 +200,11 @@ with col1:
 
     # Write the sector and industry with custom styling
     st.write(
-        f"<h1 style='font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>"
+        f"<h1 style='font-size: larger; margin-bottom: 5px; display: inline;'>Exchange - {StockInfo['exchange']}</h1>",
+        f"<h1 style='font-size: larger; margin-bottom: 5px; display: inline;'>Sector - {StockInfo['sector']}</h1>",
         f"<h1 style='font-size: larger; margin-bottom: 5px; display: inline;'>Industry - {StockInfo['industry']}</h1>",
+
+
         unsafe_allow_html=True
     )
 
@@ -419,7 +422,7 @@ with col1:
     st.subheader(f'**Trading Information**')
 
     # Display the date in a smaller font
-    st.markdown(f"<p style='font-size:12px;'>As of Date: {current_date}</p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='font-size:12px;'>As of Date: {current_date} NasdaqGS</p>", unsafe_allow_html=True)
 
 
     # Iterate through pairs and display labels with values or "N/A"
@@ -825,6 +828,4 @@ with col1:
 
         st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
-
-   
 
