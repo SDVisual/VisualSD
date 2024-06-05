@@ -14,8 +14,10 @@ def show_disclaimer():
     header_html = f'<h2 style="color:{color_code};">DISCLAIMER</h2>'
     st.markdown(header_html, unsafe_allow_html=True)
 
-    disclaimer_content = (
-        "- This Web Application (first Beta Version for Desktop Computers) Aims to enhance the accessibility and comprehension of financial data by providing Visual representations of various financial metrics, including Stock summaries, Income statements, Balance sheets and Cash flow statements. It is designed to facilitate the understanding of new companies by presenting data visually, allowing users to interpret information beyond mere numerical values."
+   disclaimer_content = (
+        "- This Web Application (first Beta Version for Desktop Computers) Aims to enhance the Accessibility and Comprehension of Financial data."
+        "\n\n- Designed to Facilitate the Understanding of new companies by presenting data Visually, allowing users to interpret information beyond mere numerical values."
+        "\n\n- Providing tools to Design dynamic visual charts and compare key elements of a requested company derived from stocks summaries, income statements, balance sheets, and cash flow statements."
         "\n\n- The information presented in this application is for informational purposes only and should not be considered a substitute for professional financial consultation. Users are encouraged to conduct their own research and consult with qualified financial advisors before making any investment decisions."
         "\n\n- The creators of this application do not guarantee the accuracy, completeness, or reliability of the information retrieved from Financial Data APIs."
         "\n\n- By continuing to use this application, you agree that you have read and understood this disclaimer, and you acknowledge that the creators of this application are not liable for any investment decisions made based on the information presented."
