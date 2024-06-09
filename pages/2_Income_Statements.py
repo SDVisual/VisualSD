@@ -6,6 +6,7 @@ import pandas as pd
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
+
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -62,6 +63,7 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
+
 
 
 
@@ -131,6 +133,9 @@ desired_order = [
     'Total Unusual Items', 'Normalized EBITDA', 'Tax Rate For Calcs',
     'Tax Effect Of Unusual Items'
 ]
+
+
+
 
 if is_extended:
     income_statement = income_statement.reindex(desired_order, fill_value='0')
@@ -846,7 +851,24 @@ with col1:
         'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
     ]
 
-    
+    # [
+    #     'Total Revenue', 'Operating Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
+    #     'Selling General And Administration', 'Research And Development', 'Operating Income',
+    #     'Net Non Operating Interest Income Expense', 'Interest Income Non Operating', 'Interest Expense Non Operating',
+    #     'Other Income Expense', 'Special Income Charges', 'Restructuring And Mergern Acquisition',
+    #     'Other Non Operating Income Expenses', 'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
+    #     'Net Income', 'Net Income Including Noncontrolling Interests', 'Net Income Continuous Operations',
+    #     'Diluted NI Availto Com Stockholders', 'Basic EPS', 'Diluted EPS', 'Basic Average Shares',
+    #     'Diluted Average Shares',
+    #     'Total Operating Income As Reported', 'Total Expenses', 'Net Income From Continuing And Discontinued Operation',
+    #     'Normalized Income', 'Interest Income', 'Interest Expense', , 'EBIT', 'EBITDA',
+    #     'Reconciled Cost Of Revenue', 'Reconciled Depreciation',
+    #     'Net Income From Continuing Operation Net Minority Interest',
+    #     'Net Income Including Noncontrolling Interests', 'Total Unusual Items Excluding Goodwill',
+    #     'Total Unusual Items', 'Normalized EBITDA', 'Tax Rate For Calcs',
+    #     'Tax Effect Of Unusual Items'
+    # ]
+
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
     data_chart = income_statement.loc[elements].transpose()
 
@@ -879,7 +901,7 @@ with col1:
                         x=data_chart.index,
                         y=data_chart[single_axis].astype(float),
                         name=single_axis,
-                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if single_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
                         textposition='auto',
                         insidetextanchor='start',
                         marker=dict(color='blue', line=dict(width=2, color='black')),
@@ -891,7 +913,7 @@ with col1:
                         y=data_chart[single_axis].astype(float),
                         mode='lines+markers',
                         name=single_axis,
-                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if single_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
                         textposition='top center',
                         marker=dict(color='blue', size=10, line=dict(width=2, color='black')),
                         line=dict(width=2, color='blue'),
@@ -936,7 +958,7 @@ with col1:
                     width=800,
                     height=500,
                     # title_text=f'{single_axis} Over Time',
-                    title_text= "",
+                    title_text="",
                     title_x=0.5,
                     title_y=0.98,
                     title_xanchor='center',
@@ -976,7 +998,7 @@ with col1:
                         x=data_chart.index,
                         y=data_chart[x_axis].astype(float),
                         name=x_axis,
-                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if x_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
                         textposition='auto',
                         insidetextanchor='start',
                         marker=dict(color='blue', line=dict(width=2, color='black')),
@@ -986,7 +1008,7 @@ with col1:
                         x=data_chart.index,
                         y=data_chart[y_axis].astype(float),
                         name=y_axis,
-                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
                         textposition='auto',
                         insidetextanchor='start',
                         marker=dict(color='red', line=dict(width=2, color='black')),
@@ -998,7 +1020,7 @@ with col1:
                         y=data_chart[x_axis].astype(float),
                         mode='lines+markers',
                         name=x_axis,
-                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if x_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
                         textposition='top center',
                         marker=dict(color='blue', size=10, line=dict(width=2, color='black')),
                         line=dict(width=2, color='blue'),
@@ -1008,7 +1030,7 @@ with col1:
                         y=data_chart[y_axis].astype(float),
                         mode='lines+markers',
                         name=y_axis,
-                        text=[f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
                         textposition='top center',
                         marker=dict(color='red', size=10, line=dict(width=2, color='black')),
                         line=dict(width=2, color='red'),
@@ -1086,6 +1108,5 @@ with col1:
                 st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
             else:
                 st.write("Please select valid elements for both X-axis and Y-axis.")
-
 
 
