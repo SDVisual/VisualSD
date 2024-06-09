@@ -6,7 +6,6 @@ import pandas as pd
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
-
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -26,7 +25,6 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
-
 
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
