@@ -271,11 +271,10 @@ with col2:
 
 with col1:
 
+    # Check if the DataFrame is empty
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
-
     else:
-
         # Filter the DataFrame to exclude non-trading days
         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
@@ -294,19 +293,33 @@ with col1:
         candlestick_chart = go.Figure()
 
         # Add candlestick trace
-        candlestick_chart.add_trace(go.Candlestick(x=df_ticker['Date'],
-                                                   open=df_ticker['Open'],
-                                                   high=df_ticker['High'],
-                                                   low=df_ticker['Low'],
-                                                   close=df_ticker['Close'],
-                                                   name='Candlestick'))
+        candlestick_chart.add_trace(go.Candlestick(
+            x=df_ticker['Date'],
+            open=df_ticker['Open'],
+            high=df_ticker['High'],
+            low=df_ticker['Low'],
+            close=df_ticker['Close'],
+            name='Candlestick'
+        ))
 
         # Add volume bars in light blue
-        candlestick_chart.add_trace(go.Bar(x=df_ticker['Date'],
-                                           y=df_ticker['Volume'],
-                                           yaxis='y2',
-                                           name='Shares Volume',
-                                           marker_color='rgba(52, 152, 219, 0.3)'))
+        candlestick_chart.add_trace(go.Bar(
+            x=df_ticker['Date'],
+            y=df_ticker['Volume'],
+            yaxis='y2',
+            name='Shares Volume',
+            marker_color='rgba(52, 152, 219, 0.3)'
+        ))
+
+        # Add line trace for close prices
+        candlestick_chart.add_trace(go.Scatter(
+            x=df_ticker['Date'],
+            y=df_ticker['Close'],
+            mode='lines',
+            name='Close Price',
+            line=dict(color='lightblue', width=1),
+            showlegend=True
+        ))
 
         # Set the title of the chart with both main and additional information
         candlestick_chart.update_layout(
@@ -319,24 +332,25 @@ with col1:
             title_font_size=22,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top',
-            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)
-            # Adjust legend position
+            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
         )
 
-        candlestick_chart.update_layout(xaxis_rangeslider_visible=False,
-                                        xaxis=dict(type='date',  # Set type to 'date'
-                                                   range=[start_date, end_date],
-                                                   rangebreaks=[
-                                                       dict(bounds=["sat", "mon"])]
-                                                       # Adjust this based on your non-trading days
-                                                   ),
-                                        yaxis=dict(title='Price', showgrid=True),
-                                        yaxis2=dict(title='',
-                                                    overlaying='y',
-                                                    side='right',  # Move to the right side
-                                                    position=1,  # Move outside the plot area
-                                                    showgrid=False),  # Remove gridlines from y2-axis
-                                        height=500)
+        candlestick_chart.update_layout(
+            xaxis_rangeslider_visible=False,
+            xaxis=dict(type='date',  # Set type to 'date'
+                       range=[start_date, end_date],
+                       rangebreaks=[dict(bounds=["sat", "mon"])],  # Adjust this based on your non-trading days
+                       ),
+            yaxis=dict(title='Price', showgrid=True),
+            yaxis2=dict(
+                title='',
+                overlaying='y',
+                side='right',  # Move to the right side
+                position=1,  # Move outside the plot area
+                showgrid=False  # Remove gridlines from y2-axis
+            ),
+            height=500
+        )
 
         # Hide Plotly toolbar and directly display the chart
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
