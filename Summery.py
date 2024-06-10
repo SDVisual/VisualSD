@@ -317,7 +317,7 @@ with col1:
             y=df_ticker['Close'],
             mode='lines',
             name='Close Price',
-            line=dict(color='lightblue', width=1),
+            line=dict(color='lightblue', width=2),
             showlegend=True
         ))
 
