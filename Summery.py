@@ -541,7 +541,7 @@ col1, col2 = st.columns([0.7, 0.3])
 with col1:
     
     
-    # Define the elements to compare
+   # Define the elements to compare
     elements = [
         ('Choose All', 'all', None),  # Option to choose all elements
         ('Revenue(TTM)', 'totalRevenue', 'Billions'),
@@ -613,7 +613,7 @@ with col1:
 
         # Check if there are enough symbols for comparison
         if len(st.session_state.valid_tickers) < 2:
-            st.warning("Please select at least TWO symbols and ONE element to compare.")
+            st.warning("Not enough symbols to compare. Please add symbols to your list.")
             st.session_state.comparison_table_visible = False
 
     # Check if the visibility flag is set to True and the user switches symbols in the list
