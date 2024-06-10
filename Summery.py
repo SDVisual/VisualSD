@@ -18,8 +18,6 @@ st.set_page_config(
 col1, col2 = st.columns([0.7, 0.3])
 
 
-
-
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
