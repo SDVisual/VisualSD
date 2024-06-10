@@ -536,8 +536,11 @@ st.write("")
 st.write("")
 
 col1, col2 = st.columns([0.7, 0.3])
-with col1:
 
+
+with col1:
+    
+    
     # Define the elements to compare
     elements = [
         ('Choose All', 'all', None),  # Option to choose all elements
@@ -560,17 +563,17 @@ with col1:
 
 
     # Define function to display comparison table
-    def display_comparison_table(selected_elements):
+    def display_comparison_table(selected_symbols, selected_elements):
         # Check if there are enough symbols for comparison
-        if len(st.session_state.valid_tickers) < 2:
+        if len(selected_symbols) < 2:
             st.warning("Not enough symbols for comparison. Please add more symbols.")
             return
 
         # Initialize an empty DataFrame to store comparison data
         comparison_df = pd.DataFrame(columns=[elem[0] for elem in elements])
 
-        # Loop through valid tickers and fetch the stock information
-        for ticker in st.session_state.valid_tickers:
+        # Loop through selected tickers and fetch the stock information
+        for ticker in selected_symbols:
             stock_info = yf.Ticker(ticker).info
 
             # Collect the elements for the current ticker
@@ -610,27 +613,32 @@ with col1:
 
         # Check if there are enough symbols for comparison
         if len(st.session_state.valid_tickers) < 2:
-            st.warning("Not enough symbols for comparison. Please add more symbols.")
+            st.warning("Please select at least TWO symbols and ONE element to compare.")
             st.session_state.comparison_table_visible = False
 
     # Check if the visibility flag is set to True and the user switches symbols in the list
     if st.session_state.get('comparison_table_visible', False):
+        # Create a dropdown list with multiple selection for choosing symbols to compare
+        all_symbols_option = 'All Symbols'
+        selected_symbols = st.multiselect("Select symbols to compare:",
+                                          [all_symbols_option] + st.session_state.valid_tickers)
+
+        # If "All Symbols" is selected, use all available symbols
+        if all_symbols_option in selected_symbols:
+            selected_symbols = st.session_state.valid_tickers
+
         # Create a dropdown list with multiple selection for choosing elements to compare
         selected_elements = st.multiselect("Select elements to compare:", [elem[0] for elem in elements])
 
-        # Check if the user has selected at least one element
+        # Check if the user has selected at least one symbol and one element
         if st.button("Let's compare"):
-            if selected_elements:
-                display_comparison_table(selected_elements)
+            if selected_symbols and selected_elements:
+                display_comparison_table(selected_symbols, selected_elements)
             else:
-                st.warning("Please select at least one element to compare.")
+                st.warning("Please select at least TWO symbols and ONE element to compare.")
     else:
         # Turn off the visibility flag if the user switches symbols in the list
         st.session_state.comparison_table_visible = False
-
-
-
-
 
 
 
