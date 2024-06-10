@@ -537,7 +537,10 @@ col1, col2 = st.columns([0.7, 0.3])
 
 
 with col1:
-    
+
+    # Initialize session state variables if they don't exist
+    if 'current_ticker' not in st.session_state:
+        st.session_state.current_ticker = None
     
     # Define the elements to compare
     elements = [
