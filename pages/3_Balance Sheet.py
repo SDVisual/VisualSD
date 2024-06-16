@@ -179,7 +179,7 @@ balance_sheet.columns = [col.strftime('%d/%m/%Y') for col in balance_sheet.colum
 balance_sheet = balance_sheet.iloc[:, -4:]
 # Replace "None" with 0
 balance_sheet = balance_sheet.fillna(0)
-st.write(balance_sheet)
+
 
 # Apply the formatting function to the balance sheet DataFrame
 balance_sheet = balance_sheet.applymap(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
@@ -193,7 +193,7 @@ styled_balance_sheet = balance_sheet.style.set_table_styles([
     {'selector': 'th', 'props': [('text-align', 'left')]}
 ])
 
-
+st.dataframe(styled_balance_sheet)
 
 st.write("")
 st.write("")
