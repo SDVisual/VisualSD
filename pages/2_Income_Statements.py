@@ -140,6 +140,9 @@ if is_extended:
 else:
     income_statement = income_statement.reindex(desired_order_first, fill_value='0')
 
+# Replace "None" with 0
+income_statement = income_statement.fillna(0)
+
 # Convert column headers to datetime
 income_statement.columns = pd.to_datetime(income_statement.columns)
 
