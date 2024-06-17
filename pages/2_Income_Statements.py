@@ -152,6 +152,9 @@ income_statement = income_statement.sort_index(axis=1)
 # Format the column headers to remove the timestamp
 income_statement.columns = [col.strftime('%d/%m/%Y') for col in income_statement.columns]
 
+# Show only the latest 4 dates
+income_statement = income_statement.iloc[:, -4:]
+
 # Check where 'Total Revenue' is NaN in each column
 nan_mask = income_statement.loc['Total Revenue'].isna()
 
