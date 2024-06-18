@@ -266,15 +266,20 @@ with col1:
     # Define colors for each column based on their values
     colors = {}
 
-    # Additional conditions for specific columns
-    colors['Operating Cash Flow'] = ['#006400' if value > 0 else 'red' if value < 0 else 'white' for value in
-                                     selected_data['Operating Cash Flow']]
-    colors['Investing Cash Flow'] = ['green' if value > 0 else '#ff6347' if value < 0 else 'white' for value in
-                                     selected_data['Investing Cash Flow']]
-    colors['Financing Cash Flow'] = ['#3cb371' if value > 0 else '#f08080' if value < 0 else 'white' for value in
-                                     selected_data['Financing Cash Flow']]
-    colors['Free Cash Flow'] = ['lightgreen' if value > 0 else '#ffa07a' if value < 0 else 'white' for value in
-                                selected_data['Free Cash Flow']]
+    colors['Operating Cash Flow'] = ['blue' for _ in selected_data['Operating Cash Flow']]
+    colors['Investing Cash Flow'] = ['purple' for _ in selected_data['Investing Cash Flow']]
+    colors['Financing Cash Flow'] = ['yellow' for _ in selected_data['Financing Cash Flow']]
+    colors['Free Cash Flow'] = ['white' for _ in selected_data['Free Cash Flow']]
+
+    # # Additional conditions for specific columns
+    # colors['Operating Cash Flow'] = ['#006400' if value > 0 else 'red' if value < 0 else 'white' for value in
+    #                                  selected_data['Operating Cash Flow']]
+    # colors['Investing Cash Flow'] = ['green' if value > 0 else '#ff6347' if value < 0 else 'white' for value in
+    #                                  selected_data['Investing Cash Flow']]
+    # colors['Financing Cash Flow'] = ['#3cb371' if value > 0 else '#f08080' if value < 0 else 'white' for value in
+    #                                  selected_data['Financing Cash Flow']]
+    # colors['Free Cash Flow'] = ['lightgreen' if value > 0 else '#ffa07a' if value < 0 else 'white' for value in
+    #                             selected_data['Free Cash Flow']]
 
     # Convert column headers to datetime
     cash_flow.columns = pd.to_datetime(cash_flow.columns)
@@ -298,7 +303,7 @@ with col1:
         title='',
         title_x=0.3,
         xaxis_title='',
-        yaxis_title='Amount ($)',
+        yaxis_title='Amount (M$)',
         legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.45, font=dict(size=15)),
     )
 
@@ -349,7 +354,7 @@ with col1:
             tickvals=percentage_change_cash_flow.columns,  # Use the dates from the DataFrame
             tickformat='%m/%y'  # Set the tick format to display as MM/YY
         ),
-        yaxis_title='Amount ($)',
+        yaxis_title='Amount (M$)',
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
         legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
@@ -449,7 +454,7 @@ with col1:
             tickvals=Capital_Expenditure.index,  # Use the dates from the DataFrame
             tickformat='%m/%Y'  # Set the tick format to display as MM/YYYY
         ),
-        yaxis=dict(title='Amount ($)'),
+        yaxis=dict(title='Amount (M$)'),
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
         legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
@@ -500,7 +505,7 @@ with col2:
             tickvals=free_cash_flow_per_share_df.index,  # Use the dates from the DataFrame
             tickformat='%m/%Y'  # Set the tick format to display as MM/YYYY
         ),
-        yaxis_title='Amount ($)',
+        yaxis_title='$ Per Share',
         yaxis2=dict(title='Percentage Growth (%)', overlaying='y', side='right', showgrid=False),
         legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
@@ -540,7 +545,7 @@ with col2:
         title='',
         title_x=0.28,
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
-        yaxis=dict(title='Amount ($)'),
+        yaxis=dict(title='Amount (M$)'),
         barmode='group',  # Group bars
         legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
@@ -638,7 +643,7 @@ with col3:
         title='',
         xaxis=dict(title='', tickformat='%m/%Y'),  # Set the tick format to display as MM/YYYY
         title_x=0.3,
-        yaxis=dict(title='Amount ($)'),
+        yaxis=dict(title='Amount (M$)'),
         legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Adjust legend position
     )
 
@@ -670,11 +675,13 @@ with col1:
     # Assuming the 'Balance Sheet' DataFrame is provided as per the initial input
     elements = [
         'Free Cash Flow', 'Operating Cash Flow', 'Investing Cash Flow', 'Financing Cash Flow', 'End Cash Position',
-        'Changes In Cash',
-        'Income Tax Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Capital Expenditure',
-        'Issuance Of Debt', 'Repayment Of Debt',
-        'Repurchase Of Capital Stock'
+        'Changes In Cash', 'Income Tax Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Capital Expenditure',
+        'Issuance Of Debt', 'Repayment Of Debt', 'Repurchase Of Capital Stock'
+
+
     ]
+
+
 
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
     data_chart = cash_flow.loc[elements].transpose()
