@@ -244,7 +244,7 @@ st.write(f'*values in millions $')
 st.write("")
 
 
-col1, col2 = st.columns([0.6, 0.4])
+col1, col2 = st.columns([0.65, 0.35])
 
 with col1:
 
