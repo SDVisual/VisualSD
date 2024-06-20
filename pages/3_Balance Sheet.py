@@ -153,6 +153,7 @@ desired_order = [
 
 st.write("<span style='font-size: 16px;'>* values in millions $</span>", unsafe_allow_html=True)
 
+balance_sheet_Design = balance_sheet.reindex(desired_order, fill_value='0')
 
 
 if is_extended:
@@ -659,19 +660,69 @@ with col1:
     st.write("")
 
     # Assuming the 'Balance Sheet' DataFrame is provided as per the initial input
+    # elements = [
+    #     'Total Assets', 'Current Assets', 'Total Non Current Assets',
+    #     'Cash Cash Equivalents And Short Term Investments',
+    #     'Total Liabilities Net Minority Interest', 'Current Liabilities',
+    #     'Total Non Current Liabilities Net Minority Interest', 'Total Equity Gross Minority Interest',
+    #     'Total Capitalization', 'Common Stock Equity', 'Net Tangible Assets',
+    #     'Working Capital', 'Invested Capital', 'Tangible Book Value',
+    #     'Total Debt', 'Net Debt', 'Share Issued', 'Ordinary Shares Number',
+    #     'Treasury Shares Number'
+    # ]
+
     elements = [
-        'Total Assets', 'Current Assets', 'Total Non Current Assets',
-        'Cash Cash Equivalents And Short Term Investments',
-        'Total Liabilities Net Minority Interest', 'Current Liabilities',
-        'Total Non Current Liabilities Net Minority Interest', 'Total Equity Gross Minority Interest',
-        'Total Capitalization', 'Common Stock Equity', 'Net Tangible Assets',
-        'Working Capital', 'Invested Capital', 'Tangible Book Value',
-        'Total Debt', 'Net Debt', 'Share Issued', 'Ordinary Shares Number',
-        'Treasury Shares Number'
+        'Total Assets', 'Current Assets', 'Cash Cash Equivalents And Short Term Investments',
+        'Cash And Cash Equivalents', 'Cash Financial',
+        'Cash Equivalents', 'Other Short Term Investments', 'Receivables', 'Accounts Receivable', 'Other Receivables',
+        'Inventory', 'Other Current Assets', 'Total Non Current Assets', 'Net PPE', 'Gross PPE',
+        'Land And Improvements', 'Machinery Furniture Equipment', 'Leases', 'Accumulated Depreciation',
+        'Investments And Advances',
+        'Investmentin Financial Assets', 'Available For Sale Securities', 'Other Investments',
+        'Non Current Deferred Assets', 'Non Current Deferred Taxes Assets',
+        'Other Non Current Assets', 'Total Liabilities Net Minority Interest', 'Current Liabilities',
+        'Payables And Accrued Expenses', 'Payables',
+        'Accounts Payable', 'Current Debt And Capital Lease Obligation', 'Current Debt', 'Commercial Paper',
+        'Other Current Borrowings', 'Current Deferred Liabilities',
+        'Current Deferred Revenue', 'Other Current Liabilities', 'Total Non Current Liabilities Net Minority Interest',
+        'Long Term Debt And Capital Lease Obligation',
+        'Long Term Debt', 'Tradeand Other Payables Non Current', 'Other Non Current Liabilities',
+        'Total Equity Gross Minority Interest', 'Stockholders Equity',
+        'Capital Stock', 'Common Stock', 'Retained Earnings', 'Gains Losses Not Affecting Retained Earnings',
+        'Other Equity Adjustments',
+        'Total Capitalization', 'Common Stock Equity', 'Net Tangible Assets', 'Working Capital', 'Invested Capital',
+        'Tangible Book Value',
+        'Total Debt', 'Net Debt', 'Share Issued', 'Ordinary Shares Number', 'Treasury Shares Number'
     ]
 
+    balance_sheet_Design = balance_sheet_Design.drop('Properties', errors='ignore')
+
+    # Convert values to millions
+    balance_sheet_Design = balance_sheet_Design.astype(float) / 1_000_000  # Divide by 1 million
+
+    # Convert column headers to datetime
+    balance_sheet_Design.columns = pd.to_datetime(balance_sheet_Design.columns)
+
+    # Sort the columns in ascending order of dates
+    balance_sheet_Design = balance_sheet_Design.sort_index(axis=1)
+
+    # Format the column headers to remove the timestamp
+    balance_sheet_Design.columns = [col.strftime('%d/%m/%Y') for col in balance_sheet_Design.columns]
+
+    # Show only the latest 4 dates
+    balance_sheet_Design = balance_sheet_Design.iloc[:, -4:]
+    # Replace "None" with 0
+    balance_sheet_Design = balance_sheet_Design.fillna(0)
+
+
+    # Apply the formatting function to the balance sheet DataFrame
+    balance_sheet_Design = balance_sheet_Design.applymap(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
+    # st.write(balance_sheet_Design)
+
+
+
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
-    data_chart = balance_sheet.loc[elements].transpose()
+    data_chart = balance_sheet_Design.loc[elements].transpose()
 
     # Convert values to float after removing commas
     data_chart = data_chart.replace({',': ''}, regex=True).astype(float)
@@ -679,9 +730,6 @@ with col1:
     # Convert data index to datetime objects if they are not already datetime objects
     data_chart.index = pd.to_datetime(data_chart.index)
 
-    # # Display the transposed income statement dataframe
-    # st.dataframe(data_chart)
-    # st.write("")
 
     # Option to choose chart type
     chart_type = st.radio('Select Chart Type', ('Single Axis', 'Dual Axis'))
