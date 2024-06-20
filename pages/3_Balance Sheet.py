@@ -8,7 +8,6 @@ import cufflinks as cf
 import matplotlib.pyplot as plt
 
 
-
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
