@@ -81,7 +81,6 @@ st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=Tr
 
 
 
-
 # ***************************************     Cash Flow   ************************************************************************
 
 StockInfo = yf.Ticker(ticker).info
