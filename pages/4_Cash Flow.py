@@ -155,6 +155,10 @@ desired_order = [
     'Repurchase Of Capital Stock'
 ]
 
+
+cash_flow_Design = cash_flow.reindex(desired_order, fill_value='0')
+
+
 if is_extended:
     cash_flow = cash_flow.reindex(desired_order, fill_value='0')
 else:
@@ -198,6 +202,8 @@ cash_flow_numeric = cash_flow.applymap(str_to_float)
 
 # Show only the latest 4 dates
 cash_flow = cash_flow.iloc[:, -4:]
+
+
 # Calculate percentage change for each metric between consecutive periods
 percentage_change_cash_flow = cash_flow_numeric.pct_change(axis=1) * 100
 
@@ -651,10 +657,11 @@ with col3:
 
 
 
-#####################################################################################################
 
 
 
+
+#######################################     Chart Zone - Design Your Own Chart             ##############################################################
 
 
 col1, col2 = st.columns([0.6, 0.4])
@@ -672,18 +679,79 @@ with col1:
     st.write("")
 
     # Assuming the 'Balance Sheet' DataFrame is provided as per the initial input
+
     elements = [
-        'Free Cash Flow', 'Operating Cash Flow', 'Investing Cash Flow', 'Financing Cash Flow', 'End Cash Position',
-        'Changes In Cash', 'Income Tax Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Capital Expenditure',
-        'Issuance Of Debt', 'Repayment Of Debt', 'Repurchase Of Capital Stock'
+        'Free Cash Flow', 'Operating Cash Flow', 'Cash Flow From Continuing Operating Activities',
+        'Net Income From Continuing Operations', 'Operating Gains Losses', 'Gain Loss On Sale Of PPE',
+        'Gain Loss On Investment Securities', 'Earnings Losses From Equity Investments',
+        'Depreciation Amortization Depletion', 'Depreciation And Amortization', 'Depreciation',
+        'Deferred Tax', 'Deferred Income Tax', 'Asset Impairment Charge', 'Stock Based Compensation',
+        'Other Non Cash Items',
+        'Change In Working Capital', 'Change In Receivables', 'Changes In Account Receivables', 'Change In Inventory',
+        'Change In Prepaid Assets',
+        'Change In Payables And Accrued Expense', 'Change In Payable', 'Change In Account Payable',
+        'Change In Accrued Expense', 'Investing Cash Flow',
+        'Cash Flow From Continuing Investing Activities', 'Net PPE Purchase And Sale', 'Purchase Of PPE',
+        'Net Business Purchase And Sale',
+        'Purchase Of Business', 'Sale Of Business', 'Net Investment Purchase And Sale', 'Purchase Of Investment',
+        'Sale Of Investment', 'Net Other Investing Changes',
+        'Financing Cash Flow', 'Cash Flow From Continuing Financing Activities', 'Net Issuance Payments Of Debt',
+        'Net Long Term Debt Issuance', 'Long Term Debt Issuance',
+        'Long Term Debt Payments', 'Net Short Term Debt Issuance', 'Short Term Debt Issuance',
+        'Net Common Stock Issuance', 'Common Stock Payments',
+        'Proceeds From Stock Option Exercised', 'Net Other Financing Charges', 'End Cash Position', 'Changes In Cash',
+        'Beginning Cash Position',
+        'Income Tax Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Capital Expenditure',
+        'Issuance Of Debt', 'Repayment Of Debt',
+        'Repurchase Of Capital Stock']
 
 
-    ]
+    # elements = [
+    #     'Free Cash Flow', 'Operating Cash Flow', 'Investing Cash Flow', 'Financing Cash Flow', 'End Cash Position',
+    #     'Changes In Cash', 'Income Tax Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Capital Expenditure',
+    #     'Issuance Of Debt', 'Repayment Of Debt', 'Repurchase Of Capital Stock'
+    #
+    #
+    # ]
 
+    cash_flow = cash_flow_Design.drop('Properties', errors='ignore')
+
+
+    def str_to_float(value):
+        try:
+            return float(value.replace(',', ''))  # Assuming the numbers are formatted with commas
+        except ValueError:
+            return value  # Return the original value if conversion fails
+
+
+    # Convert values to millions
+    cash_flow_Design = cash_flow_Design.astype(float) / 1_000_000
+
+    # Fill empty cells with '0'
+    cash_flow_Design.fillna('0', inplace=True)
+
+    # Convert column headers to datetime
+    cash_flow_Design.columns = pd.to_datetime(cash_flow_Design.columns)
+
+    # Format the column headers to remove the timestamp
+    cash_flow_Design.columns = cash_flow_Design.columns.strftime('%Y-%m-%d')
+
+    # Sort the columns in ascending order of dates
+    cash_flow_Design = cash_flow_Design.sort_index(axis=1)
+
+    # Apply formatting to the DataFrame
+    cash_flow_Design = cash_flow_Design.applymap(lambda x: f"{x:,.0f}" if isinstance(x, (int, float)) else x)
+
+
+
+    # Show only the latest 4 dates
+    cash_flow_Design = cash_flow_Design.iloc[:, -4:]
+
+    # st.write(cash_flow_Design)
 
 
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
-    data_chart = cash_flow.loc[elements].transpose()
+    data_chart = cash_flow_Design.loc[elements].transpose()
 
     # Convert values to float after removing commas
     data_chart = data_chart.replace({',': ''}, regex=True).astype(float)
