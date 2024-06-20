@@ -6,6 +6,7 @@ import pandas as pd
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
+
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -25,6 +26,7 @@ st.markdown(header_html, unsafe_allow_html=True)
 
 # Input box for user to enter symbol
 new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
+
 
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
@@ -74,6 +76,7 @@ st.sidebar.info("- For the best experience, maximize your screen.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
+
 StockInfo = yf.Ticker(ticker).info
 income_statementYear = yf.Ticker(ticker).income_stmt
 IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
@@ -115,7 +118,7 @@ desired_order_first = [
     ]
 
 desired_order = [
-    'Total Revenue', 'Operating Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
+    'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
     'Selling General And Administration', 'Research And Development', 'Operating Income',
     'Net Non Operating Interest Income Expense', 'Interest Income Non Operating', 'Interest Expense Non Operating',
     'Other Income Expense', 'Special Income Charges', 'Restructuring And Mergern Acquisition',
@@ -132,7 +135,7 @@ desired_order = [
     'Tax Effect Of Unusual Items'
 ]
 
-
+income_statement_Design = income_statement.reindex(desired_order, fill_value='0')
 
 
 if is_extended:
@@ -140,9 +143,10 @@ if is_extended:
 else:
     income_statement = income_statement.reindex(desired_order_first, fill_value='0')
 
+
+
 # Replace "None" with 0
 income_statement = income_statement.fillna(0)
-
 # Convert column headers to datetime
 income_statement.columns = pd.to_datetime(income_statement.columns)
 
@@ -170,7 +174,8 @@ income_statement_numeric = income_statement.apply(pd.to_numeric, errors='coerce'
 # Calculate the percentage of revenue for each item in the income statement
 revenue_percentage_df = income_statement_numeric.div(income_statement_numeric.loc['Total Revenue']) * 100
 
-exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs']
+exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items']
+
 income_statement = income_statement.apply(
     lambda row: row.map(lambda x: f"{x / 1:.2f}" if isinstance(x, (
         int, float)) and row.name in exclude_rows else f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x),
@@ -828,9 +833,9 @@ with col2:
     # Display the chart without the menu
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
-#####################################################################################################
 
 
+########################  Chart Zone - Design Your chart ############################################################################################################################
 
 
 col1, col2 = st.columns([0.6, 0.4])
@@ -847,34 +852,70 @@ with col1:
     st.write("")
 
     # Assuming the 'income_statement' DataFrame is provided as per the initial input
+
     elements = [
         'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
         'Selling General And Administration', 'Research And Development', 'Operating Income',
-        'Net Non Operating Interest Income Expense', 'Other Income Expense', 'Other Non Operating Income Expenses',
-        'Pretax Income', 'Tax Provision', 'Interest Income', 'Interest Expense', 'Net Interest Income',
-        'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
+        'Net Non Operating Interest Income Expense', 'Interest Income Non Operating', 'Interest Expense Non Operating',
+        'Other Income Expense', 'Special Income Charges', 'Restructuring And Mergern Acquisition',
+        'Other Non Operating Income Expenses', 'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
+        'Net Income', 'Net Income Including Noncontrolling Interests', 'Net Income Continuous Operations',
+        'Diluted NI Availto Com Stockholders', 'Basic EPS', 'Diluted EPS', 'Basic Average Shares',
+        'Diluted Average Shares',
+        'Total Operating Income As Reported', 'Total Expenses', 'Net Income From Continuing And Discontinued Operation',
+        'Normalized Income', 'Interest Income', 'Interest Expense', 'Net Interest Income', 'EBIT', 'EBITDA',
+        'Reconciled Cost Of Revenue', 'Reconciled Depreciation',
+        'Net Income From Continuing Operation Net Minority Interest',
+        'Net Income Including Noncontrolling Interests', 'Total Unusual Items Excluding Goodwill',
+        'Total Unusual Items', 'Normalized EBITDA', 'Tax Rate For Calcs'
     ]
 
-    # [
-    #     'Total Revenue', 'Operating Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
+
+    # elements = [
+    #     'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
     #     'Selling General And Administration', 'Research And Development', 'Operating Income',
-    #     'Net Non Operating Interest Income Expense', 'Interest Income Non Operating', 'Interest Expense Non Operating',
-    #     'Other Income Expense', 'Special Income Charges', 'Restructuring And Mergern Acquisition',
-    #     'Other Non Operating Income Expenses', 'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
-    #     'Net Income', 'Net Income Including Noncontrolling Interests', 'Net Income Continuous Operations',
-    #     'Diluted NI Availto Com Stockholders', 'Basic EPS', 'Diluted EPS', 'Basic Average Shares',
-    #     'Diluted Average Shares',
-    #     'Total Operating Income As Reported', 'Total Expenses', 'Net Income From Continuing And Discontinued Operation',
-    #     'Normalized Income', 'Interest Income', 'Interest Expense', , 'EBIT', 'EBITDA',
-    #     'Reconciled Cost Of Revenue', 'Reconciled Depreciation',
-    #     'Net Income From Continuing Operation Net Minority Interest',
-    #     'Net Income Including Noncontrolling Interests', 'Total Unusual Items Excluding Goodwill',
-    #     'Total Unusual Items', 'Normalized EBITDA', 'Tax Rate For Calcs',
-    #     'Tax Effect Of Unusual Items'
+    #     'Net Non Operating Interest Income Expense', 'Other Income Expense', 'Other Non Operating Income Expenses',
+    #     'Pretax Income', 'Tax Provision', 'Interest Income', 'Interest Expense', 'Net Interest Income',
+    #     'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
     # ]
 
+    income_statement_Design = income_statement_Design.drop('Properties', errors='ignore')
+
+    # Replace "None" with 0
+    income_statement_Design = income_statement_Design.fillna(0)
+
+    # Convert column headers to datetime
+    income_statement_Design.columns = pd.to_datetime(income_statement_Design.columns)
+
+    # Sort the columns in ascending order of dates
+    income_statement_Design = income_statement_Design.sort_index(axis=1)
+
+    # Format the column headers to remove the timestamp
+    income_statement_Design.columns = [col.strftime('%d/%m/%Y') for col in income_statement_Design.columns]
+
+    # Show only the latest 4 dates
+    income_statement_Design = income_statement_Design.iloc[:, -4:]
+
+    # Check where 'Total Revenue' is NaN in each column
+    nan_mask = income_statement_Design.loc['Total Revenue'].isna()
+
+    # Drop columns where 'Total Revenue' is NaN for all values
+    income_statement_Design = income_statement_Design.loc[:, ~nan_mask]
+
+    exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items']
+
+    income_statement_Design = income_statement_Design.apply(
+        lambda row: row.map(lambda x: f"{x / 1:.2f}" if isinstance(x, (
+            int, float)) and row.name in exclude_rows else f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x),
+        axis=1
+    )
+
+
+    # st.write(income_statement_Design)
+
+
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
-    data_chart = income_statement.loc[elements].transpose()
+    data_chart = income_statement_Design.loc[elements].transpose()
 
     # Convert values to float after removing commas
     data_chart = data_chart.replace({',': ''}, regex=True).astype(float)
@@ -882,16 +923,15 @@ with col1:
     # Convert data index to datetime objects if they are not already datetime objects
     data_chart.index = pd.to_datetime(data_chart.index)
 
-    # Display the transposed income statement dataframe
-    # st.dataframe(data_chart)
-    # st.write("")
 
     # Option to choose chart type
     chart_type = st.radio('Select Chart Type', ('Single Axis', 'Dual Axis'))
 
     chart_style = st.selectbox('Select Chart Style', ('Bar Chart', 'Line Chart'))
 
+
     if chart_type == 'Single Axis':
+
         # Dropdown for selecting one axis
         single_axis = st.selectbox('Select Metric', options=[None] + elements, index=0)
 
@@ -900,12 +940,16 @@ with col1:
         if go_button_single:
             if single_axis and single_axis in data_chart.columns:
                 fig = go.Figure()
+
                 if chart_style == 'Bar Chart':
                     fig.add_trace(go.Bar(
                         x=data_chart.index,
                         y=data_chart[single_axis].astype(float),
                         name=single_axis,
-                        text=[f"${'{:,.2f}'.format(val)}" if single_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
+                        text=[
+                            f"${'{:,.2f}'.format(val)}" if single_axis in ['Basic EPS', 'Diluted EPS'] else
+                            f"${'{:,.0f}'.format(val)}" if single_axis != 'Tax Rate For Calcs' else
+                            f"{val * 100:.2f}%" for val in data_chart[single_axis].astype(float)],
                         textposition='auto',
                         insidetextanchor='start',
                         marker=dict(color='blue', line=dict(width=2, color='black')),
@@ -917,7 +961,10 @@ with col1:
                         y=data_chart[single_axis].astype(float),
                         mode='lines+markers',
                         name=single_axis,
-                        text=[f"${'{:,.2f}'.format(val)}" if single_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[single_axis].astype(float)],
+                        text=[
+                            f"${'{:,.2f}'.format(val)}" if single_axis in ['Basic EPS', 'Diluted EPS'] else
+                            f"${'{:,.0f}'.format(val)}" if single_axis != 'Tax Rate For Calcs' else
+                            f"{val * 100:.2f}%" for val in data_chart[single_axis].astype(float)],
                         textposition='top center',
                         marker=dict(color='blue', size=10, line=dict(width=2, color='black')),
                         line=dict(width=2, color='blue'),
@@ -955,9 +1002,11 @@ with col1:
 
                     )
 
+                yaxis_title = '% Tax' if single_axis == 'Tax Rate For Calcs' else 'Amount (M$)'
                 fig.update_layout(
                     xaxis=dict(tickvals=data_chart.index, ticktext=data_chart.index.strftime('%d/%m/%Y')),
-                    yaxis=dict(title='Amount (M$)'),
+
+                    yaxis=dict(title=yaxis_title),
                     yaxis2=dict(title='% Growth', overlaying='y', side='right', showgrid=False, position=1),
                     width=800,
                     height=500,
@@ -982,11 +1031,12 @@ with col1:
     else:
         # Dropdown select boxes and "Go" button for dual axis
         col1, col2, col3 = st.columns(3)
-
+        elements = [elem for elem in elements if elem != 'Tax Rate For Calcs']
         with col1:
+
             x_axis = st.selectbox('X-Axis Metric', options=[None] + elements, index=0)
 
-        y_axis_options = [col for col in elements if col != x_axis]
+            y_axis_options = [col for col in elements if col != x_axis]
 
         with col2:
             y_axis = st.selectbox('Y-Axis Metric', options=[None] + y_axis_options, index=0)
@@ -1012,7 +1062,7 @@ with col1:
                         x=data_chart.index,
                         y=data_chart[y_axis].astype(float),
                         name=y_axis,
-                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
                         textposition='auto',
                         insidetextanchor='start',
                         marker=dict(color='red', line=dict(width=2, color='black')),
@@ -1034,11 +1084,12 @@ with col1:
                         y=data_chart[y_axis].astype(float),
                         mode='lines+markers',
                         name=y_axis,
-                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
                         textposition='top center',
                         marker=dict(color='red', size=10, line=dict(width=2, color='black')),
                         line=dict(width=2, color='red'),
                     ))
+
 
                 fig.update_layout(
                     xaxis=dict(tickvals=data_chart.index, ticktext=data_chart.index.strftime('%d/%m/%Y')),
