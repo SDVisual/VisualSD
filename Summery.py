@@ -76,7 +76,6 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 
 
 
-
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
