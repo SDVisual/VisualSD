@@ -183,8 +183,6 @@ income_statement = income_statement.apply(
 
 st.write(f'*Values in millions $')
 
-
-
 styled_income_statement = income_statement.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
     {'selector': 'th, td', 'props': [('text-align', 'center'), ('border', '1px solid blue'), ('font-size', '30px')]},
