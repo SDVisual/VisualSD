@@ -322,7 +322,7 @@ with col1:
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
                        "<span style='font-size: 18px;'>                 Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
                 selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-            title_x=0.10,  # Center the title
+            title_x=0.2,  # Center the title
             title_font_size=22,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top',
