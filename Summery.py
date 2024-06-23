@@ -215,7 +215,7 @@ with col2:
     st.write("")
 
     # Fetch data based on the selected time period or default to '1Y'
-    selected_time_period = st.session_state.get('selected_time_period', '1Y')
+    selected_time_period = st.session_state.get('selected_time_period', '3M')
     df_ticker = yf.download(ticker, period='max').reset_index()
     end_date = datetime.now()
     # Buttons for selecting different time periods
@@ -316,19 +316,33 @@ with col1:
             showlegend=True
         ))
 
-        # Set the title of the chart with both main and additional information
-        candlestick_chart.update_layout(
-            title_text="<span style='text-align: center;'>        Chart Dates: {} to {}</span><br>"
-                       "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
-                start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
-                min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-            title_x=0.15,  # Center the title
+          # Set the title of the chart with both main and additional information
+            candlestick_chart.update_layout(
+            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
+                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+                selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+            title_x=0.10,  # Center the title
             title_font_size=22,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top',
             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
         )
+
+        
+        # # Set the title of the chart with both main and additional information
+        # candlestick_chart.update_layout(
+        #     title_text="<span style='text-align: center;'>        Chart Dates: {} to {}</span><br>"
+        #                "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
+        #                "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+        #         start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
+        #         min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+        #     title_x=0.15,  # Center the title
+        #     title_font_size=22,  # Increase font size
+        #     title_y=0.95,  # Adjust title vertical position
+        #     title_yanchor='top',
+        #     legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
+        # )
 
         candlestick_chart.update_layout(
             xaxis_rangeslider_visible=False,
