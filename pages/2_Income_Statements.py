@@ -384,7 +384,7 @@ st.subheader(f"Chart Zone")
 #     unsafe_allow_html=True
 # )
 st.write(f'*All charts are interactive by clicking legend elements')
-st.write(f'*values in millions $')
+# st.write(f'*values in millions $')
 st.write("")
 
 col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
