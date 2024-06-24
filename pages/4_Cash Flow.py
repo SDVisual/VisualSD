@@ -73,11 +73,12 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # Display a message box in the sidebar
 
 st.sidebar.info("- Design Your Own Charts.")
+st.sidebar.info("- Compare Free Cash Flow Between Your Symbols.")
 st.sidebar.info("- Easy Download Data Tables.")
 st.sidebar.info("- For the best experience, maximize your screen.")
-# st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
+
 
 
 
@@ -236,16 +237,205 @@ st.write(cash_flow)
 st.write("")
 st.write("")
 
+
+col1, col2 = st.columns([0.7, 0.3])
+
+
+with col1:
+    # Initialize session state variables if they don't exist
+    if 'current_ticker' not in st.session_state:
+        st.session_state.current_ticker = None
+    if 'comparison_table_visible' not in st.session_state:
+        st.session_state.comparison_table_visible = False
+    if 'valid_tickers' not in st.session_state:
+        st.session_state.valid_tickers = []
+
+    # Define the Cash Flow elements to compare
+
+    cash_flow_elements = [
+        ('Choose All', 'all', 'Billions'),  # Option to choose all elements
+        ('Free Cash Flow', 'Free Cash Flow', 'Billions'),
+        ('Operating Cash Flow', 'Operating Cash Flow', 'Billions'),
+        ('Cash Flow From Continuing Operating Activities', 'Cash Flow From Continuing Operating Activities', 'Billions'),
+        ('Net Income From Continuing Operations', 'Net Income From Continuing Operations', 'Billions'),
+        ('Operating Gains Losses', 'Operating Gains Losses', 'Billions'),
+        ('Gain Loss On Sale Of PPE', 'Gain Loss On Sale Of PPE', 'Billions'),
+        ('Gain Loss On Investment Securities', 'Gain Loss On Investment Securities', 'Billions'),
+        ('Earnings Losses From Equity Investments', 'Earnings Losses From Equity Investments', 'Billions'),
+        ('Depreciation Amortization Depletion', 'Depreciation Amortization Depletion', 'Billions'),
+        ('Depreciation And Amortization', 'Depreciation And Amortization', 'Billions'),
+        ('Depreciation', 'Depreciation', 'Billions'),
+        ('Deferred Tax', 'Deferred Tax', 'Billions'),
+        ('Deferred Income Tax', 'Deferred Income Tax', 'Billions'),
+        ('Asset Impairment Charge', 'Asset Impairment Charge', 'Billions'),
+        ('Stock Based Compensation', 'Stock Based Compensation', 'Billions'),
+        ('Other Non Cash Items', 'Other Non Cash Items', 'Billions'),
+        ('Change In Working Capital', 'Change In Working Capital', 'Billions'),
+        ('Change In Receivables', 'Change In Receivables', 'Billions'),
+        ('Changes In Account Receivables', 'Changes In Account Receivables', 'Billions'),
+        ('Change In Inventory', 'Change In Inventory', 'Billions'),
+        ('Change In Prepaid Assets', 'Change In Prepaid Assets', 'Billions'),
+        ('Change In Payables And Accrued Expense', 'Change In Payables And Accrued Expense', 'Billions'),
+        ('Change In Payable', 'Change In Payable', 'Billions'),
+        ('Change In Account Payable', 'Change In Account Payable', 'Billions'),
+        ('Change In Accrued Expense', 'Change In Accrued Expense', 'Billions'),
+        ('Investing Cash Flow', 'Investing Cash Flow', 'Billions'),
+        ('Cash Flow From Continuing Investing Activities', 'Cash Flow From Continuing Investing Activities', 'Billions'),
+        ('Net PPE Purchase And Sale', 'Net PPE Purchase And Sale', 'Billions'),
+        ('Purchase Of PPE', 'Purchase Of PPE', 'Billions'),
+        ('Net Business Purchase And Sale', 'Net Business Purchase And Sale', 'Billions'),
+        ('Purchase Of Business', 'Purchase Of Business', 'Billions'),
+        ('Sale Of Business', 'Sale Of Business', 'Billions'),
+        ('Net Investment Purchase And Sale', 'Net Investment Purchase And Sale', 'Billions'),
+        ('Purchase Of Investment', 'Purchase Of Investment', 'Billions'),
+        ('Sale Of Investment', 'Sale Of Investment', 'Billions'),
+        ('Net Other Investing Changes', 'Net Other Investing Changes', 'Billions'),
+        ('Financing Cash Flow', 'Financing Cash Flow', 'Billions'),
+        ('Cash Flow From Continuing Financing Activities', 'Cash Flow From Continuing Financing Activities', 'Billions'),
+        ('Net Issuance Payments Of Debt', 'Net Issuance Payments Of Debt', 'Billions'),
+        ('Net Long Term Debt Issuance', 'Net Long Term Debt Issuance', 'Billions'),
+        ('Long Term Debt Issuance', 'Long Term Debt Issuance', 'Billions'),
+        ('Long Term Debt Payments', 'Long Term Debt Payments', 'Billions'),
+        ('Net Short Term Debt Issuance', 'Net Short Term Debt Issuance', 'Billions'),
+        ('Short Term Debt Issuance', 'Short Term Debt Issuance', 'Billions'),
+        ('Net Common Stock Issuance', 'Net Common Stock Issuance', 'Billions'),
+        ('Common Stock Payments', 'Common Stock Payments', 'Billions'),
+        ('Proceeds From Stock Option Exercised', 'Proceeds From Stock Option Exercised', 'Billions'),
+        ('Net Other Financing Charges', 'Net Other Financing Charges', 'Billions'),
+        ('End Cash Position', 'End Cash Position', 'Billions'),
+        ('Changes In Cash', 'Changes In Cash', 'Billions'),
+        ('Beginning Cash Position', 'Beginning Cash Position', 'Billions'),
+        ('Income Tax Paid Supplemental Data', 'Income Tax Paid Supplemental Data', 'Billions'),
+        ('Interest Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Billions'),
+        ('Capital Expenditure', 'Capital Expenditure', 'Billions'),
+        ('Issuance Of Debt', 'Issuance Of Debt', 'Billions'),
+        ('Repayment Of Debt', 'Repayment Of Debt', 'Billions'),
+        ('Repurchase Of Capital Stock', 'Repurchase Of Capital Stock', 'Billions')
+    ]
+
+
+    # Define function to display comparison table
+    def display_comparison_table(selected_symbols, selected_elements):
+        # Check if there are enough symbols for comparison
+        if len(selected_symbols) < 2:
+            st.warning("Not enough symbols for comparison. Please add more symbols.")
+            return
+
+        # Initialize a list to store DataFrames
+        data_frames = []
+
+        # Loop through selected tickers and fetch the stock information
+        for ticker in selected_symbols:
+            stock = yf.Ticker(ticker)
+            cash_flow_compare = stock.cash_flow
+
+
+            # Get the last available date
+            last_date = cash_flow_compare.columns[0]
+
+            # Collect the elements for the current ticker
+            data = {'Ticker': ticker, 'Date': last_date.strftime('%Y-%m-%d')}
+            for elem in cash_flow_elements:
+                if elem[1] == 'all':
+                    continue
+                value = cash_flow_compare.at[elem[1], last_date] if elem[1] in cash_flow_compare.index else None
+
+                # Check if value is not None and not NaN, otherwise set it to 0
+                if value is not None and not (isinstance(value, float) and value != value):
+                    if elem[2] == 'Millions':
+                        value = f"{value / 1_000_000:.2f}M"
+                    elif elem[2] == 'Billions':
+                        value = f"{value / 1_000_000_000:.2f}B"
+                    elif elem[2] == '2 decimals':
+                        value = f"{value:.2f}"
+                    elif elem[2] == 'percentage':
+                        value = f"{value * 100:.2f}%"
+                else:
+                    value = "0"
+
+                data[elem[0]] = value
+
+            # Append the DataFrame to the list
+            data_frames.append(pd.DataFrame([data]))
+
+        # Concatenate all DataFrames in the list
+        comparison_df = pd.concat(data_frames, ignore_index=True)
+
+        # Set 'Ticker' as the index of the DataFrame
+        comparison_df.set_index('Ticker', inplace=True)
+
+        # Display the comparison table
+        st.write("Comparison Table Of Annual Cash Flow Elements:")
+        st.write("")
+        if 'Choose All' in selected_elements:
+            selected_elements = [elem[0] for elem in balance_sheet_elements if elem[0] != 'Choose All']
+        st.dataframe(comparison_df[['Date'] + selected_elements])
+
+
+
+    # Check if the visibility flag is set to True and the user clicks the button
+    if st.button("Compare Annual Free Cash Flow Between Your Symbols"):
+        if 'comparison_table_visible' not in st.session_state:
+            st.session_state.comparison_table_visible = True
+
+        st.session_state.comparison_table_visible = not st.session_state.comparison_table_visible
+
+        # Check if there are enough symbols for comparison
+        if len(st.session_state.valid_tickers) < 2:
+            st.warning("Not enough symbols to compare. Please add symbols to your list.")
+            st.session_state.comparison_table_visible = False
+
+    # Check if ticker has changed
+    if st.session_state.current_ticker != ticker:
+        st.session_state.current_ticker = ticker
+        st.session_state.comparison_table_visible = False
+
+    # Check if the visibility flag is set to True and the user switches symbols in the list
+    if st.session_state.get('comparison_table_visible', False):
+
+        # Create a dropdown list with multiple selection for choosing symbols to compare
+        all_symbols_option = 'All Symbols'
+        selected_symbols = st.multiselect("Select symbols to compare:",
+                                          [all_symbols_option] + st.session_state.valid_tickers)
+
+        # If "All Symbols" is selected, use all available symbols
+        if all_symbols_option in selected_symbols:
+            selected_symbols = st.session_state.valid_tickers
+
+        # Create a dropdown list with multiple selection for choosing elements to compare
+        selected_elements = st.multiselect("Select elements to compare:",
+                                           [elem[0] for elem in cash_flow_elements])
+
+        # Check if the user has selected at least one symbol and one element
+        if st.button("Let's compare"):
+            if selected_symbols and selected_elements:
+                display_comparison_table(selected_symbols, selected_elements)
+            else:
+                st.warning("Please select at least TWO symbols and ONE element to compare.")
+    else:
+        # Turn off the visibility flag if the user switches symbols in the list
+        st.session_state.comparison_table_visible = False
+
+
+
+st.write("")
+st.write("")
+st.write("")
+
+
+
+
+
+
 # Define the color code for the "Chart Zone" text
-color_code_chart_zone = "white"  # Example color code
+color_code_chart_zone = "light white"  # Example color code
 
 # Display the styled header using st.write() with HTML
 st.write(
-    f'<span style="font-size:30px;">Chart Zone</span>',
-    unsafe_allow_html=True
-)
+    f'<span style="font-size:30px;">Chart Zone</span>', unsafe_allow_html=True)
+
 st.write(f'*All charts are interactive by clicking legend elements')
-st.write(f'*values in millions $')
+
 st.write("")
 
 
@@ -705,13 +895,7 @@ with col1:
         'Repurchase Of Capital Stock']
 
 
-    # elements = [
-    #     'Free Cash Flow', 'Operating Cash Flow', 'Investing Cash Flow', 'Financing Cash Flow', 'End Cash Position',
-    #     'Changes In Cash', 'Income Tax Paid Supplemental Data', 'Interest Paid Supplemental Data', 'Capital Expenditure',
-    #     'Issuance Of Debt', 'Repayment Of Debt', 'Repurchase Of Capital Stock'
-    #
-    #
-    # ]
+
 
     cash_flow = cash_flow_Design.drop('Properties', errors='ignore')
 
