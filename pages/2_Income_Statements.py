@@ -6,6 +6,7 @@ import pandas as pd
 import cufflinks as cf
 import matplotlib.pyplot as plt
 
+
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -62,6 +63,8 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 
 # Update session state with the newly selected symbol index
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
+
+
 
 
 # Display a message box in the sidebar
@@ -183,6 +186,8 @@ income_statement = income_statement.apply(
 
 st.write(f'*Values in millions $')
 
+
+
 styled_income_statement = income_statement.style.set_table_styles([
     {'selector': 'table', 'props': [('border-collapse', 'collapse'), ('border', '2px solid blue')]},
     {'selector': 'th, td', 'props': [('text-align', 'center'), ('border', '1px solid blue'), ('font-size', '30px')]},
@@ -194,11 +199,181 @@ styled_income_statement = income_statement.style.set_table_styles([
 st.dataframe(styled_income_statement)
 
 st.write("")
-st.write("")
 
+
+####################################### COMPARE Income Elements #################################
+
+
+col1, col2 = st.columns([0.7, 0.3])
+
+
+with col1:
+    # Initialize session state variables if they don't exist
+    if 'current_ticker' not in st.session_state:
+        st.session_state.current_ticker = None
+    if 'comparison_table_visible' not in st.session_state:
+        st.session_state.comparison_table_visible = False
+    if 'valid_tickers' not in st.session_state:
+        st.session_state.valid_tickers = []
+
+    # Define the elements to compare
+    income_statement_elements = [
+        ('Choose All', 'all', None),  # Option to choose all elements
+        ('Total Revenue', 'Total Revenue', 'Billions'),
+        ('Cost Of Revenue', 'Cost Of Revenue', 'Billions'),
+        ('Gross Profit', 'Gross Profit', 'Billions'),
+        ('Operating Expense', 'Operating Expense', 'Billions'),
+        ('Selling General And Administration', 'Selling General And Administration', 'Billions'),
+        ('Research And Development', 'Research And Development', 'Billions'),
+        ('Operating Income', 'Operating Income', 'Billions'),
+        ('Net Non Operating Interest Income Expense', 'Net Non Operating Interest Income Expense', 'Billions'),
+        ('Interest Income Non Operating', 'Interest Income Non Operating', 'Billions'),
+        ('Interest Expense Non Operating', 'Interest Expense Non Operating', 'Billions'),
+        ('Other Income Expense', 'Other Income Expense', 'Billions'),
+        ('Special Income Charges', 'Special Income Charges', 'Billions'),
+        ('Restructuring And Mergern Acquisition', 'Restructuring And Mergern Acquisition', 'Billions'),
+        ('Other Non Operating Income Expenses', 'Other Non Operating Income Expenses', 'Billions'),
+        ('Pretax Income', 'Pretax Income', 'Billions'),
+        ('Tax Provision', 'Tax Provision', 'Billions'),
+        ('Net Income Common Stockholders', 'Net Income Common Stockholders', 'Billions'),
+        ('Net Income', 'Net Income', 'Billions'),
+        ('Net Income Including Noncontrolling Interests', 'Net Income Including NoncontrollingInterests', 'Billions'),
+        ('Net Income Continuous Operations', 'Net Income Continuous Operations', 'Billions'),
+        ('Diluted NI Availto Com Stockholders', 'Diluted NI Availto Com Stockholders', 'Billions'),
+        ('Basic EPS', 'Basic EPS', '2 decimals'),
+        ('Diluted EPS', 'Diluted EPS', '2 decimals'),
+        ('Basic Average Shares', 'Basic Average Shares', 'Millions'),
+        ('Diluted Average Shares', 'Diluted Average Shares', 'Millions'),
+        ('Total Operating Income As Reported', 'Total Operating Income As Reported', 'Billions'),
+        ('Total Expenses', 'Total Expenses', 'Billions'),
+        ('Net Income From Continuing And Discontinued Operation',
+         'Net Income From Continuing And Discontinued Operation', 'Billions'),
+        ('Normalized Income', 'Normalized Income', 'Billions'),
+        ('Interest Income', 'Interest Income', 'Billions'),
+        ('Interest Expense', 'Interest Expense', 'Billions'),
+        ('Net Interest Income', 'Net Interest Income', 'Billions'),
+        ('EBIT', 'EBIT', 'Billions'),
+        ('EBITDA', 'EBITDA', 'Billions'),
+        ('Reconciled Cost Of Revenue', 'Reconciled Cost Of Revenue', 'Billions'),
+        ('Reconciled Depreciation', 'Reconciled Depreciation', 'Billions'),
+        ('Net Income From Continuing Operation Net Minority Interest',
+         'Net Income From Continuing Operation Net Minority Interest', 'Billions'),
+        ('Net Income Including Noncontrolling Interests', 'Net Income Including Noncontrolling Interests', 'Billions'),
+        ('Total Unusual Items Excluding Goodwill', 'Total Unusual Items Excluding Goodwill', 'Billions'),
+        ('Total Unusual Items', 'Total Unusual Items', 'Billions'),
+        ('Normalized EBITDA', 'Normalized EBITDA', 'Billions'),
+        ('Tax Rate For Calcs', 'Tax Rate For Calcs', 'percentage')
+    ]
+
+
+    # Define function to display comparison table
+    def display_comparison_table(selected_symbols, selected_elements):
+        # Check if there are enough symbols for comparison
+        if len(selected_symbols) < 2:
+            st.warning("Not enough symbols for comparison. Please add more symbols.")
+            return
+
+        # Initialize a list to store DataFrames
+        data_frames = []
+
+        # Loop through selected tickers and fetch the stock information
+        for ticker in selected_symbols:
+            stock = yf.Ticker(ticker)
+            income_statement = stock.financials
+
+
+            # Get the last available date
+            last_date = income_statement.columns[0]
+
+            # Collect the elements for the current ticker
+            data = {'Ticker': ticker, 'Date': last_date.strftime('%Y-%m-%d')}
+            for elem in income_statement_elements:
+                if elem[1] == 'all':
+                    continue
+                value = income_statement.at[elem[1], last_date] if elem[1] in income_statement.index else None
+                if value is not None:
+                    if elem[2] == 'Billions':
+                        value = f"{value / 1_000_000_000:.2f}B"
+                    elif elem[2] == '2 decimals':
+                        value = f"{value:.2f}"
+                    elif elem[2] == 'percentage':
+                        value = f"{value * 100:.2f}%"
+                data[elem[0]] = value
+
+            # Append the DataFrame to the list
+            data_frames.append(pd.DataFrame([data]))
+
+        # Concatenate all DataFrames in the list
+        comparison_df = pd.concat(data_frames, ignore_index=True)
+
+        # Set 'Ticker' as the index of the DataFrame
+        comparison_df.set_index('Ticker', inplace=True)
+
+        # Display the comparison table
+        st.write("Comparison Table Of Annual Income Statement Elements")
+        if 'Choose All' in selected_elements:
+            selected_elements = [elem[0] for elem in income_statement_elements if elem[0] != 'Choose All']
+        st.dataframe(comparison_df[['Date'] + selected_elements])
+
+
+
+    # Check if the visibility flag is set to True and the user clicks the button
+    if st.button("Compare Annual Income Statement Between Your Symbols"):
+        if 'comparison_table_visible' not in st.session_state:
+            st.session_state.comparison_table_visible = True
+
+        st.session_state.comparison_table_visible = not st.session_state.comparison_table_visible
+
+        # Check if there are enough symbols for comparison
+        if len(st.session_state.valid_tickers) < 2:
+            st.warning("Not enough symbols to compare. Please add symbols to your list.")
+            st.session_state.comparison_table_visible = False
+
+    # Check if ticker has changed
+    if st.session_state.current_ticker != ticker:
+        st.session_state.current_ticker = ticker
+        st.session_state.comparison_table_visible = False
+
+    # Check if the visibility flag is set to True and the user switches symbols in the list
+    if st.session_state.get('comparison_table_visible', False):
+
+        # Create a dropdown list with multiple selection for choosing symbols to compare
+        all_symbols_option = 'All Symbols'
+        selected_symbols = st.multiselect("Select symbols to compare:",
+                                          [all_symbols_option] + st.session_state.valid_tickers)
+
+        # If "All Symbols" is selected, use all available symbols
+        if all_symbols_option in selected_symbols:
+            selected_symbols = st.session_state.valid_tickers
+
+        # Create a dropdown list with multiple selection for choosing elements to compare
+        selected_elements = st.multiselect("Select elements to compare:",
+                                           [elem[0] for elem in income_statement_elements])
+
+        # Check if the user has selected at least one symbol and one element
+        if st.button("Let's compare"):
+            if selected_symbols and selected_elements:
+                display_comparison_table(selected_symbols, selected_elements)
+            else:
+                st.warning("Please select at least TWO symbols and ONE element to compare.")
+    else:
+        # Turn off the visibility flag if the user switches symbols in the list
+        st.session_state.comparison_table_visible = False
+
+
+
+st.write("")
+st.write("")
+st.write("")
 
 # Define the color code for the "Chart Zone" text
 color_code_chart_zone = "white"  # Example color code
+
+
+
+
+################ Chart Zone #######################################################
+
 
 st.subheader(f"Chart Zone")
 
