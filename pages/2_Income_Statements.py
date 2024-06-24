@@ -70,7 +70,7 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 # Display a message box in the sidebar
 
 st.sidebar.info("- Design Your Own Charts.")
-st.sidebar.info("- Compare Income Statement Between Your Symbols.")
+st.sidebar.info("- Compare Income Statements Between Your Symbols.")
 st.sidebar.info("- Easy Download Data Tables.")
 st.sidebar.info("- For the best experience, maximize your screen.")
 # st.sidebar.info("- Recommended dark mode in setting menu.")
@@ -311,7 +311,7 @@ with col1:
         comparison_df.set_index('Ticker', inplace=True)
 
         # Display the comparison table
-        st.write("Comparison Table Of Annual Income Statement Elements")
+        st.write("Comparison Table Of Annual Income Statements Elements")
         if 'Choose All' in selected_elements:
             selected_elements = [elem[0] for elem in income_statement_elements if elem[0] != 'Choose All']
         st.dataframe(comparison_df[['Date'] + selected_elements])
@@ -319,7 +319,7 @@ with col1:
 
 
     # Check if the visibility flag is set to True and the user clicks the button
-    if st.button("Compare Annual Income Statement Between Your Symbols"):
+    if st.button("Compare Annual Income Statements Between Your Symbols"):
         if 'comparison_table_visible' not in st.session_state:
             st.session_state.comparison_table_visible = True
 
