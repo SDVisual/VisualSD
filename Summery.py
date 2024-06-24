@@ -390,6 +390,9 @@ with col1:
     if ticker_changed:
         st.session_state.show_stock_data = False
 
+    st.write('Chart dates : {} to {}'.format(start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y")))
+    st.write("")
+
     # Generate a unique key for the checkbox based on the ticker
     checkbox_key = f"show_stock_data_{ticker}"
 
