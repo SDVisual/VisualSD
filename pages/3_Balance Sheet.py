@@ -8,6 +8,7 @@ import cufflinks as cf
 import matplotlib.pyplot as plt
 
 
+
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -197,6 +198,230 @@ st.dataframe(styled_balance_sheet)
 
 st.write("")
 st.write("")
+
+
+####################################### COMPARE Income Elements #################################
+
+
+col1, col2 = st.columns([0.7, 0.3])
+
+
+with col1:
+    # Initialize session state variables if they don't exist
+    if 'current_ticker' not in st.session_state:
+        st.session_state.current_ticker = None
+    if 'comparison_table_visible' not in st.session_state:
+        st.session_state.comparison_table_visible = False
+    if 'valid_tickers' not in st.session_state:
+        st.session_state.valid_tickers = []
+
+    # Define the balance sheet elements to compare
+    balance_sheet_elements = [
+        ('Choose All', 'all', None),  # Option to choose all elements
+        ('Total Assets', 'Total Assets', 'Billions'),
+        ('Current Assets', 'Current Assets', 'Billions'),
+        ('Cash Cash Equivalents And Short Term Investments', 'Cash Cash Equivalents And Short Term Investments',
+         'Billions'),
+        ('Cash And Cash Equivalents', 'Cash And Cash Equivalents', 'Billions'),
+        ('Cash Financial', 'Cash Financial', 'Billions'),
+        ('Cash Equivalents', 'Cash Equivalents', 'Billions'),
+        ('Other Short Term Investments', 'Other Short Term Investments', 'Billions'),
+        ('Receivables', 'Receivables', 'Billions'),
+        ('Accounts Receivable', 'Accounts Receivable', 'Billions'),
+        ('Other Receivables', 'Other Receivables', 'Billions'),
+        ('Inventory', 'Inventory', 'Billions'),
+        ('Other Current Assets', 'Other Current Assets', 'Billions'),
+        ('Total Non Current Assets', 'Total Non Current Assets', 'Billions'),
+        ('Net PPE', 'Net PPE', 'Billions'),
+        ('Gross PPE', 'Gross PPE', 'Billions'),
+        ('Land And Improvements', 'Land And Improvements', 'Billions'),
+        ('Machinery Furniture Equipment', 'Machinery Furniture Equipment', 'Billions'),
+        ('Leases', 'Leases', 'Billions'),
+        ('Accumulated Depreciation', 'Accumulated Depreciation', 'Billions'),
+        ('Investments And Advances', 'Investments And Advances', 'Billions'),
+        ('Investmentin Financial Assets', 'Investmentin Financial Assets', 'Billions'),
+        ('Available For Sale Securities', 'Available For Sale Securities', 'Billions'),
+        ('Other Investments', 'Other Investments', 'Billions'),
+        ('Non Current Deferred Assets', 'Non Current Deferred Assets', 'Billions'),
+        ('Non Current Deferred Taxes Assets', 'Non Current Deferred Taxes Assets', 'Billions'),
+        ('Other Non Current Assets', 'Other Non Current Assets', 'Billions'),
+        ('Total Liabilities Net Minority Interest', 'Total Liabilities Net Minority Interest', 'Billions'),
+        ('Current Liabilities', 'Current Liabilities', 'Billions'),
+        ('Payables And Accrued Expenses', 'Payables And Accrued Expenses', 'Billions'),
+        ('Payables', 'Payables', 'Billions'),
+        ('Accounts Payable', 'Accounts Payable', 'Billions'),
+        ('Current Debt And Capital Lease Obligation', 'Current Debt And Capital Lease Obligation', 'Billions'),
+        ('Current Debt', 'Current Debt', 'Billions'),
+        ('Commercial Paper', 'Commercial Paper', 'Billions'),
+        ('Other Current Borrowings', 'Other Current Borrowings', 'Billions'),
+        ('Current Deferred Liabilities', 'Current Deferred Liabilities', 'Billions'),
+        ('Current Deferred Revenue', 'Current Deferred Revenue', 'Billions'),
+        ('Other Current Liabilities', 'Other Current Liabilities', 'Billions'),
+        ('Total Non Current Liabilities Net Minority Interest', 'Total Non Current Liabilities Net Minority Interest',
+         'Billions'),
+        ('Long Term Debt And Capital Lease Obligation', 'Long Term Debt And Capital Lease Obligation', 'Billions'),
+        ('Long Term Debt', 'Long Term Debt', 'Billions'),
+        ('Tradeand Other Payables Non Current', 'Tradeand Other Payables Non Current', 'Billions'),
+        ('Other Non Current Liabilities', 'Other Non Current Liabilities', 'Billions'),
+        ('Total Equity Gross Minority Interest', 'Total Equity Gross Minority Interest', 'Billions'),
+        ('Stockholders Equity', 'Stockholders Equity', 'Billions'),
+        ('Capital Stock', 'Capital Stock', 'Billions'),
+        ('Common Stock', 'Common Stock', 'Billions'),
+        ('Retained Earnings', 'Retained Earnings', 'Billions'),
+        ('Gains Losses Not Affecting Retained Earnings', 'Gains Losses Not Affecting Retained Earnings', 'Billions'),
+        ('Other Equity Adjustments', 'Other Equity Adjustments', 'Billions'),
+        ('Total Capitalization', 'Total Capitalization', 'Billions'),
+        ('Common Stock Equity', 'Common Stock Equity', 'Billions'),
+        ('Net Tangible Assets', 'Net Tangible Assets', 'Billions'),
+        ('Working Capital', 'Working Capital', 'Billions'),
+        ('Invested Capital', 'Invested Capital', 'Billions'),
+        ('Tangible Book Value', 'Tangible Book Value', 'Billions'),
+        ('Total Debt', 'Total Debt', 'Billions'),
+        ('Net Debt', 'Net Debt', 'Billions'),
+        ('Share Issued', 'Share Issued', 'Billions'),
+        ('Ordinary Shares Number', 'Ordinary Shares Number', 'Billions'),
+        ('Treasury Shares Number', 'Treasury Shares Number', 'Billions')
+    ]
+
+
+    # Define function to display comparison table
+    def display_comparison_table(selected_symbols, selected_elements):
+        # Check if there are enough symbols for comparison
+        if len(selected_symbols) < 2:
+            st.warning("Not enough symbols for comparison. Please add more symbols.")
+            return
+
+        # Initialize a list to store DataFrames
+        data_frames = []
+
+        # Loop through selected tickers and fetch the stock information
+        for ticker in selected_symbols:
+            stock = yf.Ticker(ticker)
+            balance_sheet_compare = stock.balance_sheet
+
+
+            # Get the last available date
+            last_date = balance_sheet_compare.columns[0]
+
+            # Collect the elements for the current ticker
+            data = {'Ticker': ticker, 'Date': last_date.strftime('%Y-%m-%d')}
+            for elem in balance_sheet_elements:
+                if elem[1] == 'all':
+                    continue
+                value = balance_sheet_compare.at[elem[1], last_date] if elem[1] in balance_sheet_compare.index else None
+
+                # Check if value is not None and not NaN, otherwise set it to 0
+                if value is not None and not (isinstance(value, float) and value != value):
+                    if elem[2] == 'Millions':
+                        value = f"{value / 1_000_000:.2f}M"
+                    elif elem[2] == 'Billions':
+                        value = f"{value / 1_000_000_000:.2f}B"
+                    elif elem[2] == '2 decimals':
+                        value = f"{value:.2f}"
+                    elif elem[2] == 'percentage':
+                        value = f"{value * 100:.2f}%"
+                else:
+                    value = "0"
+
+                data[elem[0]] = value
+
+            # Append the DataFrame to the list
+            data_frames.append(pd.DataFrame([data]))
+
+        # Concatenate all DataFrames in the list
+        comparison_df = pd.concat(data_frames, ignore_index=True)
+
+        # Set 'Ticker' as the index of the DataFrame
+        comparison_df.set_index('Ticker', inplace=True)
+
+        # Display the comparison table
+        st.write("Comparison Table Of Annual Balance Sheet Elements:")
+        st.write("")
+        if 'Choose All' in selected_elements:
+            selected_elements = [elem[0] for elem in balance_sheet_elements if elem[0] != 'Choose All']
+        st.dataframe(comparison_df[['Date'] + selected_elements])
+
+
+
+    # Check if the visibility flag is set to True and the user clicks the button
+    if st.button("Compare Annual Balance Sheets Between Your Symbols"):
+        if 'comparison_table_visible' not in st.session_state:
+            st.session_state.comparison_table_visible = True
+
+        st.session_state.comparison_table_visible = not st.session_state.comparison_table_visible
+
+        # Check if there are enough symbols for comparison
+        if len(st.session_state.valid_tickers) < 2:
+            st.warning("Not enough symbols to compare. Please add symbols to your list.")
+            st.session_state.comparison_table_visible = False
+
+    # Check if ticker has changed
+    if st.session_state.current_ticker != ticker:
+        st.session_state.current_ticker = ticker
+        st.session_state.comparison_table_visible = False
+
+    # Check if the visibility flag is set to True and the user switches symbols in the list
+    if st.session_state.get('comparison_table_visible', False):
+
+        # Create a dropdown list with multiple selection for choosing symbols to compare
+        all_symbols_option = 'All Symbols'
+        selected_symbols = st.multiselect("Select symbols to compare:",
+                                          [all_symbols_option] + st.session_state.valid_tickers)
+
+        # If "All Symbols" is selected, use all available symbols
+        if all_symbols_option in selected_symbols:
+            selected_symbols = st.session_state.valid_tickers
+
+        # Create a dropdown list with multiple selection for choosing elements to compare
+        selected_elements = st.multiselect("Select elements to compare:",
+                                           [elem[0] for elem in balance_sheet_elements])
+
+        # Check if the user has selected at least one symbol and one element
+        if st.button("Let's compare"):
+            if selected_symbols and selected_elements:
+                display_comparison_table(selected_symbols, selected_elements)
+            else:
+                st.warning("Please select at least TWO symbols and ONE element to compare.")
+    else:
+        # Turn off the visibility flag if the user switches symbols in the list
+        st.session_state.comparison_table_visible = False
+
+
+
+st.write("")
+st.write("")
+st.write("")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Define the color code for the "Chart Zone" text
