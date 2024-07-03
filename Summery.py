@@ -17,12 +17,16 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
+
+
+
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
 color_code = "#0ECCEC"
 header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
+
 
 
 # Initialize session state for selected ticker index and valid tickers
@@ -71,6 +75,7 @@ selected_ticker_index = st.session_state.selected_ticker_index
 # Select box to choose ticker
 ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
                               index=st.session_state.selected_ticker_index)
+
 
 
 
@@ -175,7 +180,10 @@ label_mapping = {
     'Debt To Equity': 'debtToEquity',
     'Diluted EPS(TTM)': 'trailingEps',
     'Profit Margins(TTM)': 'profitMargins',
-    'Forward PE': 'forwardPE'
+    'Forward PE': 'forwardPE',
+    'Ebitda Margins(TTM)': 'ebitdaMargins',
+    'Ebitda(TTM)': 'ebitda',
+    'EV/Ebitda': 'enterpriseToEbitda'
 }
 
 
@@ -266,6 +274,7 @@ with col2:
 
 with col1:
 
+
     # Check if the DataFrame is empty
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
@@ -316,7 +325,7 @@ with col1:
             showlegend=True
         ))
 
-         # Set the title of the chart with both main and additional information
+        # Set the title of the chart with both main and additional information
         candlestick_chart.update_layout(
             title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
@@ -327,9 +336,8 @@ with col1:
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top',
             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
-        ) 
+        )
 
-        
         # # Set the title of the chart with both main and additional information
         # candlestick_chart.update_layout(
         #     title_text="<span style='text-align: center;'>        Chart Dates: {} to {}</span><br>"
@@ -363,9 +371,6 @@ with col1:
 
         # Hide Plotly toolbar and directly display the chart
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
-
-
-
 
 col1, col2 = st.columns([0.8, 0.2])
 
@@ -423,14 +428,16 @@ pairs = [
 
 
     ('PE Ratio(TTM)', 'Diluted EPS(TTM)'),
-    ('Forward PE', 'Revenue(TTM)'),
+    ('Forward PE', 'Ebitda(TTM)'),
+    ('EV/Ebitda', 'Revenue(TTM)'),
     ('Price to Sales(TTM)', 'Gross Margins(TTM)'),
     ('ROA(TTM)', 'Operating Margins(TTM)'),
     ('ROE(TTM)', 'Profit Margins(TTM)'),
 
 ]
 
-
+# 'Ebitda Margins(TTM)': 'ebitdaMargins',
+# : 'ebitda'
 
 col1, col2 = st.columns([0.4, 0.3])
 with col1:
@@ -463,14 +470,14 @@ with col1:
         formatted_label2 = f"{label2}" if label2 else ''
 
         # Divide values by billions or millions based on labels
-        if key1 and label1 in ['Market Cap (In B$)', 'Company EV', 'Revenue(TTM)']:
+        if key1 and label1 in ['Market Cap (In B$)', 'Company EV', 'Revenue(TTM)', 'Ebitda(TTM)']:
             value1 = float(value1) / 1_000_000_000 if value1 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
         elif key1 == 'Avg. Volume (10d)' or key1 == 'Volume':
             value1 = int(float(value1)) if value1 != 'N/A' else 'N/A'  # Convert to integer
             if label1 == 'Avg. Volume (10d)' or label1 == 'Volume':
                 value1 = f"{int(value1):,}" if value1 != 'N/A' else 'N/A'  # Format without decimal places
 
-        if key2 and label2 in ['Market Cap (In B$)', 'Revenue(TTM)', 'S.Outstanding (B)']:
+        if key2 and label2 in ['Market Cap (In B$)', 'Revenue(TTM)', 'S.Outstanding (B)', 'Ebitda(TTM)']:
             value2 = float(value2) / 1_000_000_000 if value2 != 'N/A' else 'N/A'  # Divide by billions and convert to integer
         elif key2 == 'Avg. Volume (10d)' or key2 == 'Volume':
             value2 = int(float(value2)) if value2 != 'N/A' else 'N/A'  # Convert to integer
@@ -518,6 +525,8 @@ with col1:
             formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
         elif label2 == 'Profit Margins(TTM)':
             formatted_value2 = f"{value2:.2%}" if value2 != 'N/A' else ''
+        elif label2 == 'Ebitda(TTM)':
+            formatted_value2 = f"{value2:,.2f}B" if value2 != 'N/A' else ''
 
         elif label2 == 'Revenue(TTM)':
             formatted_value2 = f"{value2:,.2f}B" if value2 != 'N/A' else ''
@@ -555,7 +564,7 @@ with col1:
     # Initialize session state variables if they don't exist
     if 'current_ticker' not in st.session_state:
         st.session_state.current_ticker = None
-    
+
     # Define the elements to compare
     elements = [
         ('Choose All', 'all', None),  # Option to choose all elements
@@ -674,13 +683,11 @@ with col1:
     if 'fullTimeEmployees' in StockInfo:
         st.write("Full Time Employees:", str(StockInfo['fullTimeEmployees']))
 
+
+    webfiling = "https://www.sec.gov/edgar/search"
     st.write("Company Website:", StockInfo['website'])
-    # st.write("****************************************************************************************************")
-    # # Adjust the size of the line using CSS
-    # st.write('<hr style="height:4px;border:none;color:#333;background-color:#333;">', unsafe_allow_html=True)
-    # # Adjust the size and color of the line using CSS
-    # st.write('<hr style="height:5px;border:none;color:blue;background-color:blue;">', unsafe_allow_html=True)
-    # # Adjust the size and color of the line using CSS
+    st.write("Search Company Filing (8-k/10-k):", webfiling)
+
 
     st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
