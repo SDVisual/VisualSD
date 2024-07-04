@@ -66,7 +66,6 @@ st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ti
 
 
 
-
 # Display a message box in the sidebar
 
 st.sidebar.info("- Design Your Own Charts.")
@@ -367,38 +366,26 @@ st.write("")
 st.write("")
 st.write("")
 
-# Define the color code for the "Chart Zone" text
-color_code_chart_zone = "white"  # Example color code
-
-
 
 
 ################ Chart Zone #######################################################
 
+# Define the color code for the "Chart Zone" text
+color_code_chart_zone = "white"  # Example color code
 
 st.subheader(f"Chart Zone")
 
-# # Display the styled header using st.write() with HTML
-# st.write(
-#     f'<span style="font-size:30px;">Chart Zone</span>',
-#     unsafe_allow_html=True
-# )
+
 st.write(f'*All charts are interactive by clicking legend elements')
-# st.write(f'*values in millions $')
+
 st.write("")
 
 col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
-# data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Selling General And Administration',
-#                                   'Research And Development', 'Operating Expense', 'Operating Income',
-#                                   'Net Income']].transpose()
-# st.write(data)
 
 
 data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income',
                                   'Net Income']].transpose()
-
-
 
 
 # Define a dictionary to map full names to shorter abbreviations
@@ -451,7 +438,7 @@ with col1:
             title_xanchor='center',
             title_yanchor='top',
             font=dict(size=18),
-            legend=dict(orientation="h", yanchor="bottom", y=1.07, xanchor="center", x=0.45, font=dict(size=15)),
+            legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="center", x=0.45, font=dict(size=15)),
             # Center the legend
         )
 
@@ -916,7 +903,7 @@ with col1:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.02,
+            y=1.1,
             xanchor="center",
             x=0.45,
             font=dict(size=15),
@@ -992,7 +979,7 @@ with col2:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.02,
+            y=1.1,
             xanchor="center",
             x=0.45,
             font=dict(size=15),
