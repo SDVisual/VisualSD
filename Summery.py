@@ -503,6 +503,9 @@ with col1:
             formatted_value1 = f"{value1:.2%}" if value1 != 'N/A' else 'N/A'
         elif label1 == 'Dividend':
             formatted_value1 = f"{value1:,.2f}" if value1 != 'N/A' else 'N/A'
+        elif label1 == 'Volume':
+            formatted_value1 = f"{int(value1):,}" if value1 != 'N/A' else 'N/A'
+
         else:
             formatted_value1 = f"{value1:,.2f}" if value1 != 'N/A' else 'N/A'
 
@@ -528,8 +531,18 @@ with col1:
         elif label2 == 'Ebitda(TTM)':
             formatted_value2 = f"{value2:,.2f}B" if value2 != 'N/A' else ''
 
+        elif label2 == 'Market Cap (In B$)':
+            if value2 == 'N/A':
+                formatted_value2 = ''
+            elif value2 < 1:
+                formatted_value2 = f"{value2:,.3f}B"
+            else:
+                formatted_value2 = f"{value2:,.2f}B"
+
         elif label2 == 'Revenue(TTM)':
             formatted_value2 = f"{value2:,.2f}B" if value2 != 'N/A' else ''
+        elif label2 == 'Avg.Volume (10d)':
+            formatted_value2 = f"{value2:,.0f}" if value2 != 'N/A' else ''
         elif label2 == 'Dividend':
             formatted_value2 = f"{value2:,.2f}" if value2 != 'N/A' else ''
         else:
@@ -875,5 +888,4 @@ with col1:
                 st.write(StockInsider_roster_holders)
 
         st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
-
 
