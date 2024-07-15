@@ -72,7 +72,6 @@ st.sidebar.info("- Design Your Own Charts.")
 st.sidebar.info("- Compare Income Statements Between Your Symbols.")
 st.sidebar.info("- Easy Download Data Tables.")
 st.sidebar.info("- For the best experience, maximize your screen.")
-# st.sidebar.info("- Recommended dark mode in setting menu.")
 st.sidebar.info("- This app version is less suitable for stocks in the finance industry")
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
@@ -84,7 +83,8 @@ IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
 # Default to annual income statement
 income_statement = income_statementYear
 
-
+# st.write(income_statement)
+# st.write(income_statement)
 
 
 symbol = StockInfo["shortName"]
@@ -107,6 +107,9 @@ is_extended = st.checkbox("Extended Income Statment", value=False)
 # Update income statement based on the checkbox value
 if is_quarterly:
     income_statement = IncomeStatementQuarterly
+
+
+
 
 # Define desired order for the first section
 desired_order_first = [
@@ -176,11 +179,38 @@ revenue_percentage_df = income_statement_numeric.div(income_statement_numeric.lo
 
 exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items']
 
-income_statement = income_statement.apply(
-    lambda row: row.map(lambda x: f"{x / 1:.2f}" if isinstance(x, (
-        int, float)) and row.name in exclude_rows else f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x),
-    axis=1
-)
+
+
+
+# income_statement = income_statement.apply(
+#     lambda row: row.map(lambda x: f"{x / 1:.2f}" if isinstance(x, (
+#         int, float)) and row.name in exclude_rows else f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x),
+#     axis=1
+# )
+
+
+
+
+# Check if the first value of 'Total Revenue' is less than 1,000,000
+if income_statement.loc['Total Revenue'].iloc[0] > 1000000:
+    income_statement = income_statement.apply(
+        lambda row: row.map(
+            lambda x: f"{x:.2f}" if isinstance(x, (int, float)) and row.name in exclude_rows else
+                      f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x
+        ),
+        axis=1
+    )
+else:
+    income_statement = income_statement.apply(
+        lambda row: row.map(
+            lambda x: f"{x:.2f}" if isinstance(x, (int, float)) and row.name in exclude_rows else
+                      f"{x / 1e6:,.2f}" if isinstance(x, (int, float)) and x < 1000000 else
+                      f"{x / 1e6:,.2f}" if isinstance(x, (int, float)) else x
+        ),
+        axis=1
+    )
+
+
 
 
 
@@ -383,9 +413,29 @@ st.write("")
 col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
 
+# st.write(revenue_percentage_df)
 
-data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income',
-                                  'Net Income']].transpose()
+
+# List of rows to consider
+rows_to_check = ['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income', 'Net Income']
+
+# Initialize an empty list to keep rows that meet the condition
+filtered_rows = []
+
+# Iterate over the rows and check the first value
+for row in rows_to_check:
+    first_value = revenue_percentage_df.loc[row].iloc[0]
+    if first_value != 0 and pd.notnull(first_value):
+        filtered_rows.append(row)
+
+# Create the filtered DataFrame
+data = revenue_percentage_df.loc[filtered_rows].transpose()
+
+
+
+
+# data = revenue_percentage_df.loc[['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income',
+#                                   'Net Income']].transpose()
 
 
 # Define a dictionary to map full names to shorter abbreviations
@@ -854,7 +904,7 @@ with col1:
 # Basic EPS and Diluted EPS data for all years *****************************************************
 st.write("")
 st.subheader(f"Profitability")
-col1, col2, col3 = st.columns([0.35, 0.35, 0.3])
+col1, col2, col3 = st.columns([0.35, 0.4, 0.3])
 
 with col1:
 
@@ -974,7 +1024,7 @@ with col2:
         title_text=f'',
         title_x=0.35,
         xaxis=dict(title='' if is_quarterly else ''),
-        yaxis=dict(title='Amount ($)'),
+        yaxis=dict(title='Amount (M$)'),
         barmode='group',
         legend=dict(
             orientation="h",
