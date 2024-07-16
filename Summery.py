@@ -546,14 +546,14 @@ with col1:
         else:
             formatted_value2 = f"{value2:,.2f}" if value2 != 'N/A' else ''
 
-            # Calculate the difference and percentage change if label1 or label2 is "Last Price"
-            if label1 == 'Last Price':
-                value1 = float(value1)
-                previous_close = float(StockInfo.get('previousClose', 0))
-                last_price_difference = value1 - previous_close
-                percentage_change = (last_price_difference / previous_close) * 100 if previous_close != 0 else 0
-                change_color = "green" if last_price_difference >= 0 else "red"
-                formatted_value1 += f" ({last_price_difference:+.2f},{percentage_change:+.2f}%)"
+        # Calculate the difference and percentage change if label1 or label2 is "Last Price"
+        if label1 == 'Last Price':
+            value1 = float(value1)
+            previous_close = float(StockInfo.get('previousClose', 0))
+            last_price_difference = value1 - previous_close
+            percentage_change = (last_price_difference / previous_close) * 100 if previous_close != 0 else 0
+            change_color = "green" if last_price_difference >= 0 else "red"
+            formatted_value1 += f" ({last_price_difference:+.2f},{percentage_change:+.2f}%)"
 
         # Combine label and value, ensuring the total length is up to 40 characters
         label1_value1 = f"{formatted_label1}: {formatted_value1}"
