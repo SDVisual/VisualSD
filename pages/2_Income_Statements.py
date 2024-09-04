@@ -80,7 +80,7 @@ StockInfo = yf.Ticker(ticker).info
 
 # Check if the sector is "Financial Services"
 if StockInfo.get("sector") == "Financial Services":
-    st.warning("Note: Income Statements Page is less suitable for stocks in the Financial Services")
+    st.warning("Please Note: Certain data elements Can Not be retrievable for Financial and Insurance Institutions. ")
 
 
 income_statementYear = yf.Ticker(ticker).income_stmt
