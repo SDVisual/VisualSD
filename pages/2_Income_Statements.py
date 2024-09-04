@@ -65,7 +65,6 @@ ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.vali
 st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
 
-
 # Display a message box in the sidebar
 
 st.sidebar.info("- Design Your Own Charts.")
