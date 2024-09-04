@@ -17,7 +17,6 @@ st.set_page_config(
 
 col1, col2 = st.columns([0.7, 0.3])
 
-
 StockInfo = {}
 StockInfo_df = pd.DataFrame()
 
@@ -37,48 +36,141 @@ if 'valid_tickers' not in st.session_state:
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
 
+
+col1, col2 = st.columns([0.7, 0.3])
+
+with col1:
+
+    st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+
+    # Input box for user to enter symbol
+    new_symbol = st.text_input("Add symbol to Symbols List (Example given, AAPL)",
+                               placeholder="Add Stock Symbol").strip().upper()
+
+    # Check if the entered symbol is empty or consists only of whitespace characters
+    if not new_symbol or new_symbol.isspace():
+        new_symbol = DEFAULT_SYMBOL
+
+    # Check if the entered symbol is valid
+    historical_data = yf.Ticker(new_symbol).history(period='1d')
+    income_statement = yf.Ticker(new_symbol).income_stmt
+
+    if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+
+        st.error("Invalid symbol. Please enter only Stocks symbols.")
+
+    else:
+        # Add valid symbol to session state if it's not already present
+        if new_symbol not in st.session_state.valid_tickers:
+            st.session_state.valid_tickers.append(new_symbol)
+            st.text(f"{new_symbol} - Added to Symbols List")
+
+            # Update selected ticker index to the newly added symbol
+            st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
+
+    # Retrieve the index of the selected ticker symbol from the session state
+    selected_ticker_index = st.session_state.selected_ticker_index
+
+
+    # st.write("")
+
+col1, col2, col3, col4 = st.columns([0.35, 0.35, 0.15, 0.15])
+
+
+    ############################   SP 500 SELECT SECTORS ######################################
+
+with col1:
+
+    # Initialize session state if it doesn't already exist
+    if 'valid_tickers' not in st.session_state:
+        st.session_state.valid_tickers = []
+    if 'selected_sector' not in st.session_state:
+        st.session_state.selected_sector = ""
+    if 'selected_sub_industry' not in st.session_state:
+        st.session_state.selected_sub_industry = ""
+    if 'selected_ticker_index' not in st.session_state:
+        st.session_state.selected_ticker_index = 0
+
+    # Load the data from the webpage
+    sp500url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+    sp500data = pd.read_html(sp500url)[0]
+
+    # Extract relevant columns
+    data = sp500data[['Symbol', 'Security', 'GICS Sector', 'GICS Sub-Industry',
+                      'Headquarters Location', 'Date added', 'Founded']]
+
+
+
+    # Dropdown for GICS Sector
+    gics_sector = st.selectbox('Or Select S&P 500 Sectors & Companies', ["Select a sector"] + sorted(data['GICS Sector'].unique()))
+
+    # # Display a message if "Financials" is selected
+    # if gics_sector == "Financials":
+    #     st.warning("Note: This App Version is less suitable for stocks in the Finance Industry")
+
+    # Filter data based on selected GICS Sector
+    filtered_data = data[data['GICS Sector'] == gics_sector]
+
+# Display sub-industry dropdown in col2 only if a sector is selected
+with col2:
+
+
+    # Display sub-industry dropdown only if a sector is selected
+    if gics_sector != "Select a sector":
+
+        # Optional dropdown for GICS Sub-Industry
+        gics_sub_industry = st.selectbox('Optional', ["Select a sub-industry"] + sorted(
+            filtered_data['GICS Sub-Industry'].unique()))
+        filtered_data = filtered_data[filtered_data['GICS Sub-Industry'] == gics_sub_industry] if gics_sub_industry != "Select a sub-industry" else filtered_data
+    else:
+        gics_sub_industry = "Select a sub-industry"
+
+    # Filter out symbols containing a dot (.) in their names
+    filtered_data = filtered_data[~filtered_data['Symbol'].str.contains(r'\.')]
+
+    # Update the session state with the selected sector's and sub-industry's tickers only if a new sector or sub-industry is selected
+    if gics_sector != "Select a sector" and (
+            gics_sector != st.session_state.selected_sector or gics_sub_industry != st.session_state.selected_sub_industry):
+        st.session_state.valid_tickers = filtered_data['Symbol'].tolist()
+        st.session_state.selected_sector = gics_sector
+        st.session_state.selected_sub_industry = gics_sub_industry
+        # Reset the selected ticker index if the valid_tickers list is updated
+        st.session_state.selected_ticker_index = 0
+
+
 col1, col2 = st.columns([0.7, 0.3])
 with col1:
-    # Input box for user to enter symbol
-    new_symbol = st.text_input("Add symbol to Symbols List (example given, AAPL)",
-                               placeholder="Search Stocks Symbols").strip().upper()
 
-# Check if the entered symbol is empty or consists only of whitespace characters
-if not new_symbol or new_symbol.isspace():
-    new_symbol = DEFAULT_SYMBOL
+    # Display the filtered data
 
-# Check if the entered symbol is valid
-historical_data = yf.Ticker(new_symbol).history(period='1d')
-income_statement = yf.Ticker(new_symbol).income_stmt
+    # Check if filtered_data is not empty
+    if filtered_data is not None and not filtered_data.empty:
+        show_info = st.checkbox('Show selected Sector & companies information')
 
-if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+        if show_info:
+            st.write('Filtered Sector Companies Info:')
+            st.dataframe(filtered_data)
 
-    st.error("Invalid symbol. Please enter only Stocks symbols.")
 
-else:
-    # Add valid symbol to session state if it's not already present
-    if new_symbol not in st.session_state.valid_tickers:
-        st.session_state.valid_tickers.append(new_symbol)
-        st.text(f"Symbol Added to Symbols List - {new_symbol} ")
+    # Select box to choose ticker from the sidebar
+    ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
+                                  index=st.session_state.selected_ticker_index)
 
-        # Update selected ticker index to the newly added symbol
-        st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
-
-# Retrieve the index of the selected ticker symbol from the session state
-selected_ticker_index = st.session_state.selected_ticker_index
+    # Update session state with the newly selected symbol index
+    if ticker in st.session_state.valid_tickers:
+        st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
 
 
 
-# Select box to choose ticker
-ticker = st.sidebar.selectbox('Symbols List - Select Box', st.session_state.valid_tickers,
-                              index=st.session_state.selected_ticker_index)
+    if st.sidebar.button('Clear Symbols List'):
+        st.session_state.valid_tickers = []
+        st.session_state.selected_ticker_index = 0
+        st.sidebar.success("List cleared. Make New Symbols List !")
 
 
 
 
-# Update session state with the newly selected symbol index
-st.session_state.selected_ticker_index = st.session_state.valid_tickers.index(ticker)
 
 # Display a message box in the sidebar
 st.sidebar.info("- For the best experience, maximize your screen.")
@@ -89,100 +181,107 @@ st.sidebar.info("- This App Version is Less suitable for stocks in the Finance I
 st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=True)
 
 
-StockInfo = yf.Ticker(ticker).info
-rec_summery = yf.Ticker(ticker).recommendations_summary
 
-# Check if "companyOfficers" exists before dropping
-if "companyOfficers" in StockInfo:
-    del StockInfo["companyOfficers"]
+col1, col2 = st.columns([0.7, 0.3])
+
+with col1:
 
 
-def replace_empty_nested_dicts(data):
-    if isinstance(data, dict):
-        for key, value in data.items():
-            if isinstance(value, dict) and not value:
-                data[key] = 0
-            else:
-                replace_empty_nested_dicts(value)
-    return data
+    st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+    StockInfo = yf.Ticker(ticker).info
+    rec_summery = yf.Ticker(ticker).recommendations_summary
+
+    # Check if "companyOfficers" exists before dropping
+    if "companyOfficers" in StockInfo:
+        del StockInfo["companyOfficers"]
 
 
-StockInfo = replace_empty_nested_dicts(StockInfo)
+    def replace_empty_nested_dicts(data):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                if isinstance(value, dict) and not value:
+                    data[key] = 0
+                else:
+                    replace_empty_nested_dicts(value)
+        return data
 
-StockInfo_df = pd.DataFrame.from_dict(StockInfo, orient='index').reset_index()
 
-# Convert all columns to strings
-StockInfo_df = StockInfo_df.astype(str)
-# st.write(StockInfo_df)
+    StockInfo = replace_empty_nested_dicts(StockInfo)
 
-# Define the desired order of columns
-desired_order_StockInfo = [
-    "address1", "city", "state", "zip", "country", "phone", "website",
-    "industry", "industryKey", "industryDisp", "sector", "sectorKey", "sectorDisp",
-    "longBusinessSummary", "fullTimeEmployees", "auditRisk", "boardRisk", "compensationRisk",
-    "shareHolderRightsRisk", "overallRisk", "governanceEpochDate", "compensationAsOfEpochDate",
-    "maxAge", "priceHint", "previousClose", "open", "dayLow", "dayHigh",
-    "regularMarketPreviousClose", "regularMarketOpen", "regularMarketDayLow", "regularMarketDayHigh",
-    "dividendRate", "dividendYield", "exDividendDate", "payoutRatio", "fiveYearAvgDividendYield",
-    "beta", "trailingPE", "forwardPE", "volume", "regularMarketVolume", "averageVolume",
-    "averageVolume10days", "averageDailyVolume10Day", "bidSize", "askSize", "marketCap",
-    "fiftyTwoWeekLow", "fiftyTwoWeekHigh", "priceToSalesTrailing12Months", "fiftyDayAverage",
-    "twoHundredDayAverage", "trailingAnnualDividendRate", "trailingAnnualDividendYield", "currency",
-    "enterpriseValue", "profitMargins", "floatShares", "sharesOutstanding", "sharesShort",
-    "sharesShortPriorMonth", "sharesShortPreviousMonthDate", "dateShortInterest", "sharesPercentSharesOut",
-    "heldPercentInsiders", "heldPercentInstitutions", "shortRatio", "shortPercentOfFloat",
-    "impliedSharesOutstanding",
-    "bookValue", "priceToBook", "lastFiscalYearEnd", "nextFiscalYearEnd", "mostRecentQuarter",
-    "earningsQuarterlyGrowth", "netIncomeToCommon", "trailingEps", "forwardEps", "pegRatio",
-    "lastSplitFactor", "lastSplitDate", "enterpriseToRevenue", "enterpriseToEbitda", "52WeekChange",
-    "SandP52WeekChange", "lastDividendValue", "lastDividendDate", "exchange", "quoteType",
-    "symbol", "underlyingSymbol", "shortName", "longName", "firstTradeDateEpochUtc", "timeZoneFullName",
-    "timeZoneShortName", "uuid", "messageBoardId", "gmtOffSetMilliseconds", "currentPrice",
-    "targetHighPrice", "targetLowPrice", "targetMeanPrice", "targetMedianPrice", "recommendationMean",
-    "recommendationKey", "numberOfAnalystOpinions", "totalCash", "totalCashPerShare", "ebitda",
-    "totalDebt", "quickRatio", "currentRatio", "totalRevenue", "debtToEquity", "revenuePerShare",
-    "returnOnAssets", "returnOnEquity", "freeCashflow", "operatingCashflow", "earningsGrowth",
-    "revenueGrowth", "grossMargins", "ebitdaMargins", "operatingMargins", "financialCurrency",
-    "trailingPegRatio"
-]
+    StockInfo_df = pd.DataFrame.from_dict(StockInfo, orient='index').reset_index()
 
-# Define the desired order of labels for Stock Info
-label_mapping = {
-    'Last Price': 'currentPrice',
-    'Previous Close': 'previousClose',
-    'Open': 'regularMarketOpen',
-    'Day High': 'dayHigh',
-    'Day Low': 'dayLow',
-    '52 Week Low': 'fiftyTwoWeekLow',
-    '52 Week High': 'fiftyTwoWeekHigh',
-    '50d Average Price': 'fiftyDayAverage',
-    '200d Average Price': 'twoHundredDayAverage',
-    'Volume': 'volume',
-    'Avg.Volume (10d)': 'averageVolume10days',
-    'S.Outstanding (B)': 'sharesOutstanding',
-    'Market Cap (In B$)': 'marketCap',
-    'Company EV': 'enterpriseValue',
-    'PE Ratio(TTM)': 'trailingPE',
-    'Price to Sales(TTM)': 'priceToSalesTrailing12Months',
-    'Beta (5Y Monthly)': 'beta',
-    'Dividend Yield': 'dividendYield',
-    'Dividend': 'dividendRate',
-    'Short % Of Float': 'shortPercentOfFloat',
-    'Shares Short': 'sharesShort',
-    '1YTarget Est': 'targetMeanPrice',
-    'Gross Margins(TTM)': 'grossMargins',
-    'Operating Margins(TTM)': 'operatingMargins',
-    'Revenue(TTM)': 'totalRevenue',
-    'ROE(TTM)': 'returnOnEquity',
-    'ROA(TTM)': 'returnOnAssets',
-    'Debt To Equity': 'debtToEquity',
-    'Diluted EPS(TTM)': 'trailingEps',
-    'Profit Margins(TTM)': 'profitMargins',
-    'Forward PE': 'forwardPE',
-    'Ebitda Margins(TTM)': 'ebitdaMargins',
-    'Ebitda(TTM)': 'ebitda',
-    'EV/Ebitda': 'enterpriseToEbitda'
-}
+    # Convert all columns to strings
+    StockInfo_df = StockInfo_df.astype(str)
+    # st.write(StockInfo_df)
+
+    # Define the desired order of columns
+    desired_order_StockInfo = [
+        "address1", "city", "state", "zip", "country", "phone", "website",
+        "industry", "industryKey", "industryDisp", "sector", "sectorKey", "sectorDisp",
+        "longBusinessSummary", "fullTimeEmployees", "auditRisk", "boardRisk", "compensationRisk",
+        "shareHolderRightsRisk", "overallRisk", "governanceEpochDate", "compensationAsOfEpochDate",
+        "maxAge", "priceHint", "previousClose", "open", "dayLow", "dayHigh",
+        "regularMarketPreviousClose", "regularMarketOpen", "regularMarketDayLow", "regularMarketDayHigh",
+        "dividendRate", "dividendYield", "exDividendDate", "payoutRatio", "fiveYearAvgDividendYield",
+        "beta", "trailingPE", "forwardPE", "volume", "regularMarketVolume", "averageVolume",
+        "averageVolume10days", "averageDailyVolume10Day", "bidSize", "askSize", "marketCap",
+        "fiftyTwoWeekLow", "fiftyTwoWeekHigh", "priceToSalesTrailing12Months", "fiftyDayAverage",
+        "twoHundredDayAverage", "trailingAnnualDividendRate", "trailingAnnualDividendYield", "currency",
+        "enterpriseValue", "profitMargins", "floatShares", "sharesOutstanding", "sharesShort",
+        "sharesShortPriorMonth", "sharesShortPreviousMonthDate", "dateShortInterest", "sharesPercentSharesOut",
+        "heldPercentInsiders", "heldPercentInstitutions", "shortRatio", "shortPercentOfFloat",
+        "impliedSharesOutstanding",
+        "bookValue", "priceToBook", "lastFiscalYearEnd", "nextFiscalYearEnd", "mostRecentQuarter",
+        "earningsQuarterlyGrowth", "netIncomeToCommon", "trailingEps", "forwardEps", "pegRatio",
+        "lastSplitFactor", "lastSplitDate", "enterpriseToRevenue", "enterpriseToEbitda", "52WeekChange",
+        "SandP52WeekChange", "lastDividendValue", "lastDividendDate", "exchange", "quoteType",
+        "symbol", "underlyingSymbol", "shortName", "longName", "firstTradeDateEpochUtc", "timeZoneFullName",
+        "timeZoneShortName", "uuid", "messageBoardId", "gmtOffSetMilliseconds", "currentPrice",
+        "targetHighPrice", "targetLowPrice", "targetMeanPrice", "targetMedianPrice", "recommendationMean",
+        "recommendationKey", "numberOfAnalystOpinions", "totalCash", "totalCashPerShare", "ebitda",
+        "totalDebt", "quickRatio", "currentRatio", "totalRevenue", "debtToEquity", "revenuePerShare",
+        "returnOnAssets", "returnOnEquity", "freeCashflow", "operatingCashflow", "earningsGrowth",
+        "revenueGrowth", "grossMargins", "ebitdaMargins", "operatingMargins", "financialCurrency",
+        "trailingPegRatio"
+    ]
+
+    # Define the desired order of labels for Stock Info
+    label_mapping = {
+        'Last Price': 'currentPrice',
+        'Previous Close': 'previousClose',
+        'Open': 'regularMarketOpen',
+        'Day High': 'dayHigh',
+        'Day Low': 'dayLow',
+        '52 Week Low': 'fiftyTwoWeekLow',
+        '52 Week High': 'fiftyTwoWeekHigh',
+        '50d Average Price': 'fiftyDayAverage',
+        '200d Average Price': 'twoHundredDayAverage',
+        'Volume': 'volume',
+        'Avg.Volume (10d)': 'averageVolume10days',
+        'S.Outstanding (B)': 'sharesOutstanding',
+        'Market Cap (In B$)': 'marketCap',
+        'Company EV': 'enterpriseValue',
+        'PE Ratio(TTM)': 'trailingPE',
+        'Price to Sales(TTM)': 'priceToSalesTrailing12Months',
+        'Beta (5Y Monthly)': 'beta',
+        'Dividend Yield': 'dividendYield',
+        'Dividend': 'dividendRate',
+        'Short % Of Float': 'shortPercentOfFloat',
+        'Shares Short': 'sharesShort',
+        '1YTarget Est': 'targetMeanPrice',
+        'Gross Margins(TTM)': 'grossMargins',
+        'Operating Margins(TTM)': 'operatingMargins',
+        'Revenue(TTM)': 'totalRevenue',
+        'ROE(TTM)': 'returnOnEquity',
+        'ROA(TTM)': 'returnOnAssets',
+        'Debt To Equity': 'debtToEquity',
+        'Diluted EPS(TTM)': 'trailingEps',
+        'Profit Margins(TTM)': 'profitMargins',
+        'Forward PE': 'forwardPE',
+        'Ebitda Margins(TTM)': 'ebitdaMargins',
+        'Ebitda(TTM)': 'ebitda',
+        'EV/Ebitda': 'enterpriseToEbitda'
+    }
 
 
 
@@ -336,19 +435,6 @@ with col1:
             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
         )
 
-        # # Set the title of the chart with both main and additional information
-        # candlestick_chart.update_layout(
-        #     title_text="<span style='text-align: center;'>        Chart Dates: {} to {}</span><br>"
-        #                "<span style='font-size: 18px;'>       Low: {:.2f} | High: {:.2f} | Range Low To High: {:.2f}%</span><br>"
-        #                "<span style='font-size: 18px;'>                             Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
-        #         start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y"),
-        #         min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-        #     title_x=0.15,  # Center the title
-        #     title_font_size=22,  # Increase font size
-        #     title_y=0.95,  # Adjust title vertical position
-        #     title_yanchor='top',
-        #     legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
-        # )
 
         candlestick_chart.update_layout(
             xaxis_rangeslider_visible=False,
@@ -556,11 +642,12 @@ with col1:
             formatted_value1 += f" ({last_price_difference:+.2f},{percentage_change:+.2f}%)"
 
         # Combine label and value, ensuring the total length is up to 40 characters
+
         label1_value1 = f"{formatted_label1}: {formatted_value1}"
         label2_value2 = f"{formatted_label2}: {formatted_value2}" if formatted_label2 else ''
 
         # Display pairs in the same line without the "|" string
-        st.text(f"{label1_value1:<45} {label2_value2}")
+        st.text(f"{label1_value1:<40} {label2_value2}")
 
 
 
