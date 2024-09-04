@@ -77,17 +77,39 @@ st.sidebar.markdown("&copy;VisualSD. All rights reserved.", unsafe_allow_html=Tr
 
 
 StockInfo = yf.Ticker(ticker).info
+
+
+# Check if the sector is "Financial Services"
+if StockInfo.get("sector") == "Financial Services":
+    st.warning("Note: Income Statements Page is less suitable for stocks in the Financial Services")
+
+
 income_statementYear = yf.Ticker(ticker).income_stmt
 IncomeStatementQuarterly = yf.Ticker(ticker).quarterly_income_stmt
 
 # Default to annual income statement
 income_statement = income_statementYear
 
-# st.write(income_statement)
-# st.write(income_statement)
-
 
 symbol = StockInfo["shortName"]
+sector = StockInfo["sector"]
+Industry = StockInfo["industry"]
+
+# List of industries that set IsIN to True
+insurance_industries = [
+    "Insurance - Diversified",
+    "Insurance - Life",
+    "Insurance - Property & Casualty",
+    "Insurance - Specialty",
+    "Insurance Brokers"
+]
+
+# Check if StockInfo['industry'] matches any of the insurance industries
+if StockInfo["industry"] in insurance_industries:
+    isIN = True
+else:
+    isIN = False
+
 color_code = "#0ECCEC"  # Color for the symbol
 
 # Combine st.write() with HTML-styled header
@@ -97,17 +119,6 @@ st.write(f'<span style="font-size:30px;">Income Statement - </span>'
 
 
 st.write("")
-
-# Checkbox to select between annual and quarterly
-is_quarterly = st.checkbox("Quarterly Income Statement", value=False)
-
-# Checkbox to toggle display of extended balance sheet
-is_extended = st.checkbox("Extended Income Statment", value=False)
-
-# Update income statement based on the checkbox value
-if is_quarterly:
-    income_statement = IncomeStatementQuarterly
-
 
 
 
@@ -138,13 +149,76 @@ desired_order = [
     'Tax Effect Of Unusual Items'
 ]
 
-income_statement_Design = income_statement.reindex(desired_order, fill_value='0')
+
+
+desired_orderF = [
+    'Total Revenue', 'Salaries And Wages', 'Other Gand A', 'General And Administrative Expense',
+    'Selling And Marketing Expense', 'Selling General And Administration', 'Total Expenses', 'Gain On Sale Of Security', 'Other Special Charges', 'Special Income Charges',
+    'Pretax Income', 'Tax Provision', 'Net Income Continuous Operations', 'Net Income Including Noncontrolling Interests', 'Net Income',
+    'Preferred Stock Dividends', 'Otherunder Preferred Stock Dividend', 'Net Income Common Stockholders', 'Diluted NI Availto Com Stockholders', 'Basic EPS',
+    'Diluted EPS', 'Basic Average Shares', 'Diluted Average Shares', 'Net Income From Continuing And Discontinued Operation', 'Normalized Income',
+    'Interest Income', 'Interest Expense', 'Net Interest Income', 'Reconciled Depreciation', 'Net Income From Continuing Operation Net Minority Interest',
+    'Total Unusual Items Excluding Goodwill', 'Total Unusual Items', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items'
+]
+
+# desired_orderIN = [
+#     'Total Revenue', 'Salaries And Wages', 'Other Gand A', 'General And Administrative Expense',
+#     'Selling And Marketing Expense', 'Selling General And Administration', 'Gain On Sale Of Security', 'Other Special Charges', 'Special Income Charges',
+#     'Pretax Income', 'Tax Provision', 'Net Income Continuous Operations', 'Net Income Including Noncontrolling Interests', 'Net Income',
+#     'Preferred Stock Dividends', 'Otherunder Preferred Stock Dividend', 'Net Income Common Stockholders', 'Diluted NI Availto Com Stockholders', 'Basic EPS',
+#     'Diluted EPS', 'Basic Average Shares', 'Diluted Average Shares', 'Net Income From Continuing And Discontinued Operation', 'Normalized Income',
+#     'Interest Income', 'Interest Expense', 'Net Interest Income', 'Reconciled Depreciation', 'Net Income From Continuing Operation Net Minority Interest',
+#     'Total Unusual Items Excluding Goodwill', 'Total Unusual Items', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items'
+# ]
+
+
+
+
+
+# Checkbox to select between annual and quarterly
+is_quarterly = st.checkbox("Quarterly Income Statement", value=False)
+
+# Checkbox to toggle display of extended balance sheet
+is_extended = st.checkbox("Extended Income Statment", value=False)
+
+
+# Update income statement quarterly or yearly based on the checkbox value
+
+if is_quarterly:
+    income_statement = IncomeStatementQuarterly
+
+
+
+
+# Check if 'Cost Of Revenue' and 'Gross Profit' are in the rows (index) of income_statement
+if {'Cost Of Revenue', 'Gross Profit'}.issubset(income_statement.index):
+    isF = True
+else:
+    isF = False
+
+# # Display the value of isF
+# st.write(isF)
+
+
+
+if sector == "Financial Services" and not isF:
+    income_statement_Design = income_statement.reindex(desired_orderF, fill_value='0')
+else:
+    income_statement_Design = income_statement.reindex(desired_order, fill_value='0')
 
 
 if is_extended:
-    income_statement = income_statement.reindex(desired_order, fill_value='0')
+    if sector == "Financial Services" and not isF:
+       income_statement = income_statement.reindex(desired_orderF, fill_value='0')
+
+    else:
+        income_statement = income_statement.reindex(desired_order, fill_value='0')
 else:
-    income_statement = income_statement.reindex(desired_order_first, fill_value='0')
+    if sector == "Financial Services" and not isF:
+       income_statement = income_statement.reindex(desired_orderF, fill_value='0')
+    else:
+       income_statement = income_statement.reindex(desired_order_first, fill_value='0')
+
 
 
 
@@ -168,6 +242,30 @@ nan_mask = income_statement.loc['Total Revenue'].isna()
 # Drop columns where 'Total Revenue' is NaN for all values
 income_statement = income_statement.loc[:, ~nan_mask]
 
+
+
+# income_statement = income_statement[(income_statement != "0").any(axis=1)]
+# income_statement = income_statement[(income_statement != 0).any(axis=1)]
+
+
+
+
+
+# if 'Research And Development' in income_statement.columns:
+#     # Create a mask that excludes the 'Research And Development' column
+#     mask = (income_statement.drop(columns=['Research And Development']) != 0).any(axis=1) & \
+#            (income_statement.drop(columns=['Research And Development']) != "0").any(axis=1)
+#
+#     # Apply the mask to the DataFrame, retaining all rows where the condition is true for all other columns
+#     income_statement = income_statement[mask]
+# else:
+#     income_statement = income_statement[(income_statement != "0").any(axis=1)]
+#     income_statement = income_statement[(income_statement != 0).any(axis=1)]
+
+
+
+
+
 # % CHANGE DF *********************************
 
 # Convert the DataFrame values to numeric type, ignoring errors
@@ -177,17 +275,7 @@ income_statement_numeric = income_statement.apply(pd.to_numeric, errors='coerce'
 # Calculate the percentage of revenue for each item in the income statement
 revenue_percentage_df = income_statement_numeric.div(income_statement_numeric.loc['Total Revenue']) * 100
 
-exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items']
-
-
-
-
-# income_statement = income_statement.apply(
-#     lambda row: row.map(lambda x: f"{x / 1:.2f}" if isinstance(x, (
-#         int, float)) and row.name in exclude_rows else f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x),
-#     axis=1
-# )
-
+exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs']
 
 
 
@@ -253,8 +341,12 @@ with col1:
         ('Cost Of Revenue', 'Cost Of Revenue', 'Billions'),
         ('Gross Profit', 'Gross Profit', 'Billions'),
         ('Operating Expense', 'Operating Expense', 'Billions'),
+        ('Salaries And Wages', 'Salaries And Wages', 'Billions'),
+        ('General And Administrative Expense', 'General And Administrative Expense', 'Billions'),
+        ('Selling And Marketing Expense', 'Selling And Marketing Expense', 'Billions'),
         ('Selling General And Administration', 'Selling General And Administration', 'Billions'),
         ('Research And Development', 'Research And Development', 'Billions'),
+        ('Other G&A', 'Other Gand A', 'Billions'),
         ('Operating Income', 'Operating Income', 'Billions'),
         ('Net Non Operating Interest Income Expense', 'Net Non Operating Interest Income Expense', 'Billions'),
         ('Interest Income Non Operating', 'Interest Income Non Operating', 'Billions'),
@@ -267,7 +359,7 @@ with col1:
         ('Tax Provision', 'Tax Provision', 'Billions'),
         ('Net Income Common Stockholders', 'Net Income Common Stockholders', 'Billions'),
         ('Net Income', 'Net Income', 'Billions'),
-        ('Net Income Including Noncontrolling Interests', 'Net Income Including NoncontrollingInterests', 'Billions'),
+        ('Net Income Including Noncontrolling Interests', 'Net Income Including Noncontrolling Interests', 'Billions'),
         ('Net Income Continuous Operations', 'Net Income Continuous Operations', 'Billions'),
         ('Diluted NI Availto Com Stockholders', 'Diluted NI Availto Com Stockholders', 'Billions'),
         ('Basic EPS', 'Basic EPS', '2 decimals'),
@@ -288,7 +380,6 @@ with col1:
         ('Reconciled Depreciation', 'Reconciled Depreciation', 'Billions'),
         ('Net Income From Continuing Operation Net Minority Interest',
          'Net Income From Continuing Operation Net Minority Interest', 'Billions'),
-        ('Net Income Including Noncontrolling Interests', 'Net Income Including Noncontrolling Interests', 'Billions'),
         ('Total Unusual Items Excluding Goodwill', 'Total Unusual Items Excluding Goodwill', 'Billions'),
         ('Total Unusual Items', 'Total Unusual Items', 'Billions'),
         ('Normalized EBITDA', 'Normalized EBITDA', 'Billions'),
@@ -311,12 +402,17 @@ with col1:
             stock = yf.Ticker(ticker)
             income_statement = stock.financials
 
-
             # Get the last available date
             last_date = income_statement.columns[0]
 
             # Collect the elements for the current ticker
-            data = {'Ticker': ticker, 'Date': last_date.strftime('%Y-%m-%d')}
+            data = {
+                'Ticker': ticker,
+                'Sector': stock.info.get('sector', 'N/A'),  # Add Sector
+                'Industry': stock.info.get('industry', 'N/A'),  # Add Industry
+                'Date': last_date.strftime('%Y-%m-%d')
+            }
+
             for elem in income_statement_elements:
                 if elem[1] == 'all':
                     continue
@@ -339,11 +435,20 @@ with col1:
         # Set 'Ticker' as the index of the DataFrame
         comparison_df.set_index('Ticker', inplace=True)
 
+        # # Replace NaN, NaT, and 'nanB' with 0
+        # comparison_df.iloc[:, 0] = comparison_df.iloc[:, 0].fillna(0).replace({'nan': 0, 'nanB': 0})
+
+
+        # Replace 'nanB' with '0'
+        comparison_df.replace('nanB', 'None', inplace=True)
+
         # Display the comparison table
         st.write("Comparison Table Of Annual Income Statements Elements")
         if 'Choose All' in selected_elements:
             selected_elements = [elem[0] for elem in income_statement_elements if elem[0] != 'Choose All']
-        st.dataframe(comparison_df[['Date'] + selected_elements])
+
+        # Add 'Sector' and 'Industry' to the selected elements for display
+        st.dataframe(comparison_df[['Sector', 'Industry', 'Date'] + selected_elements])
 
 
 
@@ -415,12 +520,23 @@ col1, col2 = st.columns([0.6, 0.4])  # Adjust the width ratio of col1 and col2 a
 
 # st.write(revenue_percentage_df)
 
+# sector = StockInfo["sector"]
+# # st.write(StockInfo)
 
-# List of rows to consider
-rows_to_check = ['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income', 'Net Income']
+if sector == "Financial Services" and not isF:
+    rows_to_check = ['Net Interest Income', 'Selling General And Administration', 'Pretax Income', 'Net Income']
+
+else:
+
+    # List of rows to consider
+    rows_to_check = ['Cost Of Revenue', 'Gross Profit', 'Operating Expense', 'Operating Income', 'Net Income']
+
+
+
 
 # Initialize an empty list to keep rows that meet the condition
 filtered_rows = []
+# st.write(revenue_percentage_df)
 
 # Iterate over the rows and check the first value
 for row in rows_to_check:
@@ -430,7 +546,7 @@ for row in rows_to_check:
 
 # Create the filtered DataFrame
 data = revenue_percentage_df.loc[filtered_rows].transpose()
-
+# st.write(data)
 
 
 
@@ -451,29 +567,29 @@ with col1:
     if not data.empty:
         fig = go.Figure()
 
-
-
         # Define colors for each quarter
         colors = ['#0080ff', '#5483b3', '#7da0ca', '#c1e8ff']  # Add more colors if needed
 
-        # Create traces for each quarter or year based on checkbox value
+        # Iterate over each date (year or quarter) in the data
         for i, date in enumerate(data.index):
-            if is_quarterly:
-                label = f'Q{pd.to_datetime(date).quarter} {pd.to_datetime(date).year}'
-            else:
-                label = str(pd.to_datetime(date).year)
+            # Check if there is any non-null and non-zero value in the current row
+            if data.loc[date].notnull().any() and (data.loc[date] != 0).any():
+                # Set the label based on whether it's quarterly or annual data
+                if is_quarterly:
+                    label = f'Q{pd.to_datetime(date).quarter} {pd.to_datetime(date).year}'
+                else:
+                    label = str(pd.to_datetime(date).year)
 
-            fig.add_trace(go.Bar(
-                x=[name_mapping.get(col, col) for col in data.columns],  # Use the mapped names as x-axis labels
-                y=data.loc[date],
-                name=label,  # Use the formatted date as the legend label
-                text=[f"{value:.2f}%" for value in data.loc[date]],
-
-
-                insidetextanchor='start',
-                marker=dict(color=colors[i % len(colors)], line=dict(width=1, color='black')),
-                insidetextfont=dict(size=20),
-            ))
+                # Add a bar trace for each valid period
+                fig.add_trace(go.Bar(
+                    x=[name_mapping.get(col, col) for col in data.columns],  # Use the mapped names as x-axis labels
+                    y=data.loc[date],
+                    name=label,  # Use the formatted date as the legend label
+                    text=[f"{value:.2f}%" for value in data.loc[date]],  # Display percentages with 2 decimals
+                    insidetextanchor='start',
+                    marker=dict(color=colors[i % len(colors)], line=dict(width=1, color='black')),
+                    insidetextfont=dict(size=20),
+                ))
 
         # Update layout
         fig.update_layout(
@@ -481,20 +597,20 @@ with col1:
             xaxis=dict(title=''),  # Set x-axis title
             yaxis=dict(title='%  of  Total  Revenue'),
             height=400,
-            title_text=f'Income Statment Margins By {"Quarters" if is_quarterly else "Years"} ',
-            # Update title
+            title_text=f'Income Statement Margins By {"Quarters" if is_quarterly else "Years"}',
             title_x=0.48,
             title_y=0.98,
             title_xanchor='center',
             title_yanchor='top',
             font=dict(size=18),
             legend=dict(orientation="h", yanchor="bottom", y=1.03, xanchor="center", x=0.45, font=dict(size=15)),
-            # Center the legend
         )
 
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
     else:
         st.write("Income statement is empty.")
+
+    # st.write(data)
 
 
 
@@ -506,7 +622,15 @@ st.write("")
 
 col1, col2, col3 = st.columns([0.35, 0.35, 0.4])  # Adjust the width ratio of col1 and col2 as needed
 
-data = income_statement.loc[['Net Income', 'Total Revenue', 'Operating Income']].transpose()
+
+# Select the appropriate metrics based on the sector
+
+if sector == "Financial Services" and not isF:
+    metrics = ['Total Revenue', 'Pretax Income', 'Net Income']
+else:
+    metrics = ['Total Revenue', 'Operating Income', 'Net Income']
+
+data = income_statement.loc[metrics].transpose()
 
 # Convert data index to datetime objects if they are not already datetime objects
 data.index = pd.to_datetime(data.index)
@@ -521,7 +645,7 @@ with col1:
         colors = ['blue', '#0080ff', '#c1e8ff']  # Add more colors if needed
 
         # Create traces outside the loop
-        for i, metric in enumerate(['Total Revenue', 'Operating Income', 'Net Income']):
+        for i, metric in enumerate(metrics):
             # Check if the metric is 'Net Income' and if so, set the color to red for negative values
             bar_colors = ['red' if metric == 'Net Income' and float(value.replace(',', '')) < 0 else colors[i] for
                           value in data[metric]]
@@ -531,7 +655,12 @@ with col1:
                 # Adjust date format based on checkbox value
                 y=[float(value.replace(',', '')) for value in data[metric]],
                 name=metric,
-                text=[f"${'{:,.0f}'.format(float(value.replace(',', '')))}" for value in data[metric]],
+                text=[
+                    f"${'{:,.2f}'.format(float(value.replace(',', '')))}" if float(
+                        value.replace(',', '')) < 1000000 else
+                    f"${'{:,.0f}'.format(float(value.replace(',', '')))}"
+                    for value in data[metric]
+                ],
                 textposition='auto',
                 insidetextanchor='start',
                 marker=dict(color=bar_colors, line=dict(width=2, color='black')),
@@ -549,8 +678,6 @@ with col1:
             width=300,
             height=500,
             title_text=f'',
-            # title_text=f'Company Revenues' + (" QoQ" if is_quarterly else " YoY"),
-            # Update title based on checkbox value
             title_x=0.5,
             title_y=0.98,
             title_xanchor='center',
@@ -563,60 +690,78 @@ with col1:
     else:
         st.write("Income statement is empty.")
 
+
 # Plot bar chart Company Expenses YoY **********************************
 with col2:
     if not income_statement.empty:
-        data_expenses = income_statement.loc[
-            ['Operating Expense', 'Selling General And Administration', 'Research And Development']].transpose()
+        # Select the appropriate metrics based on the sector
+        if sector == "Financial Services" and not isF:
+            metrics_expenses = ['Selling General And Administration', 'Salaries And Wages',
+                                'Selling And Marketing Expense']
+        else:
+            metrics_expenses = ['Operating Expense', 'Selling General And Administration', 'Research And Development']
 
-        # Convert data_expenses index to datetime objects if they are not already datetime objects
-        data_expenses.index = pd.to_datetime(data_expenses.index)
+        # Check for Insurance sector metrics
+        if isIN:
+            metrics_expenses = ['Total Expenses', 'Selling General And Administration']
 
-        fig_expenses = go.Figure()
+        # Filter metrics_expenses to only include items present in the DataFrame index
+        available_metrics = [metric for metric in metrics_expenses if metric in income_statement.index]
+        # st.write(available_metrics)
+        # Check if available_metrics is not empty
+        if available_metrics:
+            # Access the filtered metrics in the DataFrame
+            data_expenses = income_statement.loc[available_metrics].transpose()
 
-        # Define colors for each trace
-        colors_expenses = ['red', '#cd5c5c', '#fa8072']
+            # Convert data_expenses index to datetime objects if they are not already datetime objects
+            data_expenses.index = pd.to_datetime(data_expenses.index)
 
-        # Create traces outside the loop
-        for i, metric in enumerate(
-                ['Operating Expense', 'Selling General And Administration', 'Research And Development']):
-            legend_label = 'SG&A' if metric == 'Selling General And Administration' else (
-                'R&D' if metric == 'Research And Development' else metric)
-            fig_expenses.add_trace(go.Bar(
-                x=data_expenses.index.strftime('%Y-%m-%d' if is_quarterly else '%Y'),
-                # Adjust date format based on checkbox value
-                y=[float(value.replace(',', '')) for value in data_expenses[metric]],
-                name=legend_label,
-                text=[f"${'{:,.0f}'.format(float(value.replace(',', '')))}" for value in data_expenses[metric]],
-                textposition='auto',
-                insidetextanchor='start',
-                marker=dict(color=colors_expenses[i], line=dict(width=2, color='black')),
-                insidetextfont=dict(size=15),  # Use the same size as in the first chart
-            ))
+            # Proceed with plotting or further manipulation using data_expenses
+            fig_expenses = go.Figure()
 
-        # Update layout to match the first chart
-        fig_expenses.update_layout(
-            barmode='group',
-            xaxis=dict(tickvals=data_expenses.index if is_quarterly else data_expenses.index.year,
-                       ticktext=data_expenses.index.strftime('%Y-%m-%d' if is_quarterly else '%Y')),
-            # Adjust ticktext based on checkbox value
-            yaxis=dict(title='Amount (M$)'),
-            width=300,  # Use the same width as in the first chart
-            height=500,  # Use the same height as in the first chart
-            # title_text=f'Company Expenses' + (" QoQ" if is_quarterly else " YoY"),
-            title_text=f'',
-            # Update title based on checkbox value
-            title_x=0.5,
-            title_y=0.98,
-            title_xanchor='center',
-            title_yanchor='top',
-            font=dict(size=15),  # Use the same font size as in the first chart
-            legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),  # Center the legend
-        )
+            # Define colors for each trace
+            colors_expenses = ['red', '#cd5c5c', '#fa8072']
 
-        st.plotly_chart(fig_expenses, use_container_width=True, config={'displayModeBar': False})
-    else:
-        st.write("Income statement is empty.")
+            # Create traces outside the loop
+            for i, metric in enumerate(available_metrics):
+                legend_label = 'Total SG&A' if metric == 'Selling General And Administration' else (
+                    'R&D' if metric == 'Research And Development' else metric)
+                fig_expenses.add_trace(go.Bar(
+                    x=data_expenses.index.strftime('%Y-%m-%d' if is_quarterly else '%Y'),
+                    # Adjust date format based on checkbox value
+                    y=[float(value.replace(',', '')) for value in data_expenses[metric]],
+                    name=legend_label,
+                    text=[f"${'{:,.0f}'.format(float(value.replace(',', '')))}" for value in data_expenses[metric]],
+                    textposition='auto',
+                    insidetextanchor='start',
+                    marker=dict(color=colors_expenses[i], line=dict(width=2, color='black')),
+                    insidetextfont=dict(size=15),  # Use the same size as in the first chart
+                ))
+
+            # Update layout to match the first chart
+            fig_expenses.update_layout(
+                barmode='group',
+                xaxis=dict(tickvals=data_expenses.index if is_quarterly else data_expenses.index.year,
+                           ticktext=data_expenses.index.strftime('%Y-%m-%d' if is_quarterly else '%Y')),
+                # Adjust ticktext based on checkbox value
+                yaxis=dict(title='Amount (M$)'),
+                width=300,  # Use the same width as in the first chart
+                height=500,  # Use the same height as in the first chart
+                title_text='',
+                title_x=0.5,
+                title_y=0.98,
+                title_xanchor='center',
+                title_yanchor='top',
+                font=dict(size=15),  # Use the same font size as in the first chart
+                legend=dict(orientation="h", yanchor="bottom", y=1.06, xanchor="center", x=0.45, font=dict(size=15)),
+                # Center the legend
+            )
+
+            st.plotly_chart(fig_expenses, use_container_width=True, config={'displayModeBar': False})
+
+        else:
+            st.write("No matching metrics found in the income statement.")
+
 
 
 
@@ -626,10 +771,14 @@ with col2:
 
 col1, col2 = st.columns([0.7, 0.3])  # Adjust the width ratio of col1 and col2 as needed
 
-percentage_change_df = income_statement_numeric
+
+
 
 # Calculate percentage change/Growth for each metric between consecutive periods
+percentage_change_df = income_statement_numeric
+
 percentage_change_df = percentage_change_df.pct_change(axis=1) * 100
+
 
 # Convert the first column to numeric, coercing errors to NaN
 percentage_change_df.iloc[:, 0] = pd.to_numeric(percentage_change_df.iloc[:, 0], errors='coerce')
@@ -637,18 +786,41 @@ percentage_change_df.iloc[:, 0] = pd.to_numeric(percentage_change_df.iloc[:, 0],
 # Replace NaN values with 0
 percentage_change_df.iloc[:, 0] = percentage_change_df.iloc[:, 0].fillna(0)
 
-data_percentage_change_df = percentage_change_df.loc[
-    ['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']].transpose()
+if sector == "Financial Services" and not isF:
+
+    data_percentage_change_df = percentage_change_df.loc[['Total Revenue', 'Interest Income', 'Net Interest Income', 'Net Income']].transpose()
+    data = income_statement.loc[['Total Revenue', 'Interest Income', 'Net Interest Income', 'Net Income']].transpose()
+    columns_to_check = ['Total Revenue', 'Interest Income', 'Net Interest Income', 'Net Income']
+else:
+    data_percentage_change_df = percentage_change_df.loc[['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']].transpose()
+    data = income_statement.loc[['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']].transpose()
+    columns_to_check = ['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']
 
 
 
-data = income_statement.loc[['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']].transpose()
 # Convert string values to numeric
 data = pd.DataFrame(data).apply(lambda x: x.str.replace(',', '').astype(float))
 
 
+# # Assuming 'data' is your DataFrame
+# columns_to_check = ['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income']
+
+# Check which columns have all values equal to 0
+columns_to_drop = []
+for col in columns_to_check:
+    if (data[col] == 0).all():
+        columns_to_drop.append(col)
+
+# Drop the columns that have all values equal to 0
+data.drop(columns=columns_to_drop, inplace=True)
+
+
+
+
 # Now you can proceed with the rest of your code
 with col1:
+
+
     # # Add title in the middle with smaller font size
     # st.markdown("<h2 style='text-align: left; color: white'>Company Growth Trend</h2>", unsafe_allow_html=True)
     st.subheader(f"Growth Trend {'QoQ' if is_quarterly else 'YoY'}")
@@ -666,16 +838,37 @@ with col1:
     line_fig = go.Figure()
 
     # Define the list of metrics
-    metrics = ['Total Revenue', 'Gross Profit']
+    if sector == "Financial Services" and not isF:
+        metrics = ['Total Revenue', 'Interest Income']
+    else:
+        metrics = ['Total Revenue', 'Gross Profit']
+
+    # Check if 'data' DataFrame has the columns in 'metrics'
+    for metric in metrics:
+        if metric not in data.columns:
+            print(f"Column '{metric}' not found in DataFrame. Adjusting metrics list...")
+            metrics.remove(metric)
+
+
 
     # Iterate over each metric and create a chart
     for metric, col in zip(metrics, [col1, col2]):
 
         # Regular CAGR calculation
+
         start_value = data[metric].iloc[0]
         end_value = data[metric].iloc[-1]
-        num_periods = len(data)
+
+        if start_value == 0:
+            start_value = data[metric].iloc[1]
+            num_periods = len(data) - 1
+        else:
+            num_periods = len(data)
+
         Ncagr = False
+
+
+
 
         if start_value == 0:
             # Handle zero starting value
@@ -777,6 +970,9 @@ with col1:
 
 
 
+
+
+
     # Define colors for each metric
     line_colors = ['red', 'red']
 
@@ -784,8 +980,26 @@ with col1:
     line_fig = go.Figure()
 
     # Define the list of metrics
-    metrics = ['Operating Income', 'Net Income']
+    if sector == "Financial Services" and not isF:
+        metrics = ['Net Interest Income', 'Net Income']
+    else:
+        metrics = ['Operating Income', 'Net Income']
 
+    # # Define the list of metrics
+    # metrics = ['Operating Income', 'Net Income']
+
+
+    # Check if 'data' DataFrame has the columns in 'metrics'
+    for metric in metrics:
+        if metric not in data.columns:
+            print(f"Column '{metric}' not found in DataFrame. Adjusting metrics list...")
+            metrics.remove(metric)
+
+    # Check if metrics has more than one value
+    if len(metrics) > 1:
+        col1, col2 = st.columns(2)
+    else:
+        col1, col2 = st.columns(1)
 
 
     # Iterate over each metric and create a chart
@@ -967,79 +1181,63 @@ with col1:
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
 with col2:
+    with col2:
 
+        if sector == "Financial Services" and not isF:
+            # Use financial sector metrics
+            metrics = ['Interest Income', 'Interest Expense', 'Net Interest Income']
+            colors = ['blue', 'red', '#c1e8ff']  # Example colors for financial metrics
+            names = ['Interest Income', 'Interest Expense', 'Net Interest Income']
+        else:
+            # Use non-financial sector metrics
+            metrics = ['EBITDA', 'EBIT', 'Net Income']
+            colors = ['blue', '#0080ff', '#c1e8ff']  # Colors for non-financial metrics
+            names = ['EBITDA', 'EBIT', 'Net Income']
 
-    # Extract EBITDA and Net Income data for all years without converting to float
-    ebit = income_statement.loc['EBIT']
-    ebitda = income_statement.loc['EBITDA']
-    net_income = income_statement.loc['Net Income']
+        # Extract the data for the selected metrics
+        data = [income_statement.loc[metric] for metric in metrics]
 
-    # Create a bar chart
-    fig = go.Figure()
+        # Create a bar chart
+        fig = go.Figure()
 
-    # Add EBITDA bars
-    ebitda_x = ebitda.index.astype(str)
-    ebitda_x = ebitda_x.map(
-        lambda x: pd.to_datetime(x).strftime('%Y-%m-%d') if is_quarterly else pd.to_datetime(x).strftime('%Y'))
-    fig.add_trace(go.Bar(
-        x=ebitda_x,
-        y=ebitda.values,
-        name='EBITDA',
-        text=ebitda.values,
-        textposition='auto',
-        marker=dict(color='blue')
+        for i, metric in enumerate(data):
+            metric_x = metric.index.astype(str)
+            metric_x = metric_x.map(
+                lambda x: pd.to_datetime(x).strftime('%Y-%m-%d') if is_quarterly else pd.to_datetime(x).strftime('%Y'))
 
-    ))
+            fig.add_trace(go.Bar(
+                x=metric_x,
+                y=metric.values,
+                name=names[i],
+                text=metric.values,
+                textposition='auto',
+                marker=dict(color=colors[i])
+            ))
 
-    # Add EBIT bars
-    ebit_x = ebit.index.astype(str)
-    ebit_x = ebit_x.map(
-        lambda x: pd.to_datetime(x).strftime('%Y-%m-%d') if is_quarterly else pd.to_datetime(x).strftime('%Y'))
-    fig.add_trace(go.Bar(
-        x=ebit_x,
-        y=ebit.values,
-        name='EBIT',
-        text=ebit.values,
-        textposition='auto',
-        marker=dict(color='#0080ff')  # Medium blue color
-    ))
-
-    # Add Net Income bars
-    net_income_x = net_income.index.astype(str)
-    net_income_x = net_income_x.map(
-        lambda x: pd.to_datetime(x).strftime('%Y-%m-%d') if is_quarterly else pd.to_datetime(x).strftime('%Y'))
-
-    fig.add_trace(go.Bar(
-        x=net_income_x,
-        y=net_income.values,
-        name='Net Income',
-        text=net_income.values,
-        textposition='auto',
-        marker=dict(color='#c1e8ff')  # Medium blue color
-    ))
-
-    # Update layout
-    fig.update_layout(
-        # title='EBIT VS EBITDA vs Net Income (M$)',
-        title_text=f'',
-        title_x=0.35,
-        xaxis=dict(title='' if is_quarterly else ''),
-        yaxis=dict(title='Amount (M$)'),
-        barmode='group',
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.1,
-            xanchor="center",
-            x=0.45,
-            font=dict(size=15),
-        ),
-        font=dict(
-            size=18  # Adjust font size of values on bars
+        # Update layout
+        fig.update_layout(
+            title_text=f'',
+            title_x=0.35,
+            xaxis=dict(title='' if is_quarterly else ''),
+            yaxis=dict(title='Amount (M$)'),
+            barmode='group',
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.1,
+                xanchor="center",
+                x=0.45,
+                font=dict(size=15),
+            ),
+            font=dict(
+                size=18  # Adjust font size of values on bars
+            )
         )
-    )
-    # Display the chart without the menu
-    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        # Display the chart without the menu
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
+
+
 
 
 
@@ -1060,33 +1258,101 @@ with col1:
     st.write("")
 
     # Assuming the 'income_statement' DataFrame is provided as per the initial input
+    if sector == "Financial Services" and not isF:
+        elements = [
+            'Total Revenue', 'Salaries And Wages', 'Other Gand A', 'General And Administrative Expense',
+            'Selling And Marketing Expense', 'Selling General And Administration', 'Gain On Sale Of Security', 'Other Special Charges', 'Special Income Charges',
+            'Pretax Income', 'Tax Provision', 'Net Income Continuous Operations', 'Net Income Including Noncontrolling Interests', 'Net Income',
+            'Preferred Stock Dividends', 'Otherunder Preferred Stock Dividend', 'Net Income Common Stockholders', 'Diluted NI Availto Com Stockholders', 'Basic EPS',
+            'Diluted EPS', 'Basic Average Shares', 'Diluted Average Shares', 'Net Income From Continuing And Discontinued Operation', 'Normalized Income',
+            'Interest Income', 'Interest Expense', 'Net Interest Income', 'Reconciled Depreciation', 'Net Income From Continuing Operation Net Minority Interest',
+            'Total Unusual Items Excluding Goodwill', 'Total Unusual Items', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items']
 
-    elements = [
-        'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
-        'Selling General And Administration', 'Research And Development', 'Operating Income',
-        'Net Non Operating Interest Income Expense', 'Interest Income Non Operating', 'Interest Expense Non Operating',
-        'Other Income Expense', 'Special Income Charges', 'Restructuring And Mergern Acquisition',
-        'Other Non Operating Income Expenses', 'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
-        'Net Income', 'Net Income Including Noncontrolling Interests', 'Net Income Continuous Operations',
-        'Diluted NI Availto Com Stockholders', 'Basic EPS', 'Diluted EPS', 'Basic Average Shares',
-        'Diluted Average Shares',
-        'Total Operating Income As Reported', 'Total Expenses', 'Net Income From Continuing And Discontinued Operation',
-        'Normalized Income', 'Interest Income', 'Interest Expense', 'Net Interest Income', 'EBIT', 'EBITDA',
-        'Reconciled Cost Of Revenue', 'Reconciled Depreciation',
-        'Net Income From Continuing Operation Net Minority Interest',
-        'Net Income Including Noncontrolling Interests', 'Total Unusual Items Excluding Goodwill',
-        'Total Unusual Items', 'Normalized EBITDA', 'Tax Rate For Calcs'
-    ]
+    else:
+
+        elements = [
+            'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
+            'Selling General And Administration', 'Research And Development', 'Operating Income',
+            'Net Non Operating Interest Income Expense', 'Interest Income Non Operating',
+            'Interest Expense Non Operating',
+            'Other Income Expense', 'Special Income Charges', 'Restructuring And Mergern Acquisition',
+            'Other Non Operating Income Expenses', 'Pretax Income', 'Tax Provision', 'Net Income Common Stockholders',
+            'Net Income', 'Net Income Continuous Operations',
+            'Diluted NI Availto Com Stockholders', 'Basic EPS', 'Diluted EPS', 'Basic Average Shares',
+            'Diluted Average Shares',
+            'Total Operating Income As Reported', 'Total Expenses',
+            'Net Income From Continuing And Discontinued Operation',
+            'Normalized Income', 'Interest Income', 'Interest Expense', 'Net Interest Income', 'EBIT', 'EBITDA',
+            'Reconciled Cost Of Revenue', 'Reconciled Depreciation',
+            'Net Income From Continuing Operation Net Minority Interest',
+            'Total Unusual Items Excluding Goodwill',
+            'Total Unusual Items', 'Normalized EBITDA', 'Tax Rate For Calcs']
 
 
-    # elements = [
-    #     'Total Revenue', 'Cost Of Revenue', 'Gross Profit', 'Operating Expense',
-    #     'Selling General And Administration', 'Research And Development', 'Operating Income',
-    #     'Net Non Operating Interest Income Expense', 'Other Income Expense', 'Other Non Operating Income Expenses',
-    #     'Pretax Income', 'Tax Provision', 'Interest Income', 'Interest Expense', 'Net Interest Income',
-    #     'Net Income', 'EBIT', 'EBITDA', 'Basic EPS', 'Diluted EPS'
-    # ]
 
+
+
+    # Replace None values with 0
+    income_statement_Design = income_statement_Design.replace({None: 0})
+
+    exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs']
+
+    # Check if the first value of 'Total Revenue' is less than 1,000,000
+    if income_statement_Design.loc['Total Revenue'].iloc[0] > 1000000:
+        income_statement_Design = income_statement_Design.apply(
+            lambda row: row.map(
+                lambda x: f"{x:.2f}" if isinstance(x, (int, float)) and row.name in exclude_rows else
+                f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x
+            ),
+            axis=1
+        )
+    else:
+        income_statement_Design = income_statement_Design.apply(
+            lambda row: row.map(
+                lambda x: f"{x:.2f}" if isinstance(x, (int, float)) and row.name in exclude_rows else
+                f"{x / 1e6:,.2f}" if isinstance(x, (int, float)) and x < 1000000 else
+                f"{x / 1e6:,.2f}" if isinstance(x, (int, float)) else x
+            ),
+            axis=1
+        )
+
+
+
+
+
+    # Initialize a list to keep track of elements to drop
+    elements_to_drop = []
+
+    # # Print the DataFrame index for verification
+    # st.write("DataFrame Index:")
+    # st.write(income_statement_Design.index.tolist())
+
+    # Iterate over each element in the list
+    for element in elements:
+        if element in income_statement_Design.index:
+            # # Print the current element and its values
+            # st.write(f"Checking element: '{element}'")
+            # st.write(income_statement_Design.loc[element])
+
+            # Check if all values in the row are zero
+            if (income_statement_Design.loc[element] == "0").all():
+                elements_to_drop.append(element)
+        else:
+            st.write(f"Element '{element}' not found in DataFrame index.")
+
+    # # Print elements to drop
+    # st.write("Elements to Drop (All Zero Values):")
+    # st.write(elements_to_drop)
+
+    # Update the elements list
+    elements = [element for element in elements if element not in elements_to_drop]
+    # st.write(elements)
+
+
+
+
+
+    # Drop the 'Properties' column if it exists
     income_statement_Design = income_statement_Design.drop('Properties', errors='ignore')
 
     # Replace "None" with 0
@@ -1110,16 +1376,10 @@ with col1:
     # Drop columns where 'Total Revenue' is NaN for all values
     income_statement_Design = income_statement_Design.loc[:, ~nan_mask]
 
-    exclude_rows = ['Basic EPS', 'Diluted EPS', 'Tax Rate For Calcs', 'Tax Effect Of Unusual Items']
-
-    income_statement_Design = income_statement_Design.apply(
-        lambda row: row.map(lambda x: f"{x / 1:.2f}" if isinstance(x, (
-            int, float)) and row.name in exclude_rows else f"{x / 1e6:,.0f}" if isinstance(x, (int, float)) else x),
-        axis=1
-    )
-
-
+    # Display the DataFrame for verification
+    st.write("Income Statement Design DataFrame:")
     # st.write(income_statement_Design)
+
 
 
     # Transposing the income_statement DataFrame to have dates as rows and elements as columns
@@ -1136,6 +1396,7 @@ with col1:
     chart_type = st.radio('Select Chart Type', ('Single Axis', 'Dual Axis'))
 
     chart_style = st.selectbox('Select Chart Style', ('Bar Chart', 'Line Chart'))
+
 
 
     if chart_type == 'Single Axis':
@@ -1270,7 +1531,7 @@ with col1:
                         x=data_chart.index,
                         y=data_chart[y_axis].astype(float),
                         name=y_axis,
-                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[x_axis].astype(float)],
+                        text=[f"${'{:,.2f}'.format(val)}" if y_axis in ['Basic EPS', 'Diluted EPS'] else f"${'{:,.0f}'.format(val)}" for val in data_chart[y_axis].astype(float)],
                         textposition='auto',
                         insidetextanchor='start',
                         marker=dict(color='red', line=dict(width=2, color='black')),
@@ -1343,7 +1604,7 @@ with col1:
                                        showarrow=False,
                                        font=dict(color="black", size=15),
                                        xshift=25,
-                                       yshift=20,  # Adjusted y-shift to position above the element
+                                       yshift=50,  # Adjusted y-shift to position above the element
                                        bgcolor="yellow",
                                        bordercolor="black",
                                        borderwidth=1,
