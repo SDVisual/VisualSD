@@ -76,7 +76,7 @@ with col1:
 
 
     
-    # income_statement = yf.Ticker(new_symbol).income_stmt
+    income_statement = yf.Ticker(new_symbol).income_stmt
 
     if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
 
