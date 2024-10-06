@@ -53,6 +53,17 @@ with col1:
 
     # Check if the entered symbol is valid
     historical_data = yf.Ticker(new_symbol).history(period='1d')
+
+    # Check if historical data is not empty
+    if not historical_data.empty:
+        # Proceed with accessing the index safely
+        start_date = historical_data.index[0]
+        end_date = historical_data.index[-1]
+        logger.debug(f'{new_symbol}: yfinance returning OHLC: {start_date} -> {end_date}')
+    else:
+        logger.warning(f'No historical data found for {new_symbol}')
+
+    
     income_statement = yf.Ticker(new_symbol).income_stmt
 
     if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
