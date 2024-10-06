@@ -72,7 +72,7 @@ with col1:
     else:
         st.success(f"Data successfully fetched for {new_symbol}")
     except Exception as e:
-    st.error(f"Error fetching data for {new_symbol}: {e}")
+        st.error(f"Error fetching data for {new_symbol}: {e}")
 
 
     
