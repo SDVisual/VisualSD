@@ -61,6 +61,7 @@ with col1:
         st.write(historical_data)  # Log the fetched historical data
         income_statement = yf.Ticker(new_symbol).income_stmt
         st.write(income_statement)  # Log the fetched income statement
+        
     except Exception as e:
         st.error(f"Failed to fetch data for {new_symbol}. Error: {e}")
 
