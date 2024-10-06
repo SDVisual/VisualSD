@@ -51,25 +51,50 @@ with col1:
     if not new_symbol or new_symbol.isspace():
         new_symbol = DEFAULT_SYMBOL
 
-    # Check if the entered symbol is valid
-    historical_data = yf.Ticker(new_symbol).history(period='1d')
+    # # Check if the entered symbol is valid
+    # historical_data = yf.Ticker(new_symbol).history(period='1d')
 
-    # Check if historical data is not empty
-    if not historical_data.empty:
-        # Proceed with accessing the index safely
-        start_date = historical_data.index[0]
-        end_date = historical_data.index[-1]
-        logger.debug(f'{new_symbol}: yfinance returning OHLC: {start_date} -> {end_date}')
-    else:
-        logger.warning(f'No historical data found for {new_symbol}')
+    # # Check if historical data is not empty
+    # if not historical_data.empty:
+    #     # Proceed with accessing the index safely
+    #     start_date = historical_data.index[0]
+    #     end_date = historical_data.index[-1]
+    #     logger.debug(f'{new_symbol}: yfinance returning OHLC: {start_date} -> {end_date}')
+    # else:
+    #     logger.warning(f'No historical data found for {new_symbol}')
 
     
+    # income_statement = yf.Ticker(new_symbol).income_stmt
+
+    # if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+
+    #     st.error("Invalid symbol. Please enter only Stocks symbols.")
+
+    # Check if the entered symbol is valid
+    historical_data = yf.Ticker(new_symbol).history(period='1d')
     income_statement = yf.Ticker(new_symbol).income_stmt
+    
+    # Ensure historical_data and income_statement are not empty before proceeding
+    if new_symbol != DEFAULT_SYMBOL and (historical_data.empty or income_statement.empty):
+        st.error("Invalid symbol. Please enter only valid Stock symbols.")
+    else:
+        # Add valid symbol to session state if it's not already present
+        if new_symbol not in st.session_state.valid_tickers:
+            st.session_state.valid_tickers.append(new_symbol)
+            st.text(f"{new_symbol} - Added to Symbols List")
+    
+            # Update selected ticker index to the newly added symbol
+            st.session_state.selected_ticker_index = len(st.session_state.valid_tickers) - 1
+    
+        # Only attempt to access the index if historical_data is not empty
+        if not historical_data.empty:
+            start_date = historical_data.index[0]
+            end_date = historical_data.index[-1]
+            st.text(f"Historical data available from {start_date} to {end_date}")
+        else:
+            st.warning(f"No historical data available for {new_symbol}")
 
-    if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
-
-        st.error("Invalid symbol. Please enter only Stocks symbols.")
-
+    
     else:
         # Add valid symbol to session state if it's not already present
         if new_symbol not in st.session_state.valid_tickers:
