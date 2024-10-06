@@ -52,7 +52,18 @@ with col1:
         new_symbol = DEFAULT_SYMBOL
 
     # Check if the entered symbol is valid
-    historical_data = yf.Ticker(new_symbol).history(period='1d')
+    
+    # historical_data = yf.Ticker(new_symbol).history(period='1d')
+
+    try:
+        historical_data = yf.Ticker(new_symbol).history(period='1d')
+        st.write(historical_data)  # Log the fetched historical data
+        income_statement = yf.Ticker(new_symbol).income_stmt
+        st.write(income_statement)  # Log the fetched income statement
+    except Exception as e:
+        st.error(f"Failed to fetch data for {new_symbol}. Error: {e}")
+
+    
     income_statement = yf.Ticker(new_symbol).income_stmt
 
     if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
