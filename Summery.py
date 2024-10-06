@@ -35,14 +35,6 @@ if 'valid_tickers' not in st.session_state:
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
 
-st.write("Starting a long computation...")
-
-# Display a spinner while running some task
-with st.spinner("Please wait..."):
-    time.sleep(5)  # Simulate a long-running task
-
-st.success("Computation finished!")
-
 
 col1, col2 = st.columns([0.7, 0.3])
 
@@ -64,13 +56,13 @@ with col1:
     
     historical_data = yf.Ticker(new_symbol).history(period='1d')
 
-    # try:
-    #     historical_data = yf.Ticker(new_symbol).history(period='1d')
-    #     st.write(historical_data)  # Log the fetched historical data
-    #     income_statement = yf.Ticker(new_symbol).income_stmt
-    #     st.write(income_statement)  # Log the fetched income statement
-    # except Exception as e:
-    #     st.error(f"Failed to fetch data for {new_symbol}. Error: {e}")
+    try:
+        historical_data = yf.Ticker(new_symbol).history(period='1d')
+        st.write(historical_data)  # Log the fetched historical data
+        income_statement = yf.Ticker(new_symbol).income_stmt
+        st.write(income_statement)  # Log the fetched income statement
+    except Exception as e:
+        st.error(f"Failed to fetch data for {new_symbol}. Error: {e}")
 
     
     income_statement = yf.Ticker(new_symbol).income_stmt
