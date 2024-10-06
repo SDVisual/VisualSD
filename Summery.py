@@ -57,13 +57,22 @@ with col1:
     # historical_data = yf.Ticker(new_symbol).history(period='1d')
 
     try:
-        historical_data = yf.Ticker(new_symbol).history(period='1d')
-        st.write(historical_data)  # Log the fetched historical data
-        income_statement = yf.Ticker(new_symbol).income_stmt
-        st.write(income_statement)  # Log the fetched income statement
-        
+    historical_data = yf.Ticker(new_symbol).history(period='1d')
+    income_statement = yf.Ticker(new_symbol).income_stmt
+
+    # Log the responses for debugging
+    st.write(f"Historical Data for {new_symbol}:")
+    st.write(historical_data)
+
+    st.write(f"Income Statement for {new_symbol}:")
+    st.write(income_statement)
+
+    if historical_data.empty or income_statement.empty:
+        st.error(f"No data found for {new_symbol}")
+    else:
+        st.success(f"Data successfully fetched for {new_symbol}")
     except Exception as e:
-        st.error(f"Failed to fetch data for {new_symbol}. Error: {e}")
+    st.error(f"Error fetching data for {new_symbol}: {e}")
 
     
     # income_statement = yf.Ticker(new_symbol).income_stmt
