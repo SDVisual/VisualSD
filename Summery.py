@@ -46,37 +46,12 @@ with col1:
     new_symbol = st.text_input("Add symbol to Symbols List (Example given, AAPL)",
                                placeholder="Add Stock Symbol").strip().upper()
 
-        
     # Check if the entered symbol is empty or consists only of whitespace characters
     if not new_symbol or new_symbol.isspace():
         new_symbol = DEFAULT_SYMBOL
 
-        
     # Check if the entered symbol is valid
-    
     historical_data = yf.Ticker(new_symbol).history(period='1d')
-    income_statement = yf.Ticker(new_symbol).income_stmt
-    
-    try:
-        historical_data = yf.Ticker(new_symbol).history(period='1d')
-        income_statement = yf.Ticker(new_symbol).income_stmt
-    
-        # Log the responses for debugging
-        st.write(f"Historical Data for {new_symbol}:")
-        st.write(historical_data)
-    
-        st.write(f"Income Statement for {new_symbol}:")
-        st.write(income_statement)
-    
-        if historical_data.empty or income_statement.empty:
-            st.error(f"No data found for {new_symbol}")
-        else:
-            st.success(f"Data successfully fetched for {new_symbol}")
-    except Exception as e:
-            st.error(f"Error fetching data for {new_symbol}: {e}")
-
-
-    
     income_statement = yf.Ticker(new_symbol).income_stmt
 
     if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
