@@ -34,7 +34,7 @@ if 'valid_tickers' not in st.session_state:
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
-
+time.sleep(2)
 
 col1, col2 = st.columns([0.7, 0.3])
 
@@ -46,9 +46,7 @@ with col1:
     new_symbol = st.text_input("Add symbol to Symbols List (Example given, AAPL)",
                                placeholder="Add Stock Symbol").strip().upper()
 
-    # Pause for 2 seconds between fetching historical data and income statement
-    time.sleep(2)
-    
+        
     # Check if the entered symbol is empty or consists only of whitespace characters
     if not new_symbol or new_symbol.isspace():
         new_symbol = DEFAULT_SYMBOL
