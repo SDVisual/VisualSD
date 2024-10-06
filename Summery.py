@@ -56,7 +56,7 @@ with col1:
     
     # historical_data = yf.Ticker(new_symbol).history(period='1d')
 
-    try:
+try:
     historical_data = yf.Ticker(new_symbol).history(period='1d')
     income_statement = yf.Ticker(new_symbol).income_stmt
 
@@ -71,7 +71,7 @@ with col1:
         st.error(f"No data found for {new_symbol}")
     else:
         st.success(f"Data successfully fetched for {new_symbol}")
-    except Exception as e:
+except Exception as e:
         st.error(f"Error fetching data for {new_symbol}: {e}")
 
 
