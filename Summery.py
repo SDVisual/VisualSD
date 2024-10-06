@@ -35,6 +35,14 @@ if 'valid_tickers' not in st.session_state:
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
 
+st.write("Starting a long computation...")
+
+# Display a spinner while running some task
+with st.spinner("Please wait..."):
+    time.sleep(5)  # Simulate a long-running task
+
+st.success("Computation finished!")
+
 
 col1, col2 = st.columns([0.7, 0.3])
 
