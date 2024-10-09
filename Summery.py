@@ -36,7 +36,7 @@ if 'valid_tickers' not in st.session_state:
 DEFAULT_SYMBOL = st.session_state.valid_tickers[-1] if st.session_state.valid_tickers else 'AAPL'
 
 
-col1, col2 = st.columns([0.35, 0.3])
+col1, col2 = st.columns([0.35, 0.65])
 
 with col1:
 
