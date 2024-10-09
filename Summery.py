@@ -40,7 +40,7 @@ col1, col2 = st.columns([0.35, 0.65])
 
 with col1:
 
-    st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
+    # st.write('<hr style="height:4px;border:none;color:#0ECCEC;background-color:#0ECCEC;">', unsafe_allow_html=True)
 
     # Input box for user to enter symbol
     new_symbol = st.text_input("Add symbol to Symbols List (Example given, AAPL)",
