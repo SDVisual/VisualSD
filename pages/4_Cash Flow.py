@@ -23,9 +23,12 @@ header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
+col1, col2 = st.columns([0.35, 0.65])
 
-# Input box for user to enter symbol
-new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
+with col1:
+
+    # Input box for user to enter symbol
+    new_symbol = st.text_input("Add symbol to Symbols List (e.g., AAPL)", placeholder="Search Stocks").strip().upper()
 
 
 # Retrieve the last valid symbol entered by the user, default to 'AAPL' if none
