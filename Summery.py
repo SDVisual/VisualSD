@@ -54,7 +54,9 @@ with col1:
     historical_data = yf.Ticker(new_symbol).history(period='1d')
     income_statement = yf.Ticker(new_symbol).income_stmt
 
-    if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+    # if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
+
+    if new_symbol != DEFAULT_SYMBOL and income_statement.empty:
 
         st.error("Invalid symbol. Please enter only Stocks symbols.")
 
