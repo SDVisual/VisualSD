@@ -50,7 +50,7 @@ with col1:
         new_symbol = DEFAULT_SYMBOL
 
     # Check if the entered symbol is valid
-    historical_data = yf.Ticker(new_symbol).history(period='2d')
+    historical_data = yf.Ticker(new_symbol).history(period='1d')
     income_statement = yf.Ticker(new_symbol).income_stmt
 
     if new_symbol != DEFAULT_SYMBOL and historical_data.empty or income_statement.empty:
