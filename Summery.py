@@ -323,11 +323,11 @@ with col2:
       
    
 
-    # Fetch stock data
+       # Fetch stock data
     df_ticker = yf.download(ticker, period='max').reset_index()
     
-    # Clean the column names by removing the ticker symbol suffix (e.g., ',AA')
-    df_ticker.columns = df_ticker.columns.str.split(',').str[0]
+    # Ensure column names are strings and clean them by removing any ticker suffix
+    df_ticker.columns = df_ticker.columns.astype(str).str.split(',').str[0]
     
     # Display the cleaned DataFrame
     st.write(df_ticker)
