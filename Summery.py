@@ -434,7 +434,7 @@ with col1:
         candlestick_chart.update_layout(
             title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:'red';'>{:.2f}%</span></span>".format(
                 selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
             title_x=0.25,  # Center the title
             title_font_size=22,  # Increase font size
