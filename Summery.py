@@ -367,9 +367,96 @@ with col2:
 
 
 
+# with col1:
+
+
+#     # Check if the DataFrame is empty
+#     if df_ticker.empty:
+#         st.warning(f"No data found for {ticker} in the selected date range.")
+#     else:
+#         # Filter the DataFrame to exclude non-trading days
+#         df_ticker = df_ticker[df_ticker['Volume'] > 0]
+
+#         # Calculate additional information
+#         max_price = df_ticker['High'].max()
+#         min_price = df_ticker['Low'].min()
+#         range_low_to_high = ((max_price - min_price) / min_price) * 100
+
+#         initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
+#         final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
+#         yield_percentage = (((final_close / initial_close) - 1) * 100)
+
+#         # Determine color based on yield
+#         yield_color = 'red' if yield_percentage < 0 else 'green'
+
+       
+#         candlestick_chart = go.Figure()
+
+#         # Add candlestick trace
+#         candlestick_chart.add_trace(go.Candlestick(
+#             x=df_ticker['Date'],
+#             open=df_ticker['Open'],
+#             high=df_ticker['High'],
+#             low=df_ticker['Low'],
+#             close=df_ticker['Close'],
+#             name='Candlestick'
+#         ))
+
+#         # Add volume bars in light blue
+#         candlestick_chart.add_trace(go.Bar(
+#             x=df_ticker['Date'],
+#             y=df_ticker['Volume'],
+#             yaxis='y2',
+#             name='Shares Volume',
+#             marker_color='rgba(52, 152, 219, 0.3)'
+#         ))
+
+#         # Add line trace for close prices
+#         candlestick_chart.add_trace(go.Scatter(
+#             x=df_ticker['Date'],
+#             y=df_ticker['Close'],
+#             mode='lines',
+#             name='Close Price',
+#             line=dict(color='lightblue', width=2),
+#             showlegend=True
+#         ))
+
+#         # Set the title of the chart with both main and additional information
+#         candlestick_chart.update_layout(
+#             title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
+#                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+#                        "<span style='font-size: 18px;'>                 Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+#                 selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+#             title_x=0.25,  # Center the title
+#             title_font_size=22,  # Increase font size
+#             title_y=0.95,  # Adjust title vertical position
+#             title_yanchor='top',
+#             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
+#         )
+
+
+#         candlestick_chart.update_layout(
+#             xaxis_rangeslider_visible=False,
+#             xaxis=dict(type='date',  # Set type to 'date'
+#                        range=[start_date, end_date],
+#                        rangebreaks=[dict(bounds=["sat", "mon"])],  # Adjust this based on your non-trading days
+#                        ),
+#             yaxis=dict(title='Price', showgrid=True),
+#             yaxis2=dict(
+#                 title='',
+#                 overlaying='y',
+#                 side='right',  # Move to the right side
+#                 position=1,  # Move outside the plot area
+#                 showgrid=False  # Remove gridlines from y2-axis
+#             ),
+#             height=500
+#         )
+
+#         # Hide Plotly toolbar and directly display the chart
+#         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
+
+
 with col1:
-
-
     # Check if the DataFrame is empty
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
@@ -382,16 +469,14 @@ with col1:
         min_price = df_ticker['Low'].min()
         range_low_to_high = ((max_price - min_price) / min_price) * 100
 
-        initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
-        final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
-        yield_percentage = (((final_close / initial_close) - 1) * 100)
+        initial_close = df_ticker.iloc[0]['Close']  # Oldest closing price
+        final_close = df_ticker.iloc[-1]['Close']  # Latest closing price
+        yield_percentage = ((final_close / initial_close - 1) * 100)
 
-        # # Determine color based on yield
-        # yield_color = 'red' if yield_percentage < 0 else 'green'
+        # Determine color based on yield
+        yield_color = 'red' if yield_percentage < 0 else 'green'
 
-        yield_color = yield_percentage.apply(lambda x: 'red' if x < 0 else 'green')
-
-
+        # Initialize candlestick chart
         candlestick_chart = go.Figure()
 
         # Add candlestick trace
@@ -404,7 +489,7 @@ with col1:
             name='Candlestick'
         ))
 
-        # Add volume bars in light blue
+        # Add volume bars
         candlestick_chart.add_trace(go.Bar(
             x=df_ticker['Date'],
             y=df_ticker['Volume'],
@@ -413,7 +498,7 @@ with col1:
             marker_color='rgba(52, 152, 219, 0.3)'
         ))
 
-        # Add line trace for close prices
+        # Add line for close prices
         candlestick_chart.add_trace(go.Scatter(
             x=df_ticker['Date'],
             y=df_ticker['Close'],
@@ -423,39 +508,48 @@ with col1:
             showlegend=True
         ))
 
-        # Set the title of the chart with both main and additional information
+        # Set chart title and formatting
         candlestick_chart.update_layout(
-            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
-                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
-                selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-            title_x=0.25,  # Center the title
-            title_font_size=22,  # Increase font size
-            title_y=0.95,  # Adjust title vertical position
+            title_text=(
+                f"<span style='text-align: center;'>{ticker} Chart </span><br>"
+                f"<span style='font-size: 18px;'>Low: {min_price:.2f} | High: {max_price:.2f} | "
+                f"Range: {range_low_to_high:.2f}%</span><br>"
+                f"<span style='font-size: 18px;'>Return: <span style='color:{yield_color};'>"
+                f"{yield_percentage:.2f}%</span></span>"
+            ),
+            title_x=0.5,  # Center title horizontally
+            title_font_size=22,
+            title_y=0.95,
             title_yanchor='top',
-            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
+            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
         )
 
-
+        # Configure layout for axes and rangebreaks
         candlestick_chart.update_layout(
             xaxis_rangeslider_visible=False,
-            xaxis=dict(type='date',  # Set type to 'date'
-                       range=[start_date, end_date],
-                       rangebreaks=[dict(bounds=["sat", "mon"])],  # Adjust this based on your non-trading days
-                       ),
+            xaxis=dict(
+                type='date',
+                range=[start_date, end_date],
+                rangebreaks=[{"bounds": ["sat", "mon"]}]
+            ),
             yaxis=dict(title='Price', showgrid=True),
             yaxis2=dict(
                 title='',
                 overlaying='y',
-                side='right',  # Move to the right side
-                position=1,  # Move outside the plot area
-                showgrid=False  # Remove gridlines from y2-axis
+                side='right',
+                position=1,
+                showgrid=False
             ),
             height=500
         )
 
-        # Hide Plotly toolbar and directly display the chart
+        # Display the chart in Streamlit
         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
+
+
+
+
+
 
 col1, col2 = st.columns([0.8, 0.2])
 
