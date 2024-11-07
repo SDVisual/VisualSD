@@ -543,7 +543,7 @@ with col1:
         # Set the title of the chart with both main and additional information
         candlestick_chart.update_layout(
             title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
-                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span>"
                       
             title_x=0.25,  # Center the title
             title_font_size=22,  # Increase font size
