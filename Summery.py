@@ -387,7 +387,7 @@ with col2:
 
 with col1:
 
-    st.write(df_ticker)
+    
     # Check if the DataFrame is empty
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
