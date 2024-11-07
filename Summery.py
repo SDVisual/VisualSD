@@ -435,25 +435,25 @@ with col1:
         )
 
 
-#         candlestick_chart.update_layout(
-#             xaxis_rangeslider_visible=False,
-#             xaxis=dict(type='date',  # Set type to 'date'
-#                        range=[start_date, end_date],
-#                        rangebreaks=[dict(bounds=["sat", "mon"])],  # Adjust this based on your non-trading days
-#                        ),
-#             yaxis=dict(title='Price', showgrid=True),
-#             yaxis2=dict(
-#                 title='',
-#                 overlaying='y',
-#                 side='right',  # Move to the right side
-#                 position=1,  # Move outside the plot area
-#                 showgrid=False  # Remove gridlines from y2-axis
-#             ),
-#             height=500
-#         )
+        candlestick_chart.update_layout(
+            xaxis_rangeslider_visible=False,
+            xaxis=dict(type='date',  # Set type to 'date'
+                       range=[start_date, end_date],
+                       rangebreaks=[dict(bounds=["sat", "mon"])],  # Adjust this based on your non-trading days
+                       ),
+            yaxis=dict(title='Price', showgrid=True),
+            yaxis2=dict(
+                title='',
+                overlaying='y',
+                side='right',  # Move to the right side
+                position=1,  # Move outside the plot area
+                showgrid=False  # Remove gridlines from y2-axis
+            ),
+            height=500
+        )
 
-#         # Hide Plotly toolbar and directly display the chart
-#         st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
+        # Hide Plotly toolbar and directly display the chart
+        st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
 
 
 
