@@ -321,13 +321,10 @@ with col2:
     selected_time_period = st.session_state.get('selected_time_period', '3M')
     # df_ticker = yf.download(ticker, period='max').reset_index()
     df_ticker = yf.download(ticker, period='max').reset_index()
+    st.write(df_ticker.head())
+    st.write(df_ticker.columns)
 
-    # Check if columns are multi-level and flatten if necessary
-    if isinstance(df_ticker.columns, pd.MultiIndex):
-        df_ticker.columns = df_ticker.columns.get_level_values(1)  # Get the second level, typically the actual names
     
-    # Rename columns to standard names if needed
-    df_ticker.columns = ['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
 
     end_date = datetime.now()
     # Buttons for selecting different time periods
