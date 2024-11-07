@@ -320,9 +320,17 @@ with col2:
     # Fetch data based on the selected time period or default to '3m'
     selected_time_period = st.session_state.get('selected_time_period', '3M')
     # df_ticker = yf.download(ticker, period='max').reset_index()
+      
+   
+
+    # Fetch stock data
     df_ticker = yf.download(ticker, period='max').reset_index()
-    st.write(df_ticker.head())
-    st.write(df_ticker.columns)
+    
+    # Clean the column names by removing the ticker symbol suffix (e.g., ',AA')
+    df_ticker.columns = df_ticker.columns.str.split(',').str[0]
+    
+    # Display the cleaned DataFrame
+    st.write(df_ticker)
 
     
 
