@@ -323,18 +323,15 @@ with col2:
       
    
 
-     # Fetch stock data
+    # Fetch stock data
     df_ticker = yf.download(ticker, period='max').reset_index()
     
-    # If the columns are a MultiIndex, flatten them by joining the levels
-    if isinstance(df_ticker.columns, pd.MultiIndex):
-        df_ticker.columns = [' '.join(col).strip() for col in df_ticker.columns.values]
-    
-    # Clean the column names by removing the ticker symbol suffix (if applicable)
-    df_ticker.columns = df_ticker.columns.str.split(',').str[0]
+    # Clean the column names by removing the ticker symbol suffix (e.g., ' AAPL')
+    df_ticker.columns = df_ticker.columns.str.replace(f' {ticker}', '', regex=False)
     
     # Display the cleaned DataFrame
     st.write(df_ticker)
+
 
     
 
