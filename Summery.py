@@ -388,10 +388,17 @@ with col1:
         # Filter the DataFrame to exclude non-trading days
         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
-        # Calculate additional information
-        max_price = df_ticker['High'].max()
-        min_price = df_ticker['Low'].min()
-        range_low_to_high = ((max_price - min_price) / min_price) * 100
+
+        # Convert Series to scalar values if necessary
+        min_price = float(min_price.iloc[0]) if isinstance(min_price, pd.Series) else min_price
+        max_price = float(max_price.iloc[0]) if isinstance(max_price, pd.Series) else max_price
+        range_low_price = float(range_low_price.iloc[0]) if isinstance(range_low_price, pd.Series) else range_low_price
+        range_high_price = float(range_high_price.iloc[0]) if isinstance(range_high_price, pd.Series) else range_high_price
+
+        # # Calculate additional information
+        # max_price = df_ticker['High'].max()
+        # min_price = df_ticker['Low'].min()
+        # range_low_to_high = ((max_price - min_price) / min_price) * 100
 
         # initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
         # final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
