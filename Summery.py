@@ -399,6 +399,7 @@ with col1:
         st.write(yield_percentage)
         # Determine color based on yield
         yield_color = 'red' if yield_percentage < 0 else 'green'
+        st.write(yield_color)
 
         candlestick_chart = go.Figure()
 
