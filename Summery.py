@@ -469,12 +469,11 @@ with col1:
         min_price = df_ticker['Low'].min()
         range_low_to_high = ((max_price - min_price) / min_price) * 100
 
-        initial_close = df_ticker.iloc[0]['Close']  # Oldest closing price
-        final_close = df_ticker.iloc[-1]['Close']  # Latest closing price
-        yield_percentage = ((final_close / initial_close - 1) * 100)
-
-        # Determine color based on yield
+        initial_close = float(df_ticker.iloc[0]['Close'])  # Ensure single numeric value
+        final_close = float(df_ticker.iloc[-1]['Close'])   # Ensure single numeric value
+        yield_percentage = (final_close / initial_close - 1) * 100
         yield_color = 'red' if yield_percentage < 0 else 'green'
+
 
         # Initialize candlestick chart
         candlestick_chart = go.Figure()
