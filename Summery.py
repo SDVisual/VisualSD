@@ -321,8 +321,16 @@ with col2:
 
     # Fetch data based on the selected time period or default to '1Y'
     selected_time_period = st.session_state.get('selected_time_period', '3M')
-    df_ticker = yf.download(ticker, period='max').reset_index()
+    # df_ticker = yf.download(ticker, period='max').reset_index()
+
+    # Create the ticker instance
+    ticker_data = yf.Ticker(ticker)
+
+    # Fetch the historical data
+    df_ticker = ticker_data.history(period="max")
+    
     end_date = datetime.now()
+    
     # Buttons for selecting different time periods
     time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
     for _ in range(1):
@@ -371,7 +379,7 @@ with col2:
 
 with col1:
 
-    st.write(df_ticker)
+   
     # Check if the DataFrame is empty
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
