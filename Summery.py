@@ -396,7 +396,7 @@ with col1:
         initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
         final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
         yield_percentage = (((final_close / initial_close) - 1) * 100)
-
+        st.write(yield_percentage)
         # Determine color based on yield
         yield_color = 'red' if yield_percentage < 0 else 'green'
 
