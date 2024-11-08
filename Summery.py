@@ -314,72 +314,72 @@ with col1:
 
 col1, col2, col3, col4 = st.columns([0.5, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
-# with col2:
+with col2:
 
-#     st.write("")
-#     st.write("")
+    st.write("")
+    st.write("")
 
-#     # Fetch data based on the selected time period or default to '1Y'
-#     selected_time_period = st.session_state.get('selected_time_period', '3M')
-#     # df_ticker = yf.download(ticker, period='max').reset_index()
+    # Fetch data based on the selected time period or default to '1Y'
+    selected_time_period = st.session_state.get('selected_time_period', '3M')
+    # df_ticker = yf.download(ticker, period='max').reset_index()
 
-#     # Create the ticker instance
-#     ticker_data = yf.Ticker(ticker)
+    # Create the ticker instance
+    ticker_data = yf.Ticker(ticker)
 
-#     # # Fetch the historical data
-#     # df_ticker = ticker_data.history(period="max")
-#     # st.write(df_ticker)
+    # # Fetch the historical data
+    # df_ticker = ticker_data.history(period="max")
+    # st.write(df_ticker)
 
 
-#     #     # Fetch the historical data
-#     df_ticker = ticker_data.history(period="max")
+    #     # Fetch the historical data
+    df_ticker = ticker_data.history(period="max")
     
     
         
-#     end_date = datetime.now()
-#     # Buttons for selecting different time periods
-#     time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
-#     for _ in range(1):
-#         st.write("")
+    end_date = datetime.now()
+    # Buttons for selecting different time periods
+    time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
+    for _ in range(1):
+        st.write("")
 
-#     # Display buttons in a single row
-#     button_container = st.container()
-
-
-
-#     with button_container:
-#         button_spacing = 1  # Adjust spacing between buttons
-#         st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
-
-#         for period in time_periods:
-#             if st.button(period):
-#                 selected_time_period = period
-#                 st.session_state.selected_time_period = period
-
-#     # Calculate start date based on selected time period
+    # Display buttons in a single row
+    button_container = st.container()
 
 
-#     if selected_time_period == '7D':
-#         start_date = end_date - timedelta(days=7)
-#     elif selected_time_period == '3M':
-#         start_date = end_date - timedelta(days=90)
-#     elif selected_time_period == '6M':
-#         start_date = end_date - timedelta(days=180)
-#     elif selected_time_period == 'YTD':
-#         start_date = datetime(end_date.year, 1, 1)
-#     elif selected_time_period == '1Y':
-#         start_date = end_date - timedelta(days=365)
-#     elif selected_time_period == '5Y':
-#         start_date = end_date - timedelta(days=5 * 365)
-#     else:  # 'MAX'
-#         start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
 
-#     if selected_time_period == '1D':
-#         # Fetch data for the selected time period again
-#         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-#     else:
-#         # Fetch data for the selected time period again
-#         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+    with button_container:
+        button_spacing = 1  # Adjust spacing between buttons
+        st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
+
+        for period in time_periods:
+            if st.button(period):
+                selected_time_period = period
+                st.session_state.selected_time_period = period
+
+    # Calculate start date based on selected time period
+
+
+    if selected_time_period == '7D':
+        start_date = end_date - timedelta(days=7)
+    elif selected_time_period == '3M':
+        start_date = end_date - timedelta(days=90)
+    elif selected_time_period == '6M':
+        start_date = end_date - timedelta(days=180)
+    elif selected_time_period == 'YTD':
+        start_date = datetime(end_date.year, 1, 1)
+    elif selected_time_period == '1Y':
+        start_date = end_date - timedelta(days=365)
+    elif selected_time_period == '5Y':
+        start_date = end_date - timedelta(days=5 * 365)
+    else:  # 'MAX'
+        start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
+
+    if selected_time_period == '1D':
+        # Fetch data for the selected time period again
+        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+    else:
+        # Fetch data for the selected time period again
+        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
         
 
 # with col1:
