@@ -386,15 +386,13 @@ with col1:
         # Filter the DataFrame to exclude non-trading days
         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
-        # Calculate additional information
-        max_price = df_ticker['High'].max()
-        min_price = df_ticker['Low'].min()
+        # Ensure all calculated values are scalars
+        max_price = float(df_ticker['High'].max())
+        min_price = float(df_ticker['Low'].min())
         range_low_to_high = ((max_price - min_price) / min_price) * 100
-        
-        initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
-        final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
-        yield_percentage = ((final_close / initial_close) - 1) * 100
-
+        initial_close = float(df_ticker.iloc[0]['Close'])
+        final_close = float(df_ticker.iloc[-1]['Close'])
+        yield_percentage = ((final_close / initial_close - 1) * 100) if initial_close != 0 else 0
         # Create the figure
         line_chart = go.Figure()
 
@@ -418,36 +416,18 @@ with col1:
             showlegend=True
         ))
 
-        # Update layout for the line chart
-        line_chart.update_layout(
-            title_text="<span style='text-align: center;'>{} Chart</span><br>"
-                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
-                       .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
-            title_x=0.25,
-            title_font_size=22,
-            title_y=0.95,
-            title_yanchor='top',
-            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
-            xaxis_rangeslider_visible=False,
-            xaxis=dict(
-                type='date',
-                range=[start_date, end_date],
-                rangebreaks=[dict(bounds=["sat", "mon"])],  # Exclude weekends
-                title_text="Date"
-            ),
-            yaxis=dict(title='Price', showgrid=True),
-            yaxis2=dict(
-                title='Volume',
-                overlaying='y',
-                side='right',
-                showgrid=False
-            ),
-            height=500
-        )
-
-        # Display the chart in Streamlit
-        st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
+       # Update chart title
+line_chart.update_layout(
+    title_text="<span style='text-align: center;'>{} Chart</span><br>"
+               "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+               "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
+               .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
+    title_x=0.25,
+    title_font_size=22,
+    title_y=0.95,
+    title_yanchor='top',
+    legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)
+)
 
 
 
