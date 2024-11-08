@@ -388,24 +388,17 @@ with col1:
         # Filter the DataFrame to exclude non-trading days
         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
-        # # Calculate additional information
-        # max_price = df_ticker['High'].max()
-        # min_price = df_ticker['Low'].min()
-        # range_low_to_high = ((max_price - min_price) / min_price) * 100
-
+        # Calculate additional information
+        max_price = df_ticker['High'].max()
+        min_price = df_ticker['Low'].min()
+        range_low_to_high = ((max_price - min_price) / min_price) * 100
+       
         
-                # Ensure all values are scalar, if they are Series, convert to single float values
-        min_price = float(min_price.iloc[0]) if isinstance(min_price, pd.Series) else min_price
-        max_price = float(max_price.iloc[0]) if isinstance(max_price, pd.Series) else max_price
-        range_low_to_high = float(range_low_to_high.iloc[0]) if isinstance(range_low_to_high, pd.Series) else range_low_to_high
-        yield_percentage = float(yield_percentage.iloc[0]) if isinstance(yield_percentage, pd.Series) else yield_percentage
-
         initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
         final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
         # yield_percentage = (((final_close / initial_close) - 1) * 100)
 
-        # Determine color based on yield
-        # yield_color = 'red'
+        
         candlestick_chart = go.Figure()
 
         # Add candlestick trace
@@ -437,31 +430,19 @@ with col1:
             showlegend=True
         ))
 
-        # # Set the title of the chart with both main and additional information
-        # candlestick_chart.update_layout(
-        #     title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
-        #                "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-        #                "<span style='font-size: 18px;'>                 Return for the period: <span style='color:'red';'>{:.2f}%</span></span>".format(
-        #         selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-        #     title_x=0.25,  # Center the title
-        #     title_font_size=22,  # Increase font size
-        #     title_y=0.95,  # Adjust title vertical position
-        #     title_yanchor='top',
-        #     legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
-        # )
-
-                        # Update the chart title with formatted strings
+        # Set the title of the chart with both main and additional information
         candlestick_chart.update_layout(
-            title_text="<span style='text-align: center;'>{} Chart</span><br>"
+            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
-                       .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
+                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:'red';'>{:.2f}%</span></span>".format(
+                selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
             title_x=0.25,  # Center the title
             title_font_size=22,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top',
             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
         )
+
 
         candlestick_chart.update_layout(
             xaxis_rangeslider_visible=False,
