@@ -443,7 +443,7 @@ with col1:
         #     legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
         # )
 
-                # Set the title of the chart with main and additional information
+                        # Update the chart title with formatted strings
         candlestick_chart.update_layout(
             title_text="<span style='text-align: center;'>{} Chart</span><br>"
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
