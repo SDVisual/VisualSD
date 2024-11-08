@@ -497,10 +497,13 @@ with col1:
         min_price = float(df_ticker['Low'].min())   # Ensure min_price is a scalar float
         range_low_to_high = ((max_price - min_price) / min_price) * 100 if min_price != 0 else 0
 
-        # Calculate yield percentage
-        initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
-        final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
+        # Ensure `initial_close` and `final_close` are scalar values
+        initial_close = float(df_ticker.iloc[0]['Close'])  # First row closing price as scalar
+        final_close = float(df_ticker.iloc[-1]['Close'])   # Last row closing price as scalar
+        
+        # Calculate yield percentage, handling division by zero if `initial_close` is zero
         yield_percentage = ((final_close / initial_close - 1) * 100) if initial_close != 0 else 0
+
 
         # Initialize candlestick chart
         candlestick_chart = go.Figure()
