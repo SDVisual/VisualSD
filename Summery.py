@@ -334,15 +334,7 @@ with col2:
     #     # Fetch the historical data
     df_ticker = ticker_data.history(period="max")
     
-    # Check if there's an extra header row with the symbol and drop it
-    if isinstance(df_ticker.columns, pd.MultiIndex):
-        # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
-        df_ticker.columns = df_ticker.columns.get_level_values(1)
     
-    # Display the cleaned DataFrame
-    st.write(df_ticker)
-
-
         
     end_date = datetime.now()
     # Buttons for selecting different time periods
@@ -395,6 +387,15 @@ with col1:
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
     else:
+    
+            # Check if there's an extra header row with the symbol and drop it
+        if isinstance(df_ticker.columns, pd.MultiIndex):
+            # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
+            df_ticker.columns = df_ticker.columns.get_level_values(1)
+        
+        # Display the cleaned DataFrame
+        st.write(df_ticker)
+        
         # Filter the DataFrame to exclude non-trading days
         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
