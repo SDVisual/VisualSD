@@ -379,8 +379,6 @@ with col2:
 
 
 with col1:
-
-
     # Check if the DataFrame is empty
     if df_ticker.empty:
         st.warning(f"No data found for {ticker} in the selected date range.")
@@ -392,77 +390,65 @@ with col1:
         max_price = df_ticker['High'].max()
         min_price = df_ticker['Low'].min()
         range_low_to_high = ((max_price - min_price) / min_price) * 100
-       
         
         initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
         final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
-        # yield_percentage = (((final_close / initial_close) - 1) * 100)
+        yield_percentage = ((final_close / initial_close) - 1) * 100
 
-        
-        candlestick_chart = go.Figure()
-
-        # Add candlestick trace
-        candlestick_chart.add_trace(go.Candlestick(
-            x=df_ticker['Date'],
-            open=df_ticker['Open'],
-            high=df_ticker['High'],
-            low=df_ticker['Low'],
-            close=df_ticker['Close'],
-            name='Candlestick'
-        ))
-
-        # Add volume bars in light blue
-        candlestick_chart.add_trace(go.Bar(
-            x=df_ticker['Date'],
-            y=df_ticker['Volume'],
-            yaxis='y2',
-            name='Shares Volume',
-            marker_color='rgba(52, 152, 219, 0.3)'
-        ))
+        # Create the figure
+        line_chart = go.Figure()
 
         # Add line trace for close prices
-        candlestick_chart.add_trace(go.Scatter(
+        line_chart.add_trace(go.Scatter(
             x=df_ticker['Date'],
             y=df_ticker['Close'],
             mode='lines',
             name='Close Price',
-            line=dict(color='lightblue', width=2),
+            line=dict(color='blue', width=2),
             showlegend=True
         ))
 
-        # Set the title of the chart with both main and additional information
-        candlestick_chart.update_layout(
-            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
+        # Add volume bars in light blue
+        line_chart.add_trace(go.Bar(
+            x=df_ticker['Date'],
+            y=df_ticker['Volume'],
+            yaxis='y2',
+            name='Volume',
+            marker_color='rgba(52, 152, 219, 0.3)',
+            showlegend=True
+        ))
+
+        # Update layout for the line chart
+        line_chart.update_layout(
+            title_text="<span style='text-align: center;'>{} Chart</span><br>"
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:'red';'>{:.2f}%</span></span>".format(
-                selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
-            title_x=0.25,  # Center the title
-            title_font_size=22,  # Increase font size
-            title_y=0.95,  # Adjust title vertical position
+                       "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
+                       .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
+            title_x=0.25,
+            title_font_size=22,
+            title_y=0.95,
             title_yanchor='top',
-            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
-        )
-
-
-        candlestick_chart.update_layout(
+            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
             xaxis_rangeslider_visible=False,
-            xaxis=dict(type='date',  # Set type to 'date'
-                       range=[start_date, end_date],
-                       rangebreaks=[dict(bounds=["sat", "mon"])],  # Adjust this based on your non-trading days
-                       ),
+            xaxis=dict(
+                type='date',
+                range=[start_date, end_date],
+                rangebreaks=[dict(bounds=["sat", "mon"])],  # Exclude weekends
+                title_text="Date"
+            ),
             yaxis=dict(title='Price', showgrid=True),
             yaxis2=dict(
-                title='',
+                title='Volume',
                 overlaying='y',
-                side='right',  # Move to the right side
-                position=1,  # Move outside the plot area
-                showgrid=False  # Remove gridlines from y2-axis
+                side='right',
+                showgrid=False
             ),
             height=500
         )
 
-        # Hide Plotly toolbar and directly display the chart
-        st.plotly_chart(candlestick_chart, use_container_width=True, config={'displayModeBar': False})
+        # Display the chart in Streamlit
+        st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
+
 
 
 
