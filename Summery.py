@@ -493,8 +493,8 @@ with col1:
         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
         # Calculate additional information for the title
-        max_price = df_ticker['High'].max()
-        min_price = df_ticker['Low'].min()
+        max_price = float(df_ticker['High'].max())  # Ensure max_price is a scalar float
+        min_price = float(df_ticker['Low'].min())   # Ensure min_price is a scalar float
         range_low_to_high = ((max_price - min_price) / min_price) * 100 if min_price != 0 else 0
 
         # Calculate yield percentage
