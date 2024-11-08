@@ -321,7 +321,7 @@ with col2:
 
     # Fetch data based on the selected time period or default to '1Y'
     selected_time_period = st.session_state.get('selected_time_period', '3M')
-    df_ticker = yf.download(ticker, period='max').reset_index()
+    # df_ticker = yf.download(ticker, period='max').reset_index()
 
     # Create the ticker instance
     ticker_data = yf.Ticker(ticker)
@@ -332,7 +332,7 @@ with col2:
 
 
     #     # Fetch the historical data
-    # df_ticker = ticker_data.history(period="max")
+    df_ticker = ticker_data.history(period="max")
     
     # Check if there's an extra header row with the symbol and drop it
     if isinstance(df_ticker.columns, pd.MultiIndex):
@@ -343,10 +343,7 @@ with col2:
     st.write(df_ticker)
 
 
-    
-
-    # Display the data in Streamlit
-    # st.write(df_ticker)
+        
     end_date = datetime.now()
     # Buttons for selecting different time periods
     time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
