@@ -398,7 +398,7 @@ with col1:
         yield_percentage = (((final_close / initial_close) - 1) * 100)
 
         # Determine color based on yield
-        yield_color = 'red'
+        # yield_color = 'red'
         candlestick_chart = go.Figure()
 
         # Add candlestick trace
@@ -430,19 +430,31 @@ with col1:
             showlegend=True
         ))
 
-        # Set the title of the chart with both main and additional information
+        # # Set the title of the chart with both main and additional information
+        # candlestick_chart.update_layout(
+        #     title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
+        #                "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+        #                "<span style='font-size: 18px;'>                 Return for the period: <span style='color:'red';'>{:.2f}%</span></span>".format(
+        #         selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+        #     title_x=0.25,  # Center the title
+        #     title_font_size=22,  # Increase font size
+        #     title_y=0.95,  # Adjust title vertical position
+        #     title_yanchor='top',
+        #     legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
+        # )
+
+                # Set the title of the chart with main and additional information
         candlestick_chart.update_layout(
-            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
+            title_text="<span style='text-align: center;'>{} Chart</span><br>"
                        "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:'red';'>{:.2f}%</span></span>".format(
-                selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+                       "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
+                       .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
             title_x=0.25,  # Center the title
             title_font_size=22,  # Increase font size
             title_y=0.95,  # Adjust title vertical position
             title_yanchor='top',
             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
         )
-
 
         candlestick_chart.update_layout(
             xaxis_rangeslider_visible=False,
