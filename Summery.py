@@ -375,7 +375,7 @@ with col2:
     else:
         # Fetch data for the selected time period again
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-
+        st.write(df_ticker)
 
 
 with col1:
