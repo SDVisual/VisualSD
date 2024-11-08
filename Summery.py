@@ -326,8 +326,24 @@ with col2:
     # Create the ticker instance
     ticker_data = yf.Ticker(ticker)
 
-    # Fetch the historical data
+    # # Fetch the historical data
+    # df_ticker = ticker_data.history(period="max")
+    # st.write(df_ticker)
+
+
+        # Fetch the historical data
     df_ticker = ticker_data.history(period="max")
+    
+    # Check if there's an extra header row with the symbol and drop it
+    if isinstance(df_ticker.columns, pd.MultiIndex):
+        # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
+        df_ticker.columns = df_ticker.columns.get_level_values(1)
+    
+    # Display the cleaned DataFrame
+    st.write(df_ticker)
+
+
+    
 
     # Display the data in Streamlit
     # st.write(df_ticker)
@@ -375,8 +391,7 @@ with col2:
     else:
         # Fetch data for the selected time period again
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-        st.write(df_ticker)
-
+        
 
 with col1:
     # Check if the DataFrame is empty
