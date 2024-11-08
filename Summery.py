@@ -470,43 +470,43 @@ col1, col2, col3, col4 = st.columns([0.5, 0.2, 0.09, 0.01])  # Adjust the width 
 
 col1, col2 = st.columns([0.8, 0.2])
 
-with col1:
+# with col1:
 
 
-    # Initialize session state for checkbox and previous ticker
-    if 'show_stock_data' not in st.session_state:
-        st.session_state.show_stock_data = False
+#     # Initialize session state for checkbox and previous ticker
+#     if 'show_stock_data' not in st.session_state:
+#         st.session_state.show_stock_data = False
 
-    if 'previous_ticker' not in st.session_state:
-        st.session_state.previous_ticker = ''
+#     if 'previous_ticker' not in st.session_state:
+#         st.session_state.previous_ticker = ''
 
 
-    # Check if the ticker has changed
-    ticker_changed = st.session_state.previous_ticker != ticker
+#     # Check if the ticker has changed
+#     ticker_changed = st.session_state.previous_ticker != ticker
 
-    # Update the previous ticker to the current one
-    st.session_state.previous_ticker = ticker
+#     # Update the previous ticker to the current one
+#     st.session_state.previous_ticker = ticker
 
-    # Reset checkbox if ticker changes
-    if ticker_changed:
-        st.session_state.show_stock_data = False
+#     # Reset checkbox if ticker changes
+#     if ticker_changed:
+#         st.session_state.show_stock_data = False
 
-    st.write('Chart dates : {} to {}'.format(start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y")))
-    st.write("")
+#     st.write('Chart dates : {} to {}'.format(start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y")))
+#     st.write("")
 
-    # Generate a unique key for the checkbox based on the ticker
-    checkbox_key = f"show_stock_data_{ticker}"
+#     # Generate a unique key for the checkbox based on the ticker
+#     checkbox_key = f"show_stock_data_{ticker}"
 
-    # Checkbox for showing stock price history data
-    show_stock_data = st.checkbox('Show Stock Price History Data', value=st.session_state.show_stock_data,
-                                  key=checkbox_key)
+#     # Checkbox for showing stock price history data
+#     show_stock_data = st.checkbox('Show Stock Price History Data', value=st.session_state.show_stock_data,
+#                                   key=checkbox_key)
 
-    # Display the stock data only if the checkbox is checked
-    if show_stock_data:
-        st.subheader('Stock History - {}'.format(selected_time_period))
-        # Assuming df_ticker is defined earlier in your code as the dataframe containing the stock data
-        sorted_df = df_ticker.sort_values(by='Date', ascending=False)
-        st.write(sorted_df)
+#     # Display the stock data only if the checkbox is checked
+#     if show_stock_data:
+#         st.subheader('Stock History - {}'.format(selected_time_period))
+#         # Assuming df_ticker is defined earlier in your code as the dataframe containing the stock data
+#         sorted_df = df_ticker.sort_values(by='Date', ascending=False)
+#         st.write(sorted_df)
 
 
 
