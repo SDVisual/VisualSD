@@ -393,6 +393,7 @@ with col1:
         initial_close = float(df_ticker.iloc[0]['Close'])
         final_close = float(df_ticker.iloc[-1]['Close'])
         yield_percentage = ((final_close / initial_close - 1) * 100) if initial_close != 0 else 0
+
         # Create the figure
         line_chart = go.Figure()
 
@@ -416,18 +417,33 @@ with col1:
             showlegend=True
         ))
 
-       # Update chart title
-line_chart.update_layout(
-    title_text="<span style='text-align: center;'>{} Chart</span><br>"
-               "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-               "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
-               .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
-    title_x=0.25,
-    title_font_size=22,
-    title_y=0.95,
-    title_yanchor='top',
-    legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)
-)
+        # Update chart layout with title and y-axes configurations
+        line_chart.update_layout(
+            title_text=(
+                "<span style='text-align: center;'>{} Chart</span><br>"
+                "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+                "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
+            ).format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
+            title_x=0.5,  # Center the title
+            title_font_size=22,
+            title_y=0.95,
+            title_yanchor='top',
+            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
+            xaxis=dict(title="Date", type='date', rangebreaks=[dict(bounds=["sat", "mon"])]),  # Adjust for non-trading days
+            yaxis=dict(title='Close Price', showgrid=True),
+            yaxis2=dict(
+                title='Volume',
+                overlaying='y',
+                side='right',
+                position=1,
+                showgrid=False  # Hide grid for the volume axis
+            ),
+            height=500
+        )
+
+        # Display the chart in Streamlit
+        st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
+
 
 
 
