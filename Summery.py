@@ -314,148 +314,148 @@ with col1:
 
 col1, col2, col3, col4 = st.columns([0.5, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
-with col2:
+# with col2:
 
-    st.write("")
-    st.write("")
+#     st.write("")
+#     st.write("")
 
-    # Fetch data based on the selected time period or default to '1Y'
-    selected_time_period = st.session_state.get('selected_time_period', '3M')
-    # df_ticker = yf.download(ticker, period='max').reset_index()
+#     # Fetch data based on the selected time period or default to '1Y'
+#     selected_time_period = st.session_state.get('selected_time_period', '3M')
+#     # df_ticker = yf.download(ticker, period='max').reset_index()
 
-    # Create the ticker instance
-    ticker_data = yf.Ticker(ticker)
+#     # Create the ticker instance
+#     ticker_data = yf.Ticker(ticker)
 
-    # # Fetch the historical data
-    # df_ticker = ticker_data.history(period="max")
-    # st.write(df_ticker)
+#     # # Fetch the historical data
+#     # df_ticker = ticker_data.history(period="max")
+#     # st.write(df_ticker)
 
 
-    #     # Fetch the historical data
-    df_ticker = ticker_data.history(period="max")
+#     #     # Fetch the historical data
+#     df_ticker = ticker_data.history(period="max")
     
     
         
-    end_date = datetime.now()
-    # Buttons for selecting different time periods
-    time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
-    for _ in range(1):
-        st.write("")
+#     end_date = datetime.now()
+#     # Buttons for selecting different time periods
+#     time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
+#     for _ in range(1):
+#         st.write("")
 
-    # Display buttons in a single row
-    button_container = st.container()
-
-
-
-    with button_container:
-        button_spacing = 1  # Adjust spacing between buttons
-        st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
-
-        for period in time_periods:
-            if st.button(period):
-                selected_time_period = period
-                st.session_state.selected_time_period = period
-
-    # Calculate start date based on selected time period
+#     # Display buttons in a single row
+#     button_container = st.container()
 
 
-    if selected_time_period == '7D':
-        start_date = end_date - timedelta(days=7)
-    elif selected_time_period == '3M':
-        start_date = end_date - timedelta(days=90)
-    elif selected_time_period == '6M':
-        start_date = end_date - timedelta(days=180)
-    elif selected_time_period == 'YTD':
-        start_date = datetime(end_date.year, 1, 1)
-    elif selected_time_period == '1Y':
-        start_date = end_date - timedelta(days=365)
-    elif selected_time_period == '5Y':
-        start_date = end_date - timedelta(days=5 * 365)
-    else:  # 'MAX'
-        start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
 
-    if selected_time_period == '1D':
-        # Fetch data for the selected time period again
-        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-    else:
-        # Fetch data for the selected time period again
-        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+#     with button_container:
+#         button_spacing = 1  # Adjust spacing between buttons
+#         st.write('<style>div.row-widget.stHorizontal {flex-wrap: nowrap;}</style>', unsafe_allow_html=True)
+
+#         for period in time_periods:
+#             if st.button(period):
+#                 selected_time_period = period
+#                 st.session_state.selected_time_period = period
+
+#     # Calculate start date based on selected time period
+
+
+#     if selected_time_period == '7D':
+#         start_date = end_date - timedelta(days=7)
+#     elif selected_time_period == '3M':
+#         start_date = end_date - timedelta(days=90)
+#     elif selected_time_period == '6M':
+#         start_date = end_date - timedelta(days=180)
+#     elif selected_time_period == 'YTD':
+#         start_date = datetime(end_date.year, 1, 1)
+#     elif selected_time_period == '1Y':
+#         start_date = end_date - timedelta(days=365)
+#     elif selected_time_period == '5Y':
+#         start_date = end_date - timedelta(days=5 * 365)
+#     else:  # 'MAX'
+#         start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
+
+#     if selected_time_period == '1D':
+#         # Fetch data for the selected time period again
+#         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+#     else:
+#         # Fetch data for the selected time period again
+#         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
         
 
-with col1:
-    # Check if the DataFrame is empty
-    if df_ticker.empty:
-        st.warning(f"No data found for {ticker} in the selected date range.")
-    else:
+# with col1:
+#     # Check if the DataFrame is empty
+#     if df_ticker.empty:
+#         st.warning(f"No data found for {ticker} in the selected date range.")
+#     else:
     
-            # Check if there's an extra header row with the symbol and drop it
-        if isinstance(df_ticker.columns, pd.MultiIndex):
-            # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
-            df_ticker.columns = df_ticker.columns.get_level_values(1)
+#             # Check if there's an extra header row with the symbol and drop it
+#         if isinstance(df_ticker.columns, pd.MultiIndex):
+#             # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
+#             df_ticker.columns = df_ticker.columns.get_level_values(1)
         
-        # Display the cleaned DataFrame
-        st.write(df_ticker)
+#         # Display the cleaned DataFrame
+#         st.write(df_ticker)
         
-        # Filter the DataFrame to exclude non-trading days
-        df_ticker = df_ticker[df_ticker['Volume'] > 0]
+#         # Filter the DataFrame to exclude non-trading days
+#         df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
-        # Ensure all calculated values are scalars
-        max_price = float(df_ticker['High'].max())
-        min_price = float(df_ticker['Low'].min())
-        range_low_to_high = ((max_price - min_price) / min_price) * 100
-        initial_close = float(df_ticker.iloc[0]['Close'])
-        final_close = float(df_ticker.iloc[-1]['Close'])
-        yield_percentage = ((final_close / initial_close - 1) * 100) if initial_close != 0 else 0
+#         # Ensure all calculated values are scalars
+#         max_price = float(df_ticker['High'].max())
+#         min_price = float(df_ticker['Low'].min())
+#         range_low_to_high = ((max_price - min_price) / min_price) * 100
+#         initial_close = float(df_ticker.iloc[0]['Close'])
+#         final_close = float(df_ticker.iloc[-1]['Close'])
+#         yield_percentage = ((final_close / initial_close - 1) * 100) if initial_close != 0 else 0
 
-        # Create the figure
-        line_chart = go.Figure()
+#         # Create the figure
+#         line_chart = go.Figure()
 
-        # Add line trace for close prices
-        line_chart.add_trace(go.Scatter(
-            x=df_ticker['Date'],
-            y=df_ticker['Close'],
-            mode='lines',
-            name='Close Price',
-            line=dict(color='blue', width=2),
-            showlegend=True
-        ))
+#         # Add line trace for close prices
+#         line_chart.add_trace(go.Scatter(
+#             x=df_ticker['Date'],
+#             y=df_ticker['Close'],
+#             mode='lines',
+#             name='Close Price',
+#             line=dict(color='blue', width=2),
+#             showlegend=True
+#         ))
 
-        # Add volume bars in light blue
-        line_chart.add_trace(go.Bar(
-            x=df_ticker['Date'],
-            y=df_ticker['Volume'],
-            yaxis='y2',
-            name='Volume',
-            marker_color='rgba(52, 152, 219, 0.3)',
-            showlegend=True
-        ))
+#         # Add volume bars in light blue
+#         line_chart.add_trace(go.Bar(
+#             x=df_ticker['Date'],
+#             y=df_ticker['Volume'],
+#             yaxis='y2',
+#             name='Volume',
+#             marker_color='rgba(52, 152, 219, 0.3)',
+#             showlegend=True
+#         ))
 
-        # Update chart layout with title and y-axes configurations
-        line_chart.update_layout(
-            title_text=(
-                "<span style='text-align: center;'>{} Chart</span><br>"
-                "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
-            ).format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
-            title_x=0.5,  # Center the title
-            title_font_size=22,
-            title_y=0.95,
-            title_yanchor='top',
-            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
-            xaxis=dict(title="Date", type='date', rangebreaks=[dict(bounds=["sat", "mon"])]),  # Adjust for non-trading days
-            yaxis=dict(title='Close Price', showgrid=True),
-            yaxis2=dict(
-                title='Volume',
-                overlaying='y',
-                side='right',
-                position=1,
-                showgrid=False  # Hide grid for the volume axis
-            ),
-            height=500
-        )
+#         # Update chart layout with title and y-axes configurations
+#         line_chart.update_layout(
+#             title_text=(
+#                 "<span style='text-align: center;'>{} Chart</span><br>"
+#                 "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+#                 "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
+#             ).format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
+#             title_x=0.5,  # Center the title
+#             title_font_size=22,
+#             title_y=0.95,
+#             title_yanchor='top',
+#             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
+#             xaxis=dict(title="Date", type='date', rangebreaks=[dict(bounds=["sat", "mon"])]),  # Adjust for non-trading days
+#             yaxis=dict(title='Close Price', showgrid=True),
+#             yaxis2=dict(
+#                 title='Volume',
+#                 overlaying='y',
+#                 side='right',
+#                 position=1,
+#                 showgrid=False  # Hide grid for the volume axis
+#             ),
+#             height=500
+#         )
 
-        # Display the chart in Streamlit
-        st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
+#         # Display the chart in Streamlit
+#         st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
 
 
 
