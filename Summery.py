@@ -371,6 +371,8 @@ with col2:
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
 
+    st.erite(df_ticker)
+
 
 with col1:
 
