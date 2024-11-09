@@ -321,10 +321,10 @@ with col2:
 
     # Fetch data based on the selected time period or default to '1Y'
     selected_time_period = st.session_state.get('selected_time_period', '3M')
-    # df_ticker = yf.download(ticker, period='max').reset_index()
+    df_ticker = yf.download(ticker, period='max').reset_index()
 
-    # Create the ticker instance
-    ticker_data = yf.Ticker(ticker)
+    # # Create the ticker instance
+    # ticker_data = yf.Ticker(ticker)
 
     # # Fetch the historical data
     # df_ticker = ticker_data.history(period="max")
@@ -332,7 +332,7 @@ with col2:
 
 
     #     # Fetch the historical data
-    df_ticker = ticker_data.history(period="max")
+    # df_ticker = ticker_data.history(period="max")
     
     
         
