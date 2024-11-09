@@ -312,7 +312,7 @@ with col1:
     st.write("")
 
 
-# col1, col2, col3, col4 = st.columns([0.5, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
+col1, col2, col3, col4 = st.columns([0.5, 0.2, 0.09, 0.01])  # Adjust the width ratio of col1 and col2 as needed
 
 # with col2:
 #
