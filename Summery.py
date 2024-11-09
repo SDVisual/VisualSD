@@ -367,19 +367,19 @@ with col2:
         start_date = end_date - timedelta(days=365)
     elif selected_time_period == '5Y':
         start_date = end_date - timedelta(days=5 * 365)
-    else:  # 'MAX'
+    elif:  # 'MAX'
         start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
 
-    if selected_time_period == '1D':
-        # Fetch data for the selected time period again
-        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-    else:
-        # Fetch data for the selected time period again
-        df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-        # Check if there's an extra header row with the symbol and drop it
-    if isinstance(df_ticker.columns, pd.MultiIndex):
-        # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
-        df_ticker.columns = df_ticker.columns.get_level_values(1)
+    # if selected_time_period == '1D':
+    #     # Fetch data for the selected time period again
+    #     df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+    # else:
+    #     # Fetch data for the selected time period again
+    #     df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+    #     # Check if there's an extra header row with the symbol and drop it
+    # if isinstance(df_ticker.columns, pd.MultiIndex):
+    #     # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
+    #     df_ticker.columns = df_ticker.columns.get_level_values(1)
 
 
     
