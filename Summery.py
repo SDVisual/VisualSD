@@ -367,7 +367,7 @@ with col2:
         start_date = end_date - timedelta(days=365)
     elif selected_time_period == '5Y':
         start_date = end_date - timedelta(days=5 * 365)
-    elif:  # 'MAX'
+    else:  # 'MAX'
         start_date = df_ticker['Date'].min()  # Get the earliest date from the dataframe
 
     # if selected_time_period == '1D':
