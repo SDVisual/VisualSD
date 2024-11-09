@@ -392,7 +392,7 @@ with col1:
         yield_percentage = (((final_close / initial_close) - 1) * 100)
 
         # Determine color based on yield
-        yield_color = 'red'
+        yield_color = "red" if yield_percentage < 0 else "green"
 
 
         candlestick_chart = go.Figure()
