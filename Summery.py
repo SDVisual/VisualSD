@@ -25,6 +25,7 @@ header_html = f'<h2 style="color:{color_code};">{APP_NAME} </h2>'
 st.markdown(header_html, unsafe_allow_html=True)
 
 
+
 # Initialize session state for selected ticker index and valid tickers
 if 'selected_ticker_index' not in st.session_state:
     st.session_state.selected_ticker_index = 0
@@ -320,21 +321,16 @@ with col2:
 
     # Fetch data based on the selected time period or default to '1Y'
     selected_time_period = st.session_state.get('selected_time_period', '3M')
-    df_ticker = yf.download(ticker, period='max').reset_index()
+    # df_ticker = yf.download(ticker, period='max').reset_index()
 
-    # # Create the ticker instance
-    # ticker_data = yf.Ticker(ticker)
+    # Create the ticker instance
+    ticker_data = yf.Ticker(ticker)
 
-    # # Fetch the historical data
-    # df_ticker = ticker_data.history(period="max")
+    # Fetch the historical data
+    df_ticker = ticker_data.history(period="max")
+
+    # Display the data in Streamlit
     # st.write(df_ticker)
-
-
-    #     # Fetch the historical data
-    # df_ticker = ticker_data.history(period="max")
-    
-    
-        
     end_date = datetime.now()
     # Buttons for selecting different time periods
     time_periods = ['7D', '3M', '6M', 'YTD', '1Y', '5Y', 'MAX']
@@ -379,133 +375,128 @@ with col2:
     else:
         # Fetch data for the selected time period again
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
+
+with col1:
+    # Check if the DataFrame is empty
+    if df_ticker.empty:
+        st.warning(f"No data found for {ticker} in the selected date range.")
+    else:
+        # Filter the DataFrame to exclude non-trading days
+        df_ticker = df_ticker[df_ticker['Volume'] > 0]
+
+        # Calculate additional information
+        max_price = df_ticker['High'].max()
+        min_price = df_ticker['Low'].min()
+        range_low_to_high = ((max_price - min_price) / min_price) * 100
+
+        initial_close = df_ticker.iloc[0]['Close']  # Closing price for the oldest date
+        final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
+        yield_percentage = ((final_close / initial_close) - 1) * 100
+
+        # Create the figure
+        line_chart = go.Figure()
+
+        # Add line trace for close prices
+        line_chart.add_trace(go.Scatter(
+            x=df_ticker['Date'],
+            y=df_ticker['Close'],
+            mode='lines',
+            name='Close Price',
+            line=dict(color='blue', width=2),
+            showlegend=True
+        ))
+
+        # Add volume bars in light blue
+        line_chart.add_trace(go.Bar(
+            x=df_ticker['Date'],
+            y=df_ticker['Volume'],
+            yaxis='y2',
+            name='Volume',
+            marker_color='rgba(52, 152, 219, 0.3)',
+            showlegend=True
+        ))
+
+        # Update layout for the line chart
+        line_chart.update_layout(
+            title_text="<span style='text-align: center;'>{} Chart</span><br>"
+                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+                       "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
+            .format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
+            title_x=0.25,
+            title_font_size=22,
+            title_y=0.95,
+            title_yanchor='top',
+            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
+            xaxis_rangeslider_visible=False,
+            xaxis=dict(
+                type='date',
+                range=[start_date, end_date],
+                rangebreaks=[dict(bounds=["sat", "mon"])],  # Exclude weekends
+                title_text="Date"
+            ),
+            yaxis=dict(title='Price', showgrid=True),
+            yaxis2=dict(
+                title='Volume',
+                overlaying='y',
+                side='right',
+                showgrid=False
+            ),
+            height=500
+        )
+
+        # Display the chart in Streamlit
+        st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
+
+
+
+
+
+
+
+
         
-
-# with col1:
-#     # Check if the DataFrame is empty
-#     if df_ticker.empty:
-#         st.warning(f"No data found for {ticker} in the selected date range.")
-#     else:
-    
-#             # Check if there's an extra header row with the symbol and drop it
-#         if isinstance(df_ticker.columns, pd.MultiIndex):
-#             # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
-#             df_ticker.columns = df_ticker.columns.get_level_values(1)
-        
-#         # Display the cleaned DataFrame
-#         st.write(df_ticker)
-        
-#         # Filter the DataFrame to exclude non-trading days
-#         df_ticker = df_ticker[df_ticker['Volume'] > 0]
-
-#         # Ensure all calculated values are scalars
-#         max_price = float(df_ticker['High'].max())
-#         min_price = float(df_ticker['Low'].min())
-#         range_low_to_high = ((max_price - min_price) / min_price) * 100
-#         initial_close = float(df_ticker.iloc[0]['Close'])
-#         final_close = float(df_ticker.iloc[-1]['Close'])
-#         yield_percentage = ((final_close / initial_close - 1) * 100) if initial_close != 0 else 0
-
-#         # Create the figure
-#         line_chart = go.Figure()
-
-#         # Add line trace for close prices
-#         line_chart.add_trace(go.Scatter(
-#             x=df_ticker['Date'],
-#             y=df_ticker['Close'],
-#             mode='lines',
-#             name='Close Price',
-#             line=dict(color='blue', width=2),
-#             showlegend=True
-#         ))
-
-#         # Add volume bars in light blue
-#         line_chart.add_trace(go.Bar(
-#             x=df_ticker['Date'],
-#             y=df_ticker['Volume'],
-#             yaxis='y2',
-#             name='Volume',
-#             marker_color='rgba(52, 152, 219, 0.3)',
-#             showlegend=True
-#         ))
-
-#         # Update chart layout with title and y-axes configurations
-#         line_chart.update_layout(
-#             title_text=(
-#                 "<span style='text-align: center;'>{} Chart</span><br>"
-#                 "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-#                 "<span style='font-size: 18px;'>Return for the period: <span style='color:red;'>{:.2f}%</span></span>"
-#             ).format(selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
-#             title_x=0.5,  # Center the title
-#             title_font_size=22,
-#             title_y=0.95,
-#             title_yanchor='top',
-#             legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5),
-#             xaxis=dict(title="Date", type='date', rangebreaks=[dict(bounds=["sat", "mon"])]),  # Adjust for non-trading days
-#             yaxis=dict(title='Close Price', showgrid=True),
-#             yaxis2=dict(
-#                 title='Volume',
-#                 overlaying='y',
-#                 side='right',
-#                 position=1,
-#                 showgrid=False  # Hide grid for the volume axis
-#             ),
-#             height=500
-#         )
-
-#         # Display the chart in Streamlit
-#         st.plotly_chart(line_chart, use_container_width=True, config={'displayModeBar': False})
-
-
-
-
-
-
-
-
-
 
 
 
 col1, col2 = st.columns([0.8, 0.2])
 
-# with col1:
+with col1:
 
 
-#     # Initialize session state for checkbox and previous ticker
-#     if 'show_stock_data' not in st.session_state:
-#         st.session_state.show_stock_data = False
+    # Initialize session state for checkbox and previous ticker
+    if 'show_stock_data' not in st.session_state:
+        st.session_state.show_stock_data = False
 
-#     if 'previous_ticker' not in st.session_state:
-#         st.session_state.previous_ticker = ''
+    if 'previous_ticker' not in st.session_state:
+        st.session_state.previous_ticker = ''
 
 
-#     # Check if the ticker has changed
-#     ticker_changed = st.session_state.previous_ticker != ticker
+    # Check if the ticker has changed
+    ticker_changed = st.session_state.previous_ticker != ticker
 
-#     # Update the previous ticker to the current one
-#     st.session_state.previous_ticker = ticker
+    # Update the previous ticker to the current one
+    st.session_state.previous_ticker = ticker
 
-#     # Reset checkbox if ticker changes
-#     if ticker_changed:
-#         st.session_state.show_stock_data = False
+    # Reset checkbox if ticker changes
+    if ticker_changed:
+        st.session_state.show_stock_data = False
 
-#     st.write('Chart dates : {} to {}'.format(start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y")))
-#     st.write("")
+    st.write('Chart dates : {} to {}'.format(start_date.strftime("%d-%m-%Y"), end_date.strftime("%d-%m-%Y")))
+    st.write("")
 
-#     # Generate a unique key for the checkbox based on the ticker
-#     checkbox_key = f"show_stock_data_{ticker}"
+    # Generate a unique key for the checkbox based on the ticker
+    checkbox_key = f"show_stock_data_{ticker}"
 
-#     # Checkbox for showing stock price history data
-#     show_stock_data = st.checkbox('Show Stock Price History Data', value=st.session_state.show_stock_data,
-#                                   key=checkbox_key)
+    # Checkbox for showing stock price history data
+    show_stock_data = st.checkbox('Show Stock Price History Data', value=st.session_state.show_stock_data,
+                                  key=checkbox_key)
 
-#     # Display the stock data only if the checkbox is checked
-#     if show_stock_data:
-#         st.subheader('Stock History - {}'.format(selected_time_period))
-#         # Assuming df_ticker is defined earlier in your code as the dataframe containing the stock data
-#         sorted_df = df_ticker.sort_values(by='Date', ascending=False)
-#         st.write(sorted_df)
+    # Display the stock data only if the checkbox is checked
+    if show_stock_data:
+        st.subheader('Stock History - {}'.format(selected_time_period))
+        # Assuming df_ticker is defined earlier in your code as the dataframe containing the stock data
+        sorted_df = df_ticker.sort_values(by='Date', ascending=False)
+        st.write(sorted_df)
 
 
 
