@@ -323,6 +323,14 @@ with col2:
     selected_time_period = st.session_state.get('selected_time_period', '3M')
     df_ticker = yf.download(ticker, period='max').reset_index()
 
+    # Check if there's an extra header row with the symbol and drop it
+    if isinstance(df_ticker.columns, pd.MultiIndex):
+        # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
+        df_ticker.columns = df_ticker.columns.get_level_values(1)
+    
+    # Display the cleaned DataFrame
+    st.write(df_ticker)
+
 
 
     end_date = datetime.now()
@@ -371,7 +379,7 @@ with col2:
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
 
 
-    st.write(df_ticker)
+    
 
 
 with col1:
