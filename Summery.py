@@ -477,7 +477,7 @@ with col1:
 
 
 
-col1, col2 = st.columns([0.8, 0.2])
+# col1, col2 = st.columns([0.8, 0.2])
 
 # with col1:
 
