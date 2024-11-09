@@ -428,9 +428,9 @@ with col1:
 
        candlestick_chart.update_layout(
             title_text=(
-                f"<span style='text-align: center;'>{selected_time_period} Chart </span><br>"
-                f"<span style='font-size: 18px;'>Low: {min_price:.2f} | High: {max_price:.2f} | "
-                f"Range: {range_low_to_high:.2f}% | Yield: {yield_percentage:.2f}%</span><br>"
+                        f"<span style='text-align: center;'>{selected_time_period} Chart </span><br>"
+                        f"<span style='font-size: 18px;'>Low: {min_price:.2f} | High: {max_price:.2f} | "
+                        f"Range: {range_low_to_high:.2f}% | Yield: {yield_percentage:.2f}%</span><br>"
             ),
             title_x=0.25,  # Center the title
             title_font_size=22,  # Increase font size
