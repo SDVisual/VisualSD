@@ -323,13 +323,6 @@ with col2:
     selected_time_period = st.session_state.get('selected_time_period', '3M')
     df_ticker = yf.download(ticker, period='max').reset_index()
 
-    # Check if there's an extra header row with the symbol and drop it
-    if isinstance(df_ticker.columns, pd.MultiIndex):
-        # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
-        df_ticker.columns = df_ticker.columns.get_level_values(1)
-    
-   
-
 
 
     end_date = datetime.now()
@@ -376,13 +369,7 @@ with col2:
     else:
         # Fetch data for the selected time period again
         df_ticker = yf.download(ticker, start=start_date, end=end_date).reset_index()
-        # Check if there's an extra header row with the symbol and drop it
-        if isinstance(df_ticker.columns, pd.MultiIndex):
-            # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
-            df_ticker.columns = df_ticker.columns.get_level_values(1)
 
-
-    
 
 
 with col1:
@@ -393,7 +380,7 @@ with col1:
         st.warning(f"No data found for {ticker} in the selected date range.")
     else:
         # Filter the DataFrame to exclude non-trading days
-        # df_ticker = df_ticker[df_ticker['Volume'] > 0]
+        df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
         # Calculate additional information
         max_price = df_ticker['High'].max()
@@ -404,8 +391,8 @@ with col1:
         final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
         yield_percentage = (((final_close / initial_close) - 1) * 100)
 
-        # # Determine color based on yield
-        # yield_color = "red" if yield_percentage < 0 else "green"
+        # Determine color based on yield
+        yield_color = "red" if yield_percentage < 0 else "green"
 
 
         candlestick_chart = go.Figure()
@@ -439,20 +426,18 @@ with col1:
             showlegend=True
         ))
 
-
-    #     candlestick_chart.update_layout(
-    #     title_text=(
-    #         f"<span style='text-align: center;'>{selected_time_period} Chart </span><br>"
-    #         f"<span style='font-size: 18px;'>Low: {min_price:.2f} | High: {max_price:.2f} | "
-    #         f"Range: {range_low_to_high:.2f}% | Yield: {yield_percentage:.2f}%</span><br>"
-    #     ),
-    #     title_x=0.25,  # Center the title
-    #     title_font_size=22,  # Increase font size
-    #     title_y=0.95,  # Adjust title vertical position
-    #     title_yanchor='top',
-    #     legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
-    # )
-
+        # Set the title of the chart with both main and additional information
+        candlestick_chart.update_layout(
+            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
+                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
+                       "<span style='font-size: 18px;'>                 Return for the period: <span style='color:{};'>{:.2f}%</span></span>".format(
+                selected_time_period, min_price, max_price, range_low_to_high, yield_color, yield_percentage),
+            title_x=0.25,  # Center the title
+            title_font_size=22,  # Increase font size
+            title_y=0.95,  # Adjust title vertical position
+            title_yanchor='top',
+            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
+        )
 
 
         candlestick_chart.update_layout(
