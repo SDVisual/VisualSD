@@ -393,7 +393,7 @@ with col1:
         st.warning(f"No data found for {ticker} in the selected date range.")
     else:
         # Filter the DataFrame to exclude non-trading days
-        df_ticker = df_ticker[df_ticker['Volume'] > 0]
+        # df_ticker = df_ticker[df_ticker['Volume'] > 0]
 
         # Calculate additional information
         max_price = df_ticker['High'].max()
