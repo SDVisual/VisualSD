@@ -426,18 +426,18 @@ with col1:
             showlegend=True
         ))
 
-        # Set the title of the chart with both main and additional information
-        candlestick_chart.update_layout(
-            title_text="<span style='text-align: center;'>                           {} Chart </span><br>"
-                       "<span style='font-size: 18px;'>Low: {:.2f} | High: {:.2f} | Range: {:.2f}%</span><br>"
-                       "<span style='font-size: 18px;'>                 Return for the period: <span style='>{:.2f}%</span></span>".format(
-                selected_time_period, min_price, max_price, range_low_to_high, yield_percentage),
-            title_x=0.25,  # Center the title
-            title_font_size=22,  # Increase font size
-            title_y=0.95,  # Adjust title vertical position
-            title_yanchor='top',
-            legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
-        )
+       candlestick_chart.update_layout(
+        title_text=(
+            f"<span style='text-align: center;'>{selected_time_period} Chart </span><br>"
+            f"<span style='font-size: 18px;'>Low: {min_price:.2f} | High: {max_price:.2f} | "
+            f"Range: {range_low_to_high:.2f}% | Yield: {yield_percentage:.2f}%</span><br>"
+        ),
+        title_x=0.25,  # Center the title
+        title_font_size=22,  # Increase font size
+        title_y=0.95,  # Adjust title vertical position
+        title_yanchor='top',
+        legend=dict(orientation="h", yanchor="bottom", y=-0.25, xanchor="center", x=0.5)  # Adjust legend position
+    )
 
 
         candlestick_chart.update_layout(
