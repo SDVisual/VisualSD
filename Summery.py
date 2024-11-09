@@ -328,8 +328,7 @@ with col2:
         # Reset to single-level column names by only using the lower level (e.g., 'Open', 'High')
         df_ticker.columns = df_ticker.columns.get_level_values(1)
     
-    # Display the cleaned DataFrame
-    st.write(df_ticker)
+   
 
 
 
