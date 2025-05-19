@@ -141,15 +141,15 @@ col1, col2, col3, col4 = st.columns([0.35, 0.35, 0.15, 0.15])
 col1, col2 = st.columns([0.7, 0.3])
 with col1:
 
-    # Display the filtered data
+    # # Display the filtered data
 
-    # Check if filtered_data is not empty
-    if filtered_data is not None and not filtered_data.empty:
-        show_info = st.checkbox('Show selected Sector & companies information')
+    # # Check if filtered_data is not empty
+    # if filtered_data is not None and not filtered_data.empty:
+    #     show_info = st.checkbox('Show selected Sector & companies information')
 
-        if show_info:
-            st.write('Filtered Sector Companies Info:')
-            st.dataframe(filtered_data)
+    #     if show_info:
+    #         st.write('Filtered Sector Companies Info:')
+    #         st.dataframe(filtered_data)
 
 
     # Select box to choose ticker from the sidebar
