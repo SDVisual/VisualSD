@@ -79,63 +79,63 @@ col1, col2, col3, col4 = st.columns([0.35, 0.35, 0.15, 0.15])
 
     ############################   SP 500 SELECT SECTORS ######################################
 
-with col1:
+# with col1:
 
-    # Initialize session state if it doesn't already exist
-    if 'valid_tickers' not in st.session_state:
-        st.session_state.valid_tickers = []
-    if 'selected_sector' not in st.session_state:
-        st.session_state.selected_sector = ""
-    if 'selected_sub_industry' not in st.session_state:
-        st.session_state.selected_sub_industry = ""
-    if 'selected_ticker_index' not in st.session_state:
-        st.session_state.selected_ticker_index = 0
+#     # Initialize session state if it doesn't already exist
+#     if 'valid_tickers' not in st.session_state:
+#         st.session_state.valid_tickers = []
+#     if 'selected_sector' not in st.session_state:
+#         st.session_state.selected_sector = ""
+#     if 'selected_sub_industry' not in st.session_state:
+#         st.session_state.selected_sub_industry = ""
+#     if 'selected_ticker_index' not in st.session_state:
+#         st.session_state.selected_ticker_index = 0
 
-    # Load the data from the webpage
-    sp500url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
-    sp500data = pd.read_html(sp500url)[0]
+#     # Load the data from the webpage
+#     sp500url = 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
+#     sp500data = pd.read_html(sp500url)[0]
 
-    # Extract relevant columns
-    data = sp500data[['Symbol', 'Security', 'GICS Sector', 'GICS Sub-Industry',
-                      'Headquarters Location', 'Date added', 'Founded']]
-
-
-
-    # Dropdown for GICS Sector
-    gics_sector = st.selectbox('Or Select S&P 500 Sectors & Companies', ["Select a sector"] + sorted(data['GICS Sector'].unique()))
-
-    # # Display a message if "Financials" is selected
-    # if gics_sector == "Financials":
-    #     st.warning("Note: This App Version is less suitable for stocks in the Finance Industry")
-
-    # Filter data based on selected GICS Sector
-    filtered_data = data[data['GICS Sector'] == gics_sector]
-
-# Display sub-industry dropdown in col2 only if a sector is selected
-with col2:
+#     # Extract relevant columns
+#     data = sp500data[['Symbol', 'Security', 'GICS Sector', 'GICS Sub-Industry',
+#                       'Headquarters Location', 'Date added', 'Founded']]
 
 
-    # Display sub-industry dropdown only if a sector is selected
-    if gics_sector != "Select a sector":
 
-        # Optional dropdown for GICS Sub-Industry
-        gics_sub_industry = st.selectbox('Optional', ["Select a sub-industry"] + sorted(
-            filtered_data['GICS Sub-Industry'].unique()))
-        filtered_data = filtered_data[filtered_data['GICS Sub-Industry'] == gics_sub_industry] if gics_sub_industry != "Select a sub-industry" else filtered_data
-    else:
-        gics_sub_industry = "Select a sub-industry"
+#     # Dropdown for GICS Sector
+#     gics_sector = st.selectbox('Or Select S&P 500 Sectors & Companies', ["Select a sector"] + sorted(data['GICS Sector'].unique()))
 
-    # Filter out symbols containing a dot (.) in their names
-    filtered_data = filtered_data[~filtered_data['Symbol'].str.contains(r'\.')]
+#     # # Display a message if "Financials" is selected
+#     # if gics_sector == "Financials":
+#     #     st.warning("Note: This App Version is less suitable for stocks in the Finance Industry")
 
-    # Update the session state with the selected sector's and sub-industry's tickers only if a new sector or sub-industry is selected
-    if gics_sector != "Select a sector" and (
-            gics_sector != st.session_state.selected_sector or gics_sub_industry != st.session_state.selected_sub_industry):
-        st.session_state.valid_tickers = filtered_data['Symbol'].tolist()
-        st.session_state.selected_sector = gics_sector
-        st.session_state.selected_sub_industry = gics_sub_industry
-        # Reset the selected ticker index if the valid_tickers list is updated
-        st.session_state.selected_ticker_index = 0
+#     # Filter data based on selected GICS Sector
+#     filtered_data = data[data['GICS Sector'] == gics_sector]
+
+# # Display sub-industry dropdown in col2 only if a sector is selected
+# with col2:
+
+
+#     # Display sub-industry dropdown only if a sector is selected
+#     if gics_sector != "Select a sector":
+
+#         # Optional dropdown for GICS Sub-Industry
+#         gics_sub_industry = st.selectbox('Optional', ["Select a sub-industry"] + sorted(
+#             filtered_data['GICS Sub-Industry'].unique()))
+#         filtered_data = filtered_data[filtered_data['GICS Sub-Industry'] == gics_sub_industry] if gics_sub_industry != "Select a sub-industry" else filtered_data
+#     else:
+#         gics_sub_industry = "Select a sub-industry"
+
+#     # Filter out symbols containing a dot (.) in their names
+#     filtered_data = filtered_data[~filtered_data['Symbol'].str.contains(r'\.')]
+
+#     # Update the session state with the selected sector's and sub-industry's tickers only if a new sector or sub-industry is selected
+#     if gics_sector != "Select a sector" and (
+#             gics_sector != st.session_state.selected_sector or gics_sub_industry != st.session_state.selected_sub_industry):
+#         st.session_state.valid_tickers = filtered_data['Symbol'].tolist()
+#         st.session_state.selected_sector = gics_sector
+#         st.session_state.selected_sub_industry = gics_sub_industry
+#         # Reset the selected ticker index if the valid_tickers list is updated
+#         st.session_state.selected_ticker_index = 0
 
 
 col1, col2 = st.columns([0.7, 0.3])
