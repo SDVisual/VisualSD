@@ -391,8 +391,9 @@ with col1:
         final_close = df_ticker.iloc[-1]['Close']  # Closing price for the latest date
         yield_percentage = (((final_close / initial_close) - 1) * 100)
 
-        # # Determine color based on yield
+        # Determine color based on yield
         # yield_color = "red" if yield_percentage < 0 else "green"
+        yield_color = "blue" 
 
 
         candlestick_chart = go.Figure()
